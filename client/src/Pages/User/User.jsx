@@ -60,7 +60,7 @@ function User({user, updateUserProfile}) {
                             <img className="user-icon" src="/icons/linkedin-icon.svg" alt="linked-in"/><p>{linkedIn}</p>
                         </div>
                     </div>
-                    <ModalContainer buttonText="Update" userProfile={userProfile} updateUserProfile={updateUserProfile}/>
+                    <ModalContainer modalName = "updateuser" buttonText="Update" information={userProfile} updateUserProfile={updateUserProfile}/>
                 </div>
                 <div className="user-profile__description">
                     <div className="user-profile__description-logo"></div>

@@ -4,9 +4,26 @@ import Modal from '../Modal/Modal';
 import TriggerModalButton from '../TriggerModalButton/TriggerModalButton';
 
 class ModalContainer extends React.Component {
+
+    //props 
+    //buttonText 
+    //onSubmitTrainer= function that updates trainer state 
+    //information - information needed in form; 
+    //modalName - used to conditionally pass onsubmit
     state = {isShown:false}
 
-    onSubmit = (event) =>{
+    getOnSubmit = ()=>{
+        let onSubmit = null;
+        const modal = this.props.modalName;
+        if(modal ==="addClient"){
+            onSubmit=this.addClient;
+        }else if (modal === "updateUser"){
+            onSubmit=this.updateUser;
+        }
+        return onSubmit
+    }
+
+    updateUser = (event) =>{
         event.preventDefault();
         
         const updatedProfile = {
@@ -29,7 +46,47 @@ class ModalContainer extends React.Component {
         console.log(updatedProfile);
         console.log(this.props);
 
-        this.props.updateUserProfile(updatedProfile)
+        this.props.onSubmitTrainer(updatedProfile)
+        this.closeModal();
+    }
+
+    addClient = (event) =>{
+        event.preventDefault();
+
+        console.log(event.target.programs);
+
+        const options = event.target.programs.options;
+        let opt="";
+
+        let programs = [];
+        for(var i=0; i<options.length; i++){
+            opt = options[i];
+            opt.selected && programs.push(opt.value);
+        }
+
+        const newClient = {
+            trainerId:"",
+            username:event.target.username.value,
+            password:event.target.password.value,
+            profile:"client",
+            status:"active",
+            userProfile:{
+                fname:event.target.fname.value,
+                lname:event.target.lname.value,
+                email:event.target.email.value,
+                phone:event.target.phone.value,
+                address:event.target.address.value,
+                city: event.target.city.value,
+                province: event.target.province.value,
+                country: event.target.country.value
+            },
+            programs:programs
+        }
+
+        console.log(newClient);
+
+
+        this.props.onSubmitTrainer(newClient)
         this.closeModal();
     }
 
@@ -66,6 +123,8 @@ class ModalContainer extends React.Component {
 
 
     render(){
+        const onSubmit = this.getOnSubmit();
+
         return (
             <>
                 <TriggerModalButton 
@@ -75,14 +134,15 @@ class ModalContainer extends React.Component {
                 />
 
                 {this.state.isShown && 
-                    <Modal 
-                        onSubmit={this.onSubmit}
+                    <Modal
+                        modalName={this.props.modalName}
+                        onSubmit={onSubmit}
                         modalRef={n=> this.modal = n}
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
                         onClickOutside={this.onClickOutside}
-                        userProfile={this.props.userProfile}
+                        information={this.props.information}
                     />}
             </>
 

@@ -25,6 +25,7 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //seco
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
 
+/* =========================================== ADD CLIENT ================================================ */
 app.post('/trainer/:trainerId/addClient', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
 
@@ -55,6 +56,32 @@ app.post('/trainer/:trainerId/addClient', (req,res)=>{
     })
 })
 
+/* =========================================== ADD PROGRAM ================================================ */
+app.post('/trainer/:trainerId/addProgram', (req,res)=>{
+    //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
+
+    const {name, description} = req.body;
+    //"--id" is auto generated - not a string in mongoDB - mongoose handles the conversion from to a string and then back again
+    const program = new Program({
+        //pass an object with the different properties in the schema
+        id:uuidv4(),
+        trainerId: req.params.trainerId,
+        name,
+        description,
+        resources:[]
+    });
+
+    program.save() ///asynchronous - returns a promise
+    .then((response)=>{
+        //once the data is saved, the database sends us back a new object version of document that was saved
+        res.send(response);
+    })
+    .catch((err)=>{
+        console.log(err);
+    })
+})
+
+/* =========================================== GET CLIENTS ================================================ */
 
 app.get('/trainer/:trainerId/clients', (req, res) => {
 
@@ -67,6 +94,7 @@ app.get('/trainer/:trainerId/clients', (req, res) => {
     });
 });
 
+/* =========================================== GET TRAINER ================================================ */
 
 app.get('/trainer/:username/:trainerId', (req, res) => {
 

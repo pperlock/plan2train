@@ -5,8 +5,9 @@ import FocusTrap from 'focus-trap-react';
 import "./Modal.scss";
 
 import PersonalDetailsForm from '../PersonalDetailsForm/PersonalDetailsForm';
+import NewClientForm from '../NewClientForm/NewClientForm';
 
-function Modal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal,onSubmit, userProfile}) {
+function Modal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal,onSubmit, information, modalName}) {
     return ReactDOM.createPortal(
         <FocusTrap>
             <aside 
@@ -31,7 +32,8 @@ function Modal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal,onSub
                         </svg>
                     </button>
                     <div className="modal-body">
-                        <PersonalDetailsForm  onSubmit={onSubmit} closeModal={closeModal} userProfile={userProfile}/>
+                        {modalName==="updateUser" && <PersonalDetailsForm  onSubmit={onSubmit} closeModal={closeModal} userProfile={information}/> }
+                        {modalName === "addClient" && <NewClientForm onSubmit={onSubmit} closeModal={closeModal} programs={information}/>}
                     </div>
                 </div>
 

@@ -28,6 +28,19 @@ class Trainer extends React.Component{
 
     }
 
+    addClient=(newClient)=>{
+
+        console.log(this.state.userProfile)
+        axios.post(`http://localhost:8080/trainer/${this.state.userProfile[0].userId}/addClient`, newClient)
+        .then(res =>{
+            this.setState({clients:[...this.state.clients, res.data]})
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+        
+    }
+
     updateUserProfile=(updatedProfile)=>{
         this.setState({userProfile:updatedProfile});
     }
@@ -79,6 +92,7 @@ class Trainer extends React.Component{
                         currentClient={currentClient} 
                         // clientPrograms={clientPrograms} 
                         addNote={this.addNote}
+                        addClient={this.addClient}
                     />}
                 {(this.state.userProfile && match.path==="/clients/:clientId/lessons") && 
                     <Clients {...this.props} 
@@ -87,6 +101,7 @@ class Trainer extends React.Component{
                         currentClient={currentClient} 
                         clientPrograms={clientPrograms} 
                         // addNote={this.addNote}
+                        addClient={this.addClient}
                         />}
                 {(this.state.userProfile && match.path==="/schedule") && <Schedule />}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && <User user={this.state.userProfile} updateUserProfile={this.updateUserProfile}/>}
