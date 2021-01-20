@@ -3,10 +3,12 @@ import {Link} from 'react-router-dom';
 
 import "./ClientList.scss";
 
-function ClientList({clients}) {
+function ClientList({list,match}) {
 
-    console.log(clients);
-    
+    console.log(list);
+    console.log(match.path)
+    const page = match.path.split("/")[1];
+    console.log(page);
     
     return (
 
@@ -16,7 +18,8 @@ function ClientList({clients}) {
         <button className="client-list__add">+</button>
 
         <ul className="client-list__list">
-            {clients.map(client => <Link key={client.userId} to={`/clients/${client.userId}/profile`}><li className="client-list__client">{`${client.userProfile.lname}, ${client.userProfile.fname}`}</li></Link>)}
+            {page === "clients" && list.map(item => <Link key={item.userId} to={`/clients/${item.userId}/profile`}><li className="client-list__client">{`${item.userProfile.lname}, ${item.userProfile.fname}`}</li></Link>)}
+            {page === "programs" && list.map(item => <Link key={item.id} to ={`programs/${item.id}`}><li className="client-list__client">{`${item.name}`}</li></Link>)}
          </ul>
         
     </div>

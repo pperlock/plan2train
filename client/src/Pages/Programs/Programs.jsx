@@ -1,13 +1,14 @@
 import React from 'react';
 import "./Programs.scss"
 
-// import ProgramBar from '../../components/ProgramBar/ProgramBar';
+import ClientList from '../../components/ClientList/ClientList';
 import ProgramContent from '../../components/ProgramContent/ProgramContent';
 
-function Programs({programs, currentProgramId}) {
+function Programs({programs, currentProgramId, match}) {
+
     return (
         <div className="programs__container">
-            {/* <ProgramBar programs={programs}/> */}
+            <ClientList list={programs} match={match}/>
             <ProgramContent program={programs.filter(program=>program.id===currentProgramId)[0]}/>
         </div>
     )

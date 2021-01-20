@@ -26,7 +26,7 @@ class Clients extends React.Component {
         // console.log(this.props.match.path.split("/"));        
         return (
             <div className="clients__container" style={{backgroundImage: "url('/images/sidebar.')"}}>
-                <ClientList clients = {clients}/>
+                <ClientList list = {clients} match={this.props.match}/>
                 <div className="client">
                     <div className="client__title">
                         <p className="client__title-name">{`${fname} ${lname}`} </p>
