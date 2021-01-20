@@ -6,22 +6,16 @@ import "./Clients.scss";
 import ClientList from '../../components/ClientList/ClientList';
 import ClientProfile from '../../components/ClientProfile/ClientProfile';
 import ClientLessons from '../../components/ClientLessons/ClientLessons';
-import List from '../../components/List/List';
 
 class Clients extends React.Component {
 
-    state={displayResources:[]}
-
-    updateResources=(program)=>{
-       this.setState({displayResources:program.resources});
-    
-    }
     
     render(){
     
         const {clients, currentClient, clientPrograms} = this.props;
         const {fname, lname} = currentClient.userProfile;
         const active = currentClient.status ? "Active" : "Archived";
+        const page = this.props.match.path.split("/")[3]; 
         
         // console.log(this.props.match.path.split("/"));        
         return (
@@ -37,24 +31,10 @@ class Clients extends React.Component {
                         <Link to={`/clients/${this.props.match.params.clientId}/lessons`} className="client__nav-right">Lessons</Link>
                     </div>
 
-                    {this.props.match.path.split("/")[3] === "profile" && <ClientProfile currentClient = {currentClient}/>}
+                    {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
+                    {page === "profile" && <ClientProfile currentClient = {currentClient}/>}
+                    {page === "lessons" && <ClientLessons currentClient = {currentClient} clientPrograms = {clientPrograms}/>}
                    
-                        <div className="component client__programs">
-                            <p className="component-title">Programs</p>
-                            <div className="client__programs-content">
-                                <ul className="client__programs-list"> 
-                                    {clientPrograms.map(program=> <Link key={program.id} to={`/clients/${currentClient.id}`}><li onClick={()=>this.updateResources(program)} className="client__programs-list-item">{program.name}</li></Link>)}
-                                </ul>
-
-                                <div className="list client__programs-resources">
-                                    {this.state.displayResources.map(resource=> <List key={resource.id} content={resource.name} id={resource.id} deleteBtn={false}/>)}
-                                </div>
-                            </div>
-                            
-                        </div>
-
-                    {/* *============================NOTES============================* */}
-                    
                 </div>
             </div>
         )

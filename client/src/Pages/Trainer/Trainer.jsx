@@ -72,8 +72,22 @@ class Trainer extends React.Component{
             <>
                 {this.state.userProfile && <SideBar defaultClientId = {defaultClientId} defaultProgramId = {this.state.programs[0].id} programs={this.state.programs} match={match}/>}
                 {(this.state.userProfile && match.path==="/programs/:programId") && <Programs programs={this.state.programs} currentProgramId={match.params.programId} match={match}/>}
-                {(this.state.userProfile && match.path==="/clients/:clientId/profile") && <Clients {...this.props} programs={this.state.programs} clients={this.state.clients} currentClient={currentClient} clientPrograms={clientPrograms} addNote={this.addNote}/>}
-                {(this.state.userProfile && match.path==="/clients/:clientId/lessons") && <Clients {...this.props} programs={this.state.programs} clients={this.state.clients} currentClient={currentClient} clientPrograms={clientPrograms} addNote={this.addNote}/>}
+                {(this.state.userProfile && match.path==="/clients/:clientId/profile") && 
+                    <Clients {...this.props} 
+                        programs={this.state.programs} 
+                        clients={this.state.clients} 
+                        currentClient={currentClient} 
+                        // clientPrograms={clientPrograms} 
+                        addNote={this.addNote}
+                    />}
+                {(this.state.userProfile && match.path==="/clients/:clientId/lessons") && 
+                    <Clients {...this.props} 
+                        programs={this.state.programs} 
+                        clients={this.state.clients} 
+                        currentClient={currentClient} 
+                        clientPrograms={clientPrograms} 
+                        // addNote={this.addNote}
+                        />}
                 {(this.state.userProfile && match.path==="/schedule") && <Schedule />}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && <User user={this.state.userProfile} updateUserProfile={this.updateUserProfile}/>}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && <h1>hello</h1>}
