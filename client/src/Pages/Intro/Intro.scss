@@ -1,0 +1,53 @@
+@import '../../styles/globalImports.scss';
+
+.intro{
+    font-family:"Montserrat";
+    color: $contrast-text;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background: url('intro-background.png');
+    background-size:contain;
+    
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    &__logo{
+        font-family:"Montserrat";
+        margin-top:150px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        margin-bottom:32px;
+
+        &-title{
+            font-size:60px;
+            letter-spacing:5px;
+        }
+
+        &-bigLetter{
+            font-size:100px;
+            font-weight:600;
+        }
+    }
+
+    &__divider{
+        width:250px;
+        border: 2px solid $contrast-text;
+        margin-bottom:32px;
+        
+    }
+    &__subtitle{
+        font-weight:600;
+        margin-bottom:32px;
+    }
+
+    &__button{
+        @include buildButton(200px,50px, $accent-color, white);
+        font-size:24px;
+    }
+
+
+    
+}

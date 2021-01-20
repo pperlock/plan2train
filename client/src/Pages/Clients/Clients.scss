@@ -1,0 +1,130 @@
+@import '../../styles/globalImports.scss';
+
+.clients{
+    &__container{
+        display:flex;
+        width:80%;
+        height:100vh;
+        padding-left:300px;
+        background-size: contain;
+        background-repeat:no-repeat;
+        background-position:right;
+    }
+}
+
+.client{
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    margin-left:260px;
+    width:75%;
+
+    &__nav{
+        display:flex;
+        justify-content:center;
+        margin-bottom:40px;
+        color:grey;
+        &-left{
+            padding:0 20px;
+            border-right:1px solid grey;
+        }
+        &-right{
+            padding:0 20px;
+        }
+    }
+
+    &__title{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        margin:40px 0;
+        color:grey;
+        &-name{
+            font-size:30px;
+            color:white;
+        }
+    }
+    &__middle{
+        display:flex;
+        margin-bottom:40px;
+    }
+    &__contact{
+        padding-top:70px;
+        margin-right:20px;
+        height:500px;
+        width:33%;
+
+        &-info{
+            background-color:$medium-background;
+            padding:16px;
+            display:flex;
+            flex-direction:column;
+            justify-content: space-between;
+            margin-bottom:16px;
+            &-top{
+                display:flex;
+                justify-content: space-between;
+            }
+        }
+
+        &-add{
+            @include buildButton(50px,30px, $accent-color, white);
+            font-size:12px;
+        }
+        &-item{
+            padding-bottom:5px;
+            // border-bottom:1px solid $dark-background;
+            margin-bottom:10px;
+        }
+        &-map{
+            border:1px solid grey;
+            height:50%;
+        }
+    }
+    &__programs{
+        width:67%;
+        padding-top:70px;
+        
+        &-content{
+            display:flex;
+            justify-content:space-between;
+            width:100%;
+        }
+
+        &-list{
+            background-color:$medium-background;
+            width:25%;
+            padding:16px;
+
+            &-item{
+                margin-bottom:16px;
+            }
+        }
+        &-resources{
+            width:68%;
+        }
+    }
+    &__notes{
+        padding-top:70px;
+        width:100%;
+
+        &-form{
+            display:flex;
+            justify-content:space-between;
+            align-items:baseline;
+        }
+
+        &-new{
+            background-color:white;
+            border:0;
+            border-bottom:1px solid grey;
+            padding:16px;
+            width:100%;
+            margin-right:16px;
+        }
+        &-add{
+            @include buildButton(30px,30px, $accent-color, white);
+            font-size:12px;
+        }
+    }
+}

@@ -1,0 +1,128 @@
+@import '../../styles/globalImports.scss';
+
+@import '../../styles/globalImports.scss';
+
+.user-profile{
+    padding:20px;
+    height:100vh;
+    width:70%;
+    padding-left:320px;
+    
+    &__type{
+        color:grey;
+        margin-bottom:173px;
+    }
+    &__bottom{
+        display:flex;
+        width:109%;
+    }
+    &__container{
+        width:60%;
+        padding-top:70px;
+    }
+
+    &__sign-in{
+        display:flex;
+    }
+    
+    &__details{
+        width:100%;
+        display:flex;
+        justify-content: space-between;
+        margin-bottom:20px;
+    }
+
+    &__contact{
+        background-color:$medium-background;
+        margin:20px 0;
+        padding: 16px;
+        width:40%;
+
+        &-title{
+            margin-bottom:16px;
+        }
+    }
+
+    &__address{
+        background-color:$medium-background;
+        width:50%;
+        margin:20px 0;
+        padding: 16px;
+        font-size:18px;
+        
+        &-title{
+            margin-bottom:16px;
+        }
+        &-item{
+            padding-bottom:16px;
+        }
+    }
+
+    &__update{
+        @include buildButton(70px,40px, $accent-color, white);
+        font-size:16px;
+        align-self:flex-end;
+    }
+
+    &__social{
+        display:flex;
+        justify-content:space-evenly;
+        width:100%;
+        margin-bottom:20px;
+    }
+    
+    &-item{
+        font-size:18px;
+        display:flex;
+        align-items:center;
+        margin-bottom:16px;
+    }
+
+    &__description{
+        position:relative;
+        width:25%;
+        height:100%;
+        margin-left:20px;
+        background-color:white;
+        border-radius:4px;
+        padding:16px;
+        
+        &-logo{
+            position:absolute;
+            top:-37px;
+            left:158px;
+            width:100px;
+            height:100px;
+            border-radius:50px;
+            background-color:grey;
+            box-shadow: 2px 11px 32px  black;
+        }
+        &-content{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            padding-top:80px;
+            text-align:center;
+        }
+
+        &-company{
+            font-size:24px;
+            font-weight:bold;
+            margin-bottom:16px;
+        }
+
+        &-description{
+            padding:16px;
+            margin-bottom:20px;
+        }
+
+    }
+
+    .user-icon{
+        height:25px;
+        width:25px;
+        margin-right:16px;
+        filter: invert(83%) sepia(11%) saturate(291%) hue-rotate(353deg) brightness(92%) contrast(85%);
+    }
+}
+
