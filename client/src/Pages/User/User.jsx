@@ -4,10 +4,10 @@ import "./User.scss"
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 function User({user, updateUserProfile}) {
-    console.log(user);
-    console.log(user.userProfile);
+    // console.log(user);
+    // console.log(user.userProfile);
     const {userProfile, company, social} = user[0];
-    console.log(userProfile);
+    // console.log(userProfile);
     const {lname,fname,username,password,email,phone,address,city,province,country,postal} = userProfile;
     const {facebook, twitter, instagram, linkedIn} = social;
     const {name, description} = company;

@@ -5,10 +5,10 @@ import "./ClientList.scss";
 
 function ClientList({list,match}) {
 
-    console.log(list);
-    console.log(match.path)
+    // console.log(list);
+    // console.log(match.path)
     const page = match.path.split("/")[1];
-    console.log(page);
+    // console.log(page);
     
     return (
 
@@ -19,7 +19,7 @@ function ClientList({list,match}) {
 
         <ul className="client-list__list">
             {page === "clients" && list.map(item => <Link key={item.userId} to={`/clients/${item.userId}/profile`}><li className="client-list__client">{`${item.userProfile.lname}, ${item.userProfile.fname}`}</li></Link>)}
-            {page === "programs" && list.map(item => <Link key={item.id} to ={`programs/${item.id}`}><li className="client-list__client">{`${item.name}`}</li></Link>)}
+            {page === "programs" && list.map(item => <Link key={item.id} to ={`/programs/${item.id}`}><li className="client-list__client">{`${item.name}`}</li></Link>)}
          </ul>
         
     </div>

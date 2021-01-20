@@ -4,6 +4,7 @@ import "./ProgramContent.scss";
 import List from '../../components/List/List';
 
 function ProgramContent({program}) {
+    console.log(program.resources);
 
     return (
         <div className="program">

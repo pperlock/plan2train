@@ -16,13 +16,13 @@ class Trainer extends React.Component{
     componentDidMount(){
         axios.get(`http://localhost:8080/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}`)
         .then(res =>{
-            console.log(res.data)
+            // console.log(res.data)
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs})
         })
 
         axios.get(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/clients`)
         .then(clientRes=>{
-            console.log(clientRes.data);
+            // console.log(clientRes.data);
             this.setState({clients:clientRes.data})
         })
 
@@ -43,7 +43,7 @@ class Trainer extends React.Component{
         const clientIndex = clientsCopy.findIndex(client => client.id===currentClient.id);
         clientsCopy[clientIndex].notes.push(newNote);
             
-        console.log(...this.state.clients[clientIndex].notes);
+        // console.log(...this.state.clients[clientIndex].notes);
         this.setState({clients:clientsCopy})
 
         event.target.newNote.value="";
@@ -53,13 +53,13 @@ class Trainer extends React.Component{
  
         const {match} = this.props;
 
-        console.log(this.state.clients)
+        // console.log(this.state.clients)
 
         const defaultClientId = this.state.clients && this.state.clients[0].userId;
         const currentClient = this.state.clients && this.state.clients.filter(client=>client.userId===match.params.clientId)[0];
-        console.log(match.params.clientId);
-        console.log(this.state.clients)
-        console.log(currentClient);
+        // console.log(match.params.clientId);
+        // console.log(this.state.clients)
+        // console.log(currentClient);
 
         let clientPrograms=[];
         if (currentClient) {

@@ -7,25 +7,12 @@ import ProgramBar from '../../components/ProgramBar/ProgramBar';
 
 class SideBar extends React.Component {
 
-    
-
-    state = {profile:"", isHovering:false};
-
-    handleMouseHover(){
-        this.setState(this.toggleHoverState);
-    }
-
-    toggleHoverState(state){
-        return{
-            isHovering:!state.isHovering,
-        };
-    }
+    state = {profile:""};
 
     componentDidMount(){
         const profile = this.props.match.path.split("/")[1];
         this.setState({profile:profile});
     }
-
 
     componentDidUpdate(){
         
@@ -46,7 +33,6 @@ class SideBar extends React.Component {
     }
 
     render(){
-        console.log(this.props.defaultProgramId);
         return (
             <div className="sidebar" style={{backgroundImage: "url('/images/main-background.jfif')"}}>
             <Link  to="/">
@@ -65,8 +51,8 @@ class SideBar extends React.Component {
                             User Profile
                         </li>
                     </Link>
-                    <Link to={`/programs/${this.props.defaultProgramId}`} onMouseLeave={()=>this.handleMouseHover()} >
-                        <li id="programs-link" onMouseEnter = {()=>this.handleMouseHover()} className="sidebar__menu-link"><img id="programs-icon" className="sidebar__menu-icon"src="/icons/programs-icon.svg" alt="list icon"/>Programs</li>
+                    <Link to={`/programs/${this.props.defaultProgramId}`}>
+                        <li id="programs-link" className="sidebar__menu-link"><img id="programs-icon" className="sidebar__menu-icon"src="/icons/programs-icon.svg" alt="list icon"/>Programs</li>
                         {this.state.isHovering && <ProgramBar programs={this.props.programs}/>}
                     </Link>
                     <Link to={`/clients/${this.props.defaultClientId}/profile`}>
