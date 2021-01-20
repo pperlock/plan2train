@@ -17,8 +17,12 @@ class Clients extends React.Component {
     }
 
     componentDidMount(){
-        console.log("Mounted");
+        console.log("client-mounted");
         this.setState({animateBar:false});
+    }
+
+    componentDidUpdate(){
+        console.log("client-updated")
     }
 
     removeAnimation = ()=>{
@@ -29,14 +33,25 @@ class Clients extends React.Component {
     render(){
 
         console.log(this.state.animateBar);
+
+        console.log(this.props.match.path)
     
-        const {clients, currentClient, clientPrograms} = this.props;
+        const {clients, programs, addClient} = this.props;
+        console.log(clients);
+        console.log(programs);
+
+        const currentClient = clients.find(client=> client.userId ===this.props.match.params.clientId);
+        let clientPrograms=[];
+        clientPrograms = currentClient.programs.forEach(programId =>{
+            clientPrograms.push(programs.filter(program=> program.id === programId)[0]) 
+        });
+
         const {fname, lname} = currentClient.userProfile;
         const active = currentClient.status ? "Active" : "Archived";
         const page = this.props.match.path.split("/")[3]; 
         return (
             <div className="clients__container" style={{backgroundImage: "url('/images/sidebar.')"}}>
-                <ClientList list = {clients} match={this.props.match} animate={this.state.animateBar} onSubmitTrainer={this.props.addClient} programs={this.props.programs}/>
+                <ClientList list = {clients} match={this.props.match} animate={this.state.animateBar} onSubmitTrainer={addClient} programs={programs}/>
                 <div className="client">
                     <div className="client__title">
                         <p className="client__title-name">{`${fname} ${lname}`} </p>
