@@ -1,0 +1,88 @@
+@import '../../styles/globalImports.scss';
+
+.sidebar{
+    background-color:$medium-background;
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-position:bottom;
+    height:100vh;
+    width:300px;
+    box-shadow: 10px 10px 8px  $dark-background; 
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    box-sizing:border-box;
+    font-size:24px;
+    color: grey; 
+    z-index:2;
+    position:fixed;
+    
+    &__logo{
+        font-family:"Montserrat";
+        color: $contrast-text;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        margin:30px 0 20px 0;
+
+        &-title{
+            font-size:24px;
+        }
+
+        &-bigLetter{
+            font-size:32px;
+            font-weight:600;
+        }
+        
+    }
+    &__divider{
+        width:140px;
+        border: 2px solid $contrast-text;
+        margin-bottom:32px;
+        
+    }
+    &__menu{
+        margin-top:24px;
+        width:100%;
+        height:50%;
+
+        // &:hover > li {
+        //     background-color:$medium-background;
+        //     box-shadow:0 $medium-background;
+        // }
+
+        // &:hover > li:hover{
+        //     background-color:$accent-color;
+        //     border-radius:4px;
+        //     box-shadow: 10px 10px 8px  $dark-background; 
+        //     color: $light-text;
+        // }
+
+        &-link{
+            color: $dark-text; 
+            display:flex;
+            align-items:center;
+            
+            padding:10px 16px;
+            margin:32px 20px;
+
+            &--active{
+                background-color:$accent-color;
+                border-radius:4px;
+                box-shadow: 10px 10px 8px  $dark-background; 
+                color: $light-text;
+            }
+        }
+        &-icon{
+            height:25px;
+            width:25px;
+            margin-right:20px;
+            filter: invert(52%) sepia(0%) saturate(0%) hue-rotate(250deg) brightness(96%) contrast(80%);
+
+            &--active{
+                filter: invert(100%) sepia(2%) saturate(976%) hue-rotate(228deg) brightness(95%) contrast(101%);
+            }
+            
+        }
+    }
+}

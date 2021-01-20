@@ -1,0 +1,67 @@
+@import '../../styles/globalImports.scss';
+
+@keyframes sideBarSlideIn{
+    from{width:0px}
+    to{width:200px;}
+}
+
+.client-list{
+        padding:0 10px 0 30px;
+        background-color:$lighter-green;
+        width:200px;
+        box-shadow: 10px 10px 8px silver; 
+        display:flex;
+        flex-direction:column;
+        // align-items:center;
+        box-sizing:border-box;
+        font-size:20px;
+        color: $light-text;
+        position:absolute;
+        animation:sideBarSlideIn 0.5s ease-in;
+        height:100vh;
+
+    &__search{
+        background-color:$lighter-green;
+        border:0;
+        border-bottom:1px solid grey;
+        padding:10px;
+        box-sizing:border-box;
+        margin-top:40px;
+        margin-bottom:20px;
+        width:85%;
+    }
+
+    &__client{
+        margin-bottom:10px;
+        color:$light-text;
+    }
+
+    &__add{
+        @include buildButton(30px,30px,$light-text,$accent-color);
+        font-weight:bold;
+        margin-right:16px;
+        font-size:12px;
+        align-self:flex-end;
+        text-align:center;
+        position:relative;
+        margin:20px;
+
+        &:hover{
+            width:60px;
+            animation:expandButton 0.1s linear;
+            padding-right:21px;
+        }
+
+        &::after{
+            position:absolute;
+            opacity:0;
+            content:"Add";
+            left:25px;
+        }
+        &:hover::after{
+            opacity:1;
+            left:28px;
+        }
+    }
+
+}

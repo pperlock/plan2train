@@ -1,0 +1,77 @@
+@import '../../styles/globalImports.scss';
+
+@keyframes sideBarSlideIn{
+    from{width:0px}
+    to{width:300px;}
+}
+
+.program-bar{
+    background-color:$lighter-green;
+    width:300px;
+    box-shadow: 10px 10px 8px silver; 
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    box-sizing:border-box;
+    font-size:20px;
+    color: $light-text;
+    position:absolute;
+    //animation:sideBarSlideIn 0.5s ease-in;
+    // margin-top:244px;
+
+    top:250px;
+    left:300px;
+    z-index:-2;
+
+    // &__title{
+    //     box-sizing:border-box;
+    //     width:100%;
+    //     padding:10px 16px;
+    //     text-align:center;
+    //     margin-top:140px;
+    //     font-size:24px;
+    //     background-color: $light-text;
+    //     border-radius:4px;
+    //     box-shadow: 5px 5px 5px silver; 
+    //     color: $accent-color;
+    // }
+    &__menu{
+        width:100%;
+        &-link{
+            padding: 10px 20px;
+            color:$light-text;
+            // color:grey;
+            &:hover{
+                background-color:$light-text;
+                color:grey;
+            }
+        }
+    }
+    &__add{
+        @include buildButton(30px,30px,$light-text,$accent-color);
+        font-weight:bold;
+        margin-right:16px;
+        font-size:12px;
+        align-self:flex-end;
+        text-align:center;
+        position:relative;
+        margin:16px;
+
+        &:hover{
+            width:60px;
+            animation:expandButton 0.1s linear;
+            padding-right:21px;
+        }
+
+        &::after{
+            position:absolute;
+            opacity:0;
+            content:"Add";
+            left:25px;
+        }
+        &:hover::after{
+            opacity:1;
+            left:28px;
+        }
+    }
+}

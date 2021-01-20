@@ -1,0 +1,35 @@
+@import '../../styles/globalImports.scss';
+
+.modal-form{
+    display:flex;
+    flex-direction:column;
+    &__input{
+        padding:10px 5px;
+        border:none;
+        border-bottom:1px solid grey;
+        margin-bottom:10px;
+        margin-right:10px;
+        background-color:$form-input-background;
+
+        &:focus{
+            outline:none;
+            border-bottom:1px solid grey;
+        }
+    }
+
+    &__submit{
+        align-self:flex-end;
+        margin-top:20px;
+        &-button{
+            @include buildButton(50px, 40px, $accent-color, $light-text);
+        }
+        &-cancel{
+            border:none;
+            margin-right:10px;
+            cursor:pointer;
+        }
+    }
+
+    &__section{
+    }
+}
