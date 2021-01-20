@@ -11,7 +11,18 @@ const clientSchema = new Schema({
     trainerId: {
         type: String
     },
-
+    username:{
+        type: String
+    },
+    password:{
+        type: String
+    },
+    profile:{
+        type: String
+    },
+    status:{
+        type: String
+    },
     userProfile:{
         type: Object
     },

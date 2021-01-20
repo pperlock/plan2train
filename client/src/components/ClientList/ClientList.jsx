@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 
 import "./ClientList.scss";
 
-function ClientList({list,match}) {
+function ClientList({list,match, animate}) {
 
     // console.log(list);
     // console.log(match.path)
@@ -12,7 +12,7 @@ function ClientList({list,match}) {
     
     return (
 
-    <div className="client-list">
+    <div className={animate ? "client-list client-list--animate" : "client-list"}>
         <input className="client-list__search" type="text" placeholder="Search"/>
 
         <button className="client-list__add">+</button>

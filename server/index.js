@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
+const { v4: uuidv4 } = require('uuid');
 const PORT = 8080;
 
 //import models
@@ -11,6 +12,8 @@ const Client = require('./models/client')
 const Program = require('./models/program')
 
 app.use(cors());
+//use .json to solve issues between json and text formats
+app.use(express.json());
 
 
 //Connect To mongodb
@@ -22,48 +25,36 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //seco
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
 
-//sandbox routes ....
-// app.get('/add-user', (req,res)=>{
-//     //create a new instance of a blog document (variable name can be anything) and save that it in the database - .POST?
+app.post('/trainer/:trainerId/addClient', (req,res)=>{
+    //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
 
-//     //"--id" is auto generated - not a string in mongoDB - mongoose handles the conversion from to a string and then back again
-//     const user = new User({
-//         //pass an object with the different properties in the schema
-//         name:"Patti",
-//         profile:"Trainer"
-//     });
+    const {username,password,profile,status,userProfile, programs} = req.body;
+    //"--id" is auto generated - not a string in mongoDB - mongoose handles the conversion from to a string and then back again
+    const client = new Client({
+        //pass an object with the different properties in the schema
+        userId:uuidv4(),
+        trainerId: req.params.trainerId,
+        username,
+        password,
+        profile,
+        status,
+        userProfile,
+        programs,
+        lessons:[],
+        notes:[],
+        photos:[]
+    });
 
-//     user.save() ///asynchronous - returns a promise
-//     .then((res)=>{
-//         //once the data is saved, the database sends us back a new object version of document that was saved
-//         res.send(res);
-//     })
-//     .catch((err)=>{
-//         console.log(err);
-//     })
-// })
+    client.save() ///asynchronous - returns a promise
+    .then((response)=>{
+        //once the data is saved, the database sends us back a new object version of document that was saved
+        res.send(response);
+    })
+    .catch((err)=>{
+        console.log(err);
+    })
+})
 
-// app.get('/trainer/:username', (req, res) => {
-
-//     let trainer = {userprofile:{}, clients:[], programs:[] }
-
-//     Trainer.find({username:req.params.username}) //asynchronous
-//     .then((response)=>{
-//         const trainerId = response[0]._id
-//         trainer.userprofile = response;
-            
-//             Program.find({trainer_id:trainerId})
-//             .then((programRes)=>{
-//                 trainer.programs=programRes
-//                 res.send(trainer);
-//             })
-//         })
-
-//         .catch((err) =>{
-//             console.log(err)
-//         });
-
-// })
 
 app.get('/trainer/:trainerId/clients', (req, res) => {
 

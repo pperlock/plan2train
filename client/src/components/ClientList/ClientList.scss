@@ -17,8 +17,10 @@
         font-size:20px;
         color: $light-text;
         position:absolute;
-        animation:sideBarSlideIn 0.5s ease-in;
         height:100vh;
+        &--animate{
+            animation:sideBarSlideIn 0.5s ease-in;
+        }
 
     &__search{
         background-color:$lighter-green;
