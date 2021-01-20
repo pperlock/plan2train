@@ -23,7 +23,6 @@ class SideBar extends React.Component {
     componentDidUpdate(){
         
         const activeLink = this.props.match.path.split("/")[1];
-        console.log(activeLink);
         if(document.getElementById(`${activeLink}-link`)){
             const previouslyActiveLink = document.querySelector(".sidebar__menu-link--active");
             previouslyActiveLink.classList.remove("sidebar__menu-link--active");
@@ -43,9 +42,6 @@ class SideBar extends React.Component {
     render(){
 
         const {username,trainerId, trainerName, programs, clients, match} = this.props;
-        console.log(!!clients);
-
-        const render="false";
 
         const defaultClientId = clients ? clients[0].userId : match.params.clientId
 

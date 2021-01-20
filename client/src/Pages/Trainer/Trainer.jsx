@@ -19,16 +19,13 @@ class Trainer extends React.Component{
         .then(res =>{
             // console.log(res.data)
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
-        
-
                 axios.get(`http://localhost:8080/trainer/${this.state.trainerId}/clients`)
                 .then(clientRes=>{
-                    console.log(clientRes.data);
                     this.setState({clients:clientRes.data})
                 })
             })
         })
-        console.log("trainer-componentDidMount")
+        // console.log("trainer-componentDidMount")
     }
 
     /** ================================================ ADD CLIENT ================================================*/
@@ -85,8 +82,6 @@ class Trainer extends React.Component{
     render(){
  
         const {match} = this.props;
-
-        console.log(this.state)
 
         return (
             <>

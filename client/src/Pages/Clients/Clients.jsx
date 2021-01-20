@@ -17,38 +17,38 @@ class Clients extends React.Component {
     }
 
     componentDidMount(){
-        console.log("client-mounted");
+        // console.log("client-mounted");
         this.setState({animateBar:false});
     }
 
     componentDidUpdate(){
-        console.log("client-updated")
+        // console.log("client-updated")
     }
 
     removeAnimation = ()=>{
-        console.log("reached");
         this.setState({animateBar:false});
+    }
+
+    getclientPrograms(){
+        
     }
     
     render(){
 
-        console.log(this.state.animateBar);
-
-        console.log(this.props.match.path)
-    
         const {clients, programs, addClient} = this.props;
-        console.log(clients);
-        console.log(programs);
+        const page = this.props.match.path.split("/")[3]; 
 
-        const currentClient = clients.find(client=> client.userId ===this.props.match.params.clientId);
-        let clientPrograms=[];
-        clientPrograms = currentClient.programs.forEach(programId =>{
-            clientPrograms.push(programs.filter(program=> program.id === programId)[0]) 
+        const currentClient = this.props.clients.find(client=> client.userId ===this.props.match.params.clientId);
+
+        var clientPrograms=[];
+        currentClient.programs.forEach(programId =>{
+            clientPrograms.push(this.props.programs.find(program=> program.id === programId)) 
         });
 
         const {fname, lname} = currentClient.userProfile;
         const active = currentClient.status ? "Active" : "Archived";
-        const page = this.props.match.path.split("/")[3]; 
+
+        //determine the current client and get the appropriate program data 
         return (
             <div className="clients__container" style={{backgroundImage: "url('/images/sidebar.')"}}>
                 <ClientList list = {clients} match={this.props.match} animate={this.state.animateBar} onSubmitTrainer={addClient} programs={programs}/>
