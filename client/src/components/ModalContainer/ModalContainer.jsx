@@ -19,10 +19,13 @@ class ModalContainer extends React.Component {
             onSubmit=this.addClient;
         }else if (modal === "updateUser"){
             onSubmit=this.updateUser;
+        }else if (modal === "addProgram"){
+            onSubmit=this.addProgram;
         }
         return onSubmit
     }
 
+    /** ================================================ Update User ================================================*/
     updateUser = (event) =>{
         event.preventDefault();
         
@@ -50,6 +53,7 @@ class ModalContainer extends React.Component {
         this.closeModal();
     }
 
+    /** ================================================ ADD CLIENT ================================================*/
     addClient = (event) =>{
         event.preventDefault();
 
@@ -89,6 +93,24 @@ class ModalContainer extends React.Component {
         this.props.onSubmitTrainer(newClient)
         this.closeModal();
     }
+
+    /** ================================================ ADD CLIENT ================================================*/
+    addProgram = (event) =>{
+        event.preventDefault();
+
+        const newProgram = {
+            name:event.target.programName.value,
+            description:event.target.programDescription.value
+        }
+
+        console.log(newProgram);
+
+        this.props.onSubmitTrainer(newProgram)
+        this.closeModal();
+    }
+
+
+    /** ================================================ MODAL FUNCTIONS ================================================*/
 
     showModal = () =>{
         this.setState({isShown:true}, 

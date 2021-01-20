@@ -5,6 +5,7 @@ import FocusTrap from 'focus-trap-react';
 import "./Modal.scss";
 
 import PersonalDetailsForm from '../PersonalDetailsForm/PersonalDetailsForm';
+import NewProgramForm from '../NewProgramForm/NewProgramForm';
 import NewClientForm from '../NewClientForm/NewClientForm';
 
 function Modal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal,onSubmit, information, modalName}) {
@@ -34,6 +35,7 @@ function Modal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal,onSub
                     <div className="modal-body">
                         {modalName==="updateUser" && <PersonalDetailsForm  onSubmit={onSubmit} closeModal={closeModal} userProfile={information}/> }
                         {modalName === "addClient" && <NewClientForm onSubmit={onSubmit} closeModal={closeModal} programs={information}/>}
+                        {modalName === "addProgram" && <NewProgramForm onSubmit={onSubmit} closeModal={closeModal} />}
                     </div>
                 </div>
 

@@ -28,9 +28,10 @@ class Trainer extends React.Component{
 
     }
 
+    /** ================================================ ADD CLIENT ================================================*/
+
     addClient=(newClient)=>{
 
-        console.log(this.state.userProfile)
         axios.post(`http://localhost:8080/trainer/${this.state.userProfile[0].userId}/addClient`, newClient)
         .then(res =>{
             this.setState({clients:[...this.state.clients, res.data]})
@@ -41,10 +42,26 @@ class Trainer extends React.Component{
         
     }
 
+    /** ================================================ ADD PROGRAM ================================================*/
+    addProgram=(newProgram)=>{
+        console.log(newProgram)
+        axios.post(`http://localhost:8080/trainer/${this.state.userProfile[0].userId}/addProgram`, newProgram)
+        .then(res =>{
+            this.setState({programs:[...this.state.programs, res.data]})
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+        
+    }
+
+    /** ================================================ UPDATE USER ================================================*/
     updateUserProfile=(updatedProfile)=>{
         this.setState({userProfile:updatedProfile});
     }
 
+    
+    /** ================================================ ADD NOTE ================================================*/
     addNote=(event,currentClient)=>{
         event.preventDefault();
         const newNote = {
@@ -84,7 +101,13 @@ class Trainer extends React.Component{
         return (
             <>
                 {this.state.userProfile && <SideBar defaultClientId = {defaultClientId} defaultProgramId = {this.state.programs[0].id} programs={this.state.programs} match={match}/>}
-                {(this.state.userProfile && match.path==="/programs/:programId") && <Programs programs={this.state.programs} currentProgramId={match.params.programId} match={match}/>}
+                {(this.state.userProfile && match.path==="/programs/:programId") && 
+                    <Programs 
+                        programs={this.state.programs} 
+                        currentProgramId={match.params.programId} 
+                        match={match}
+                        addProgram={this.addProgram}    
+                        />}
                 {(this.state.userProfile && match.path==="/clients/:clientId/profile") && 
                     <Clients {...this.props} 
                         programs={this.state.programs} 

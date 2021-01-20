@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import "./ClientList.scss";
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
-function ClientList({list,match, animate, addClient, programs}) {
+function ClientList({list,match, animate, onSubmitTrainer, programs}) {
 
     // console.log(list);
     // console.log(match.path)
@@ -16,7 +16,8 @@ function ClientList({list,match, animate, addClient, programs}) {
     <div className={animate ? "client-list client-list--animate" : "client-list"}>
         <input className="client-list__search" type="text" placeholder="Search"/>
 
-        <ModalContainer modalName = "addClient" buttonText="Add" onSubmitTrainer={addClient} information={programs}/>
+        {page === "clients" && <ModalContainer modalName = "addClient" buttonText="Add" onSubmitTrainer={onSubmitTrainer} information={programs}/>}
+        {page === "programs" && <ModalContainer modalName = "addProgram" buttonText="Add" onSubmitTrainer={onSubmitTrainer}/>}
         {/* <button className="client-list__add" onClick={()=>addClient()}>+</button> */}
 
         <ul className="client-list__list">
