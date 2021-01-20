@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+
+
+import Intro from './Pages/Intro/Intro';
+import Trainer from './Pages/Trainer/Trainer';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+        <BrowserRouter>
+            <Switch>
+                <Route path="/" exact component={Intro}/>  {/* // make an axios call to get username and id on sign in*/}
+                <Route path="/trainer/:username/:trainerId" render={(props)=>(<Trainer {...props}/>)}/>
+                <Route path="/programs/:programId" render={(props)=>(<Trainer {...props}/>)}/>
+                <Route path="/clients/:clientId/profile" exact render={(props)=>(<Trainer {...props}/>)}/>
+                <Route path="/clients/:clientId/lessons" render={(props)=>(<Trainer {...props}/>)}/>
+                <Route path="/schedule" render={(props)=>(<Trainer {...props}/>)}/>
+            </Switch>
+        </BrowserRouter>
+        
     </div>
   );
 }
