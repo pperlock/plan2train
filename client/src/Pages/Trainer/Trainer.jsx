@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import firebase from '../../firebase';
 
 import "./Trainer.scss"
 
@@ -11,7 +12,7 @@ import User from '../User/User';
 
 class Trainer extends React.Component{
     
-    state={username:"bharwood", trainerId: "600616b6c63ec047da27d59f", userProfile:null, programs:null, clients:null}
+    state={files:null, username:"bharwood", trainerId: "600616b6c63ec047da27d59f", userProfile:null, programs:null, clients:null}
 
 
     componentDidMount(){
@@ -78,6 +79,50 @@ class Trainer extends React.Component{
 
         event.target.newNote.value="";
     }
+
+    fileSelectedHandler = event =>{
+        //first item in the array will be the file added
+        this.setState({files:event.target.files});
+    }
+
+    fileUpload=()=>{
+        // const fd=new FormData; //default js object
+        // //image can be any name you want -pdf, video, etc       
+        // fd.append('image', this.state.selectedFile, this.state.selectedFile.name )
+        // axios.post('link to cloud storage', fd, {
+        //     onUploadProgress:progressEvent =>{
+        //         console.log('Upload Progress:' + Math.round((progressEvent.loaded/progressEvent.total)*100) + '%')
+        //     }
+        // })//fd is the data to send with the request, third argument for progress
+        // .then(res=>{
+        //     console.log(res);
+        // })
+        // .catch(err=>{
+        //     console.log(err);
+        // })
+        
+        let bucketName = "resources";
+        let file = this.state.files[0];
+        console.log(file);
+        let storageRef = firebase.storage().ref(`${bucketName}/${file.name}`);
+        let uploadTask = storageRef.put(file);
+        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+            ()=>{
+                let downloadURL = uploadTask.snapshot.getDownloadURL;
+            })
+        
+        // retrieving the file storage ref
+            //let storageRef = firebase.storage().ref();
+            let spaceRef = storageRef.child('/resources/'+ this.state.files[0].name);
+            storageRef.child('/resources/'+this.state.files[0].name).getDownloadURL()
+            .then((url)=>{
+                console.log(url)
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+
+    }
     
     render(){
  
@@ -85,6 +130,17 @@ class Trainer extends React.Component{
 
         return (
             <>
+                {/* a reference is a way to reference another element in the dom */}
+                {/* ref takes a function that binds a property of our class to a reference of this input */}
+                <input 
+                    style={{display:'none'}} 
+                    type="file"
+                    onChange={this.fileSelectedHandler} 
+                    ref={fileInput => this.fileInput=fileInput}>
+                </input>
+                <button onClick={()=>this.fileInput.click()}>Choose File</button>
+                <button onClick={this.fileUpload}>Upload</button>
+
                 {this.state.userProfile && 
                     <SideBar
                         clients={this.state.clients} 
