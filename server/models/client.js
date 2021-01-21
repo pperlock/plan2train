@@ -11,6 +11,9 @@ const clientSchema = new Schema({
     trainerId: {
         type: String
     },
+    yearAdded:{
+        type: Date
+    },
     username:{
         type: String
     },

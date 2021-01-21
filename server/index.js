@@ -31,10 +31,12 @@ app.post('/trainer/:trainerId/addClient', (req,res)=>{
 
     const {username,password,profile,status,userProfile, programs} = req.body;
     //"--id" is auto generated - not a string in mongoDB - mongoose handles the conversion from to a string and then back again
+    const date = new Date().getFullYear();
     const client = new Client({
         //pass an object with the different properties in the schema
         userId:uuidv4(),
         trainerId: req.params.trainerId,
+        yearAdded: date,
         username,
         password,
         profile,

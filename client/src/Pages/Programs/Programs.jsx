@@ -10,13 +10,12 @@ class Programs extends React.Component {
     state={selectedFile:null, showRadio:false, addActivated:false, uploaded:false, uploadType:""}
 
     componentDidUpdate(){
-        console.log("programs - did update")
+        // console.log("programs - did update")
     }
 
     // fired by clicking on a radio button
     uploadType = (event) => {
         const type = event.target.value;
-        console.log(type);
         if (type =="file"){
                 console.log( this.fileInput)
                 this.fileInput.click()
@@ -49,7 +48,6 @@ class Programs extends React.Component {
             let storageLoc = firebase.storage().ref();
             storageLoc.child('/resources/'+ this.state.selectedFile.name).getDownloadURL()
             .then((url)=>{
-                console.log(url)
                 const newResource={
                     name:event.target.uploadName.value,
                     url:url,
