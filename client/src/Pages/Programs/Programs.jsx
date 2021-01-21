@@ -1,6 +1,7 @@
 import React from 'react';
 import "./Programs.scss";
 import firebase from '../../firebase';
+import axios from 'axios';
 
 import ClientList from '../../components/ClientList/ClientList';
 import ProgramContent from '../../components/ProgramContent/ProgramContent';
@@ -8,7 +9,11 @@ import List from '../../components/List/List';
 
 class Programs extends React.Component {
 
-    state={selectedFile:null, addActivated:false, fileName:""}
+    state={selectedFile:null, addActivated:false, uploaded:false}
+
+    componentDidUpdate(){
+        console.log("programs - did update")
+    }
 
     fileSelectedHandler = event =>{
         //files is an array - if they choose more than one
@@ -18,7 +23,6 @@ class Programs extends React.Component {
     fileUpload=()=>{
         let bucketName = "resources";
         let file = this.state.selectedFile;
-        console.log(file);
         let storageRef = firebase.storage().ref(`${bucketName}/${file.name}`);
         let uploadTask = storageRef.put(file);
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
@@ -28,30 +32,20 @@ class Programs extends React.Component {
         
         this.setState({addActivated:false});
         
-        console.log(storageRef);
         let storageLoc = firebase.storage().ref();
-        // let spaceRef = storageRef.child('/resources/'+ this.state.selectedFile.name);
         storageLoc.child('/resources/'+ this.state.selectedFile.name).getDownloadURL()
         .then((url)=>{
             console.log(url)
+            const newResource={
+                name:"Test",
+                url:url,
+                type:"pdf"
+            }
+            this.props.addResource(newResource, this.props.match.params.programId);
         })
         .catch(err=>{
             console.log(err);
         })
-        
-        // retrieving the file storage ref - added to another click handler - download for clients
-            //let storageRef = firebase.storage().ref();
-            // let spaceRef = storageRef.child('/resources/'+ this.state.files[0].name);
-            // storageRef.child('/resources/'+this.state.files[0].name).getDownloadURL()
-            // .then((url)=>{
-            //     console.log(url)
-            // })
-            // .catch(err=>{
-            //     console.log(err);
-            // })
-
-            //file.type = from firebase
-
     }
 
     render(){

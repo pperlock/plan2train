@@ -56,6 +56,28 @@ class Trainer extends React.Component{
         
     }
 
+    /** ================================================ ADD RESOURCE ================================================*/
+    addResource=(newResource, programId)=>{
+        axios.post(`http://localhost:8080/program/${this.props.match.params.programId}/addResource`, newResource)
+        .then(res =>{
+            //make a copy of the programs in state
+            const programsCopy = this.state.programs;
+            // find the location of the program to update?
+            const programLoc = programsCopy.findIndex(program =>program.id ===programId);
+            //remove that program from the array
+            programsCopy.splice(programLoc,1);
+            //add the new program returned by the axios call
+            programsCopy.push(res.data);
+            console.log(programsCopy);
+            //update the state to the modified program array
+            this.setState({programs:programsCopy});
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+        
+    }
+
     /** ================================================ UPDATE USER ================================================*/
     updateUserProfile=(updatedProfile)=>{
         this.setState({userProfile:updatedProfile});
@@ -112,7 +134,8 @@ class Trainer extends React.Component{
                         programs={this.state.programs} 
                         currentProgramId={match.params.programId} 
                         match={match}
-                        addProgram={this.addProgram}    
+                        addProgram={this.addProgram}
+                        addResource={this.addResource}    
                         />}
                 {(this.state.clients && match.path==="/clients/:clientId/profile") && 
                     <Clients {...this.props} 
