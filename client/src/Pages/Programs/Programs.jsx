@@ -91,6 +91,8 @@ class Programs extends React.Component {
                                 {program.resources.map(resource=> <List key={resource.id} content={resource.name} id={resource.id} link={resource.url} description={resource.type} deleteBtn={true} />)}
                         </div>
 
+                        {/* a reference is a way to reference another element in the dom */}
+                        {/* ref takes a function that binds a property of our class to a reference of this input */}        
                         {/* input box used to access the file picker */}
                         <input 
                             style={{display:'none'}} 

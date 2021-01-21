@@ -1,0 +1,33 @@
+@import '../../styles/globalImports.scss';
+
+.modal-delete{
+    &__header{
+        text-align:center;
+        &-title{
+            padding-left:0;
+
+        }
+        &-info{
+            margin:20px 0;
+        }
+        &-warning{
+            font-size: 18px;
+        }
+    }
+    &__area{
+        width: 33%;
+        height: 27%;
+        left:33%
+    }
+    &__close{
+        top:11px;
+        right:25px;
+    }
+    &__body{
+        display:flex;
+        justify-content:flex-end;
+        margin:50px 20px;;
+    }
+}
+
+

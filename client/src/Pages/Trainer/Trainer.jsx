@@ -82,6 +82,17 @@ class Trainer extends React.Component{
         this.setState({userProfile:updatedProfile});
     }
 
+    /** ================================================ UPDATE CLIENT ================================================*/
+        updateClient=(updatedClient)=>{
+            console.log(updatedClient);
+        //this.setState({userProfile:updatedProfile});
+    }
+
+    /** ================================================ DELETE CLIENT ================================================*/
+        updateClient=(updatedClient)=>{
+            console.log(updatedClient);
+        //this.setState({userProfile:updatedProfile});
+    }
     
     /** ================================================ ADD NOTE ================================================*/
     addNote=(event,currentClient)=>{
@@ -109,17 +120,6 @@ class Trainer extends React.Component{
 
         return (
             <>
-                {/* a reference is a way to reference another element in the dom */}
-                {/* ref takes a function that binds a property of our class to a reference of this input */}
-                <input 
-                    style={{display:'none'}} 
-                    type="file"
-                    onChange={this.fileSelectedHandler} 
-                    ref={fileInput => this.fileInput=fileInput}>
-                </input>
-                <button onClick={()=>this.fileInput.click()}>Choose File</button>
-                <button onClick={this.fileUpload}>Upload</button>
-
                 {this.state.userProfile && 
                     <SideBar
                         clients={this.state.clients} 
@@ -142,6 +142,7 @@ class Trainer extends React.Component{
                         clients={this.state.clients} 
                         addNote={this.addNote}
                         addClient={this.addClient}
+                        updateClient={this.updateClient}
                     />}
                 {(this.state.clients && match.path==="/clients/:clientId/lessons") && 
                     <Clients {...this.props} 

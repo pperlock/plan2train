@@ -22,7 +22,6 @@ function ClientProfile({currentClient}) {
                             <p className="client__contact-item"> {phone}</p>
                         </div>
                     </div>
-                    <button className="client__contact-add add"> Update </button>
                 </div>
                 <div className="client__contact-map">google map</div>
             </div>

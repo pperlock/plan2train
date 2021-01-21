@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Modal from '../Modal/Modal';
+import DeleteModal from '../DeleteModal/DeleteModal';
 import TriggerModalButton from '../TriggerModalButton/TriggerModalButton';
 
 class ModalContainer extends React.Component {
@@ -10,6 +11,7 @@ class ModalContainer extends React.Component {
     //onSubmitTrainer= function that updates trainer state 
     //information - information needed in form; 
     //modalName - used to conditionally pass onsubmit
+    //modalType - used to determine which modal to render
     state = {isShown:false}
 
     getOnSubmit = ()=>{
@@ -155,7 +157,19 @@ class ModalContainer extends React.Component {
                     buttonText={this.props.buttonText}
                 />
 
-                {this.state.isShown && 
+                {(this.state.isShown && this.props.modalType==="delete") && 
+                    <DeleteModal
+                        modalName={this.props.modalName}
+                        onSubmit={onSubmit}
+                        modalRef={n=> this.modal = n}
+                        buttonRef={n=> this.closeButton=n}
+                        closeModal={this.closeModal}
+                        onKeyDown={this.onKeyDown}
+                        onClickOutside={this.onClickOutside}
+                        information={this.props.information}
+                    />}
+
+                {(this.state.isShown && this.props.modalType !=="delete") && 
                     <Modal
                         modalName={this.props.modalName}
                         onSubmit={onSubmit}
