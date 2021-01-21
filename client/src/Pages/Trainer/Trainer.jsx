@@ -80,49 +80,7 @@ class Trainer extends React.Component{
         event.target.newNote.value="";
     }
 
-    fileSelectedHandler = event =>{
-        //first item in the array will be the file added
-        this.setState({files:event.target.files});
-    }
-
-    fileUpload=()=>{
-        // const fd=new FormData; //default js object
-        // //image can be any name you want -pdf, video, etc       
-        // fd.append('image', this.state.selectedFile, this.state.selectedFile.name )
-        // axios.post('link to cloud storage', fd, {
-        //     onUploadProgress:progressEvent =>{
-        //         console.log('Upload Progress:' + Math.round((progressEvent.loaded/progressEvent.total)*100) + '%')
-        //     }
-        // })//fd is the data to send with the request, third argument for progress
-        // .then(res=>{
-        //     console.log(res);
-        // })
-        // .catch(err=>{
-        //     console.log(err);
-        // })
-        
-        let bucketName = "resources";
-        let file = this.state.files[0];
-        console.log(file);
-        let storageRef = firebase.storage().ref(`${bucketName}/${file.name}`);
-        let uploadTask = storageRef.put(file);
-        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-            ()=>{
-                let downloadURL = uploadTask.snapshot.getDownloadURL;
-            })
-        
-        // retrieving the file storage ref
-            //let storageRef = firebase.storage().ref();
-            let spaceRef = storageRef.child('/resources/'+ this.state.files[0].name);
-            storageRef.child('/resources/'+this.state.files[0].name).getDownloadURL()
-            .then((url)=>{
-                console.log(url)
-            })
-            .catch(err=>{
-                console.log(err);
-            })
-
-    }
+    
     
     render(){
  

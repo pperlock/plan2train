@@ -8,3 +8,59 @@
         padding-left:300px;
     }
 }
+
+.program{
+    padding:176px 20px 0 20px;
+    height:100vh;
+    width:75%;
+    padding-left:320px;
+    
+    &__header{
+        width:100%;
+        &-title{
+            position:absolute;
+            width:98%;
+            bottom:95%;
+            right:1%;
+            box-sizing:border-box;
+            background-color:$accent-color;
+            border-radius:4px;
+            box-shadow: -4px 10px 8px  $dark-background; 
+            color: $light-text;
+            padding:16px;
+            font-size:24px;
+        }
+        &-description{
+            margin-top:60px;
+            padding:16px;
+            text-align:center;
+            
+        }
+    }
+    &__resources{
+        height:100%;
+        padding:16px;
+
+    }
+
+    
+}
+
+.resource{
+    &__add{
+        @include buildButton(30px,30px, $accent-color, white);
+        font-size:12px;
+    }
+    &__upload{
+        display:flex;
+        justify-content:space-between;
+        &-file{
+            width:100%;
+            padding-left:16px;
+            margin-right:16px;
+        }
+        &-type{
+            margin-right:16px;
+        }
+    }
+}
