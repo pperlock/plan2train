@@ -81,6 +81,37 @@ app.post('/trainer/:trainerId/addProgram', (req,res)=>{
     })
 })
 
+/* =========================================== ADD RESOURCE ================================================ */
+app.post('/program/:programId/addResource', (req,res)=>{
+
+    const {name, url, type} = req.body;
+
+    const newResource = {
+        id:uuidv4(),
+        name,
+        url,
+        type
+    }
+
+    Program.findOne({id:req.params.programId}) //asynchronous
+    .then((response)=>{
+        response.resources.push(newResource);
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+
+})
+
+
 /* =========================================== GET CLIENTS ================================================ */
 
 app.get('/trainer/:trainerId/clients', (req, res) => {
