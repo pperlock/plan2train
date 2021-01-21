@@ -2,7 +2,6 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import './ClientLessons.scss'
-import List from '../../components/List/List';
 
 function ClientLessons({currentClient, clientPrograms}) {
     console.log(currentClient);
