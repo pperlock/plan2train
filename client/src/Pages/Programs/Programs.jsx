@@ -7,12 +7,13 @@ import List from '../../components/List/List';
 
 class Programs extends React.Component {
 
-    state={selectedFile:null, addActivated:false, uploaded:false, uploadType:""}
+    state={selectedFile:null, showRadio:false, addActivated:false, uploaded:false, uploadType:""}
 
     componentDidUpdate(){
         console.log("programs - did update")
     }
 
+    // fired by clicking on a radio button
     uploadType = (event) => {
         const type = event.target.value;
         console.log(type);
@@ -20,16 +21,21 @@ class Programs extends React.Component {
                 console.log( this.fileInput)
                 this.fileInput.click()
         }else{
-            this.setState({uploadType:type})
+            this.setState({uploadType:type, showRadio:false})
         }
     }
 
+    // fired through reference in uploadType - event to handle choosing a file type from file picker
     fileSelectedHandler = event =>{
         //files is an array - if they choose more than one
-        this.setState({selectedFile:event.target.files[0], uploadType:"file"});
+        this.setState({selectedFile:event.target.files[0], uploadType:"file", showRadio:false});
     }
 
-    fileUpload=(uploadType)=>{
+    // fired by clicking the upload button
+    fileUpload=(event,uploadType)=>{
+        event.preventDefault();
+
+        // if the resource to be added is a file the save it to firebase and send the resulting url to db
         if (uploadType === "file"){
             let bucketName = "resources";
             let file = this.state.selectedFile;
@@ -40,13 +46,12 @@ class Programs extends React.Component {
                     let downloadURL = uploadTask.snapshot.getDownloadURL;
                 })
             
-            
             let storageLoc = firebase.storage().ref();
             storageLoc.child('/resources/'+ this.state.selectedFile.name).getDownloadURL()
             .then((url)=>{
                 console.log(url)
                 const newResource={
-                    name:"File Test",
+                    name:event.target.uploadName.value,
                     url:url,
                     type:"pdf"
                 }
@@ -55,15 +60,17 @@ class Programs extends React.Component {
             .catch(err=>{
                 console.log(err);
             })
+        //if the resource is a url then capture the url and send it to db
         }else{
             const newResource={
-                name:"URL Test",
-                url:"http://google.com",
+                name:event.target.uploadName.value,
+                url:event.target.uploadURL.value,
                 type:"url"
             }
             this.props.addResource(newResource, this.props.match.params.programId);
         }
 
+        // return the add button to the screen and hide the resource input elements
         this.setState({addActivated:false, uploadType:""});
     }
 
@@ -71,13 +78,10 @@ class Programs extends React.Component {
     render(){
         const {programs, match, addProgram}=this.props;
         const program = programs.find(program=>program.id===match.params.programId)
-
-        console.log(this.state.uploadType);
         
         return (
             <div className="programs__container">
                 <ClientList list={programs} match={match} onSubmitTrainer={addProgram}/>
-                {/* <ProgramContent program={programs.find(program=>program.id===match.params.programId)}/> */}
                 <div className="program">
                     <div className="component program__resources">
                         <div className="program__header">
@@ -89,16 +93,19 @@ class Programs extends React.Component {
                                 {program.resources.map(resource=> <List key={resource.id} content={resource.name} id={resource.id} link={resource.url} description={resource.type} deleteBtn={true} />)}
                         </div>
 
+                        {/* input box used to access the file picker */}
                         <input 
                             style={{display:'none'}} 
                             type="file"
+                            // when file is selected it sets the state to the file, hides the radio and sets type of file in state
                             onChange={this.fileSelectedHandler} 
-                            //reference used for add button - launch the file filepicker
+                            //input box is invisible activated by radio button choice through reference in upload type function 
                             ref={fileInput => this.fileInput=fileInput}>
                         </input>
 
-                        {this.state.addActivated && 
+                        {this.state.showRadio && 
                             <div>
+                                {/* clicking an input box sets which resource type options to show */}
                                 <input type="radio" id="url" name="addResource" value="url" onClick={this.uploadType}/>
                                 <label htmlFor="url">Add URL</label>
                                 <input type="radio" id="file" name="addResource" value="file" onClick={this.uploadType}/>
@@ -107,26 +114,28 @@ class Programs extends React.Component {
                         }
                         
                         {this.state.uploadType==="file" && 
-                            <div className="resource__upload">
-                                <input className="resource__upload-file" type="text" value={this.state.selectedFile.name} readOnly></input>
+                            <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
+                                <input className="resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
+                                <input className="resource__upload-file" name="uploadURL" type="text" value={this.state.selectedFile.name} readOnly></input>
                                 <select className="resource__upload-type">
                                     <option value="pdf">pdf</option>
                                     <option value="doc">doc</option>
                                     <option value="video">video</option>
                                     <option value="image">image</option>
                                 </select>
-                                <button className="resource__add" onClick={()=>this.fileUpload(this.state.uploadType)}>Upload</button>
-                            </div>
+                                <button type="submit" className="resource__add">Upload</button>
+                            </form>
                         }
 
                         {this.state.uploadType==="url" && 
-                            <div className="resource__upload">
-                                <input className="resource__upload-file" type="text" placeholder="Enter URL"></input>
-                                <button className="resource__add" onClick={()=>this.fileUpload(this.state.uploadType)}>Upload</button>
-                            </div>
+                            <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
+                                <input className="resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
+                                <input className="resource__upload-file" name="uploadURL" type="text" placeholder="Enter URL"></input>
+                                <button type="submit" className="resource__add">Upload</button>
+                            </form>
                         }
 
-                        {!this.state.addActivated && <button className="add resource__add" onClick={()=>this.setState({addActivated:true})}>+</button>}
+                        {!this.state.addActivated && <button className="add resource__add" onClick={()=>this.setState({addActivated:true, showRadio:true})}>+</button>}
                         
                     </div>
                 </div>
