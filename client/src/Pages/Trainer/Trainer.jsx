@@ -1,4 +1,5 @@
 import React from 'react';
+import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 
 import "./Trainer.scss"
@@ -11,7 +12,7 @@ import User from '../User/User';
 
 class Trainer extends React.Component{
     
-    state={files:null, username:"bharwood", trainerId: "600616b6c63ec047da27d59f", userProfile:null, programs:null, clients:null}
+    state={files:null, username:"bharwood", trainerId: "600616b6c63ec047da27d59f", userProfile:null, programs:null, clients:null, updated:false}
 
 
     componentDidMount(){
@@ -25,7 +26,24 @@ class Trainer extends React.Component{
                 })
             })
         })
-        // console.log("trainer-componentDidMount")
+        console.log("trainer-componentDidMount")
+    }
+
+    componentDidUpdate(){
+        console.log("trainer-didupdate");
+        if(this.state.updated){
+            axios.get(`http://localhost:8080/trainer/${this.state.username}/${this.state.trainerId}`)
+            .then(res =>{
+                // console.log(res.data)
+                this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
+                    axios.get(`http://localhost:8080/trainer/${this.state.trainerId}/clients`)
+                    .then(clientRes=>{
+                        this.setState({clients:clientRes.data})
+                    })
+                })
+                this.setState({updated:false})
+            })
+        }
     }
 
     /** ================================================ ADD CLIENT ================================================*/
@@ -44,7 +62,6 @@ class Trainer extends React.Component{
 
     /** ================================================ ADD PROGRAM ================================================*/
     addProgram=(newProgram)=>{
-        console.log(newProgram)
         axios.post(`http://localhost:8080/trainer/${this.state.userProfile[0].userId}/addProgram`, newProgram)
         .then(res =>{
             this.setState({programs:[...this.state.programs, res.data]})
@@ -89,9 +106,15 @@ class Trainer extends React.Component{
     }
 
     /** ================================================ DELETE CLIENT ================================================*/
-        updateClient=(updatedClient)=>{
-            console.log(updatedClient);
-        //this.setState({userProfile:updatedProfile});
+        deleteClient=(clientId)=>{
+            axios.delete(`http://localhost:8080/client/${clientId}`)
+            .then(res =>{
+                this.props.history.push(`/clients/${this.state.clients[0].userId}/profile`)
+                this.setState({updated:true});//trigger the component did update to pull updated data from db
+            })
+            .catch(err=>{
+                console.log(err);
+            })     
     }
     
     /** ================================================ ADD NOTE ================================================*/
@@ -143,6 +166,7 @@ class Trainer extends React.Component{
                         addNote={this.addNote}
                         addClient={this.addClient}
                         updateClient={this.updateClient}
+                        deleteClient={this.deleteClient}
                     />}
                 {(this.state.clients && match.path==="/clients/:clientId/lessons") && 
                     <Clients {...this.props} 
@@ -150,6 +174,7 @@ class Trainer extends React.Component{
                         clients={this.state.clients} 
                         // addNote={this.addNote}
                         addClient={this.addClient}
+                        deleteClient={this.deleteClient}
                         />}
                 {(this.state.userProfile && match.path==="/schedule") && <Schedule />}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && <User user={this.state.userProfile} updateUserProfile={this.updateUserProfile}/>}

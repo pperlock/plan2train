@@ -63,8 +63,20 @@ class Clients extends React.Component {
                         <Link to={`/clients/${this.props.match.params.clientId}/lessons`} onClick={()=> this.removeAnimation()} className="client__nav-right">Lessons</Link>
                     </div>
                     <div className="client__modify">
-                        <ModalContainer modalType = "update" modalName = "modifyClient" buttonText="Modify" onSubmitTrainer={updateClient} information={currentClient}/>
-                        <ModalContainer modalType = "delete" modalName = "deleteClient" buttonText="Delete" onSubmitTrainer={deleteClient} information={currentClient}/>
+                        <ModalContainer 
+                            modalType = "update" 
+                            modalName = "modifyClient" 
+                            buttonText="Modify" 
+                            onSubmitTrainer={updateClient} 
+                            information={currentClient}
+                            />
+                        <ModalContainer 
+                            modalType = "delete" 
+                            modalName = "delete" 
+                            buttonText="Delete" 
+                            onSubmitTrainer={deleteClient}
+                            deleteString={`${fname} ${lname}`}
+                            deleteId={currentClient.userId}/>
                     </div>
 
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}

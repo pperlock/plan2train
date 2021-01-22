@@ -23,6 +23,8 @@ class ModalContainer extends React.Component {
             onSubmit=this.updateUser;
         }else if (modal === "addProgram"){
             onSubmit=this.addProgram;
+        }else if (modal === "delete"){
+            onSubmit=this.deleteItem;
         }
         return onSubmit
     }
@@ -111,6 +113,13 @@ class ModalContainer extends React.Component {
         this.closeModal();
     }
 
+    /** ================================================ DELETE ITEM ================================================*/
+
+    deleteItem = (id) =>{
+        this.props.onSubmitTrainer(id)
+        this.closeModal();
+    }
+
 
     /** ================================================ MODAL FUNCTIONS ================================================*/
 
@@ -149,6 +158,7 @@ class ModalContainer extends React.Component {
     render(){
         const onSubmit = this.getOnSubmit();
 
+
         return (
             <>
                 <TriggerModalButton 
@@ -166,7 +176,8 @@ class ModalContainer extends React.Component {
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
                         onClickOutside={this.onClickOutside}
-                        information={this.props.information}
+                        deleteString={this.props.deleteString}
+                        deleteId = {this.props.deleteId}
                     />}
 
                 {(this.state.isShown && this.props.modalType !=="delete") && 

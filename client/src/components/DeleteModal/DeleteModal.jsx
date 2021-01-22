@@ -4,7 +4,7 @@ import FocusTrap from 'focus-trap-react';
 
 import "./DeleteModal.scss";
 
-function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal,onSubmit, information, modalName}) {
+function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal, onSubmit, deleteString, deleteId, modalName}) {
 
     return ReactDOM.createPortal(
         <FocusTrap>
@@ -19,7 +19,7 @@ function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                 <div className="modal-area modal-delete__area" ref={modalRef} style={{backgroundImage: "url('/images/intro-background.png')"}}>
                     <div className="modal-delete__header">
                         <h1 className="modal-title modal-delete__header-title">Are you Sure you You Would Like to Delete</h1>
-                        <h2 className= "modal-delete__header-info">{`${information.userProfile.fname} ${information.userProfile.lname}`}</h2>
+                        <h2 className= "modal-delete__header-info">{deleteString}</h2>
                         <p className= "modal-delete__header-warning">This action can not be undone</p>
                     </div>
                     <button
@@ -35,7 +35,7 @@ function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                     </button>
                     <div className="modal-body modal-delete__body">
                         <button onClick={closeModal}>Cancel</button>
-                        <button>Delete</button>
+                        <button onClick={()=>onSubmit(deleteId)}>Delete</button>
                     </div>
                 </div>
 
