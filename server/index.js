@@ -58,6 +58,15 @@ app.post('/trainer/:trainerId/addClient', (req,res)=>{
     })
 })
 
+/* =========================================== DELETE CLIENT ================================================ */
+
+app.delete('/client/:clientId', (req,res)=>{
+    Client.deleteOne({userId:req.params.clientId})
+    .then(response=>{
+        res.send("Client successfully deleted");
+    })
+})
+
 /* =========================================== ADD PROGRAM ================================================ */
 app.post('/trainer/:trainerId/addProgram', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
@@ -80,6 +89,15 @@ app.post('/trainer/:trainerId/addProgram', (req,res)=>{
     })
     .catch((err)=>{
         console.log(err);
+    })
+})
+
+/* =========================================== DELETE PROGRAM ================================================ */
+
+app.delete('/program/:programId', (req,res)=>{
+    Program.deleteOne({id:req.params.programId})
+    .then(response=>{
+        res.send("Program successfully deleted");
     })
 })
 
@@ -111,6 +129,31 @@ app.post('/program/:programId/addResource', (req,res)=>{
         console.log(err)
     });
 
+})
+
+/* =========================================== DELETE RESOURCE ================================================ */
+
+app.delete('/program/:programId/:resourceId', (req,res)=>{
+    Program.findOne({id:req.params.programId}) //asynchronous
+    .then((response)=>{
+
+        let foundIndex;
+        response.resources.filter((item, index) => { foundIndex = index; return item.id == req.params.resourceId; });
+        
+        response.resources.splice(foundIndex, 1);
+        
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
 })
 
 
