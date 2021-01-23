@@ -26,14 +26,13 @@ class ClientLessons extends React.Component {
         form === "note" ? this.setState({showAddNote:true}) : this.setState({showAddHomework:true});
     }
 
-    addListItem=(event, list)=>{
+    addListItem=(event)=>{
         event.preventDefault();
         // event.stopPropagation();
         !!event.target.newNote ? this.setState({showAddNote:false}) : this.setState({showAddHomework:false});
     
-        const newItem={message:event.target.newNote.value}
-
         if (!!event.target.newNote){
+            const newItem={message:event.target.newNote.value}
             axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addNote`, newItem)
             .then(res =>{
                 // console.log(res);
@@ -43,6 +42,7 @@ class ClientLessons extends React.Component {
                 console.log(err);
             })
         }else{
+            const newItem={message:event.target.newHomework.value}
             axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addHomework`, newItem)
             .then(res =>{
                 // console.log(res);
@@ -60,7 +60,6 @@ class ClientLessons extends React.Component {
         const {lessons} = this.props.currentClient;
         const currentClient = this.props.currentClient
         const currentLesson = this.props.currentClient.lessons.find(lesson=>lesson.status === "current");
-        console.log(currentLesson);
         return (
             <div className="lessons">
                 <div className="component current-lesson">
@@ -76,7 +75,7 @@ class ClientLessons extends React.Component {
                         <div className="current-lesson__top-notes">
                             <h2 className="section-title" >Notes</h2>
                                 {currentLesson.notes.map(note=><List key={note.id} content={note.message} id={note.id} deleteBtn={true}/>)}
-                            <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event, currentClient)}>
+                            <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
                                 {this.state.showAddNote && 
                                     <div className="current-lesson__form-input">
                                         <input className="client__notes-new" type="text" name="newNote" placeholder="New Note"></input>
@@ -117,7 +116,7 @@ class ClientLessons extends React.Component {
                             
                         {currentLesson.homework.map(item=><List key={item.id} content={item.message} id={item.id} deleteBtn={true}/>)}
 
-                        <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event, currentClient)}>
+                        <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
                                 {this.state.showAddHomework && 
                                     <div className="current-lesson__form-input">
                                         <input className="client__notes-new" type="text" name="newHomework" placeholder="New Homework"></input>

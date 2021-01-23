@@ -9,7 +9,8 @@ const PORT = 8080;
 const User = require('./models/user')
 const Trainer = require('./models/trainer')
 const Client = require('./models/client')
-const Program = require('./models/program')
+const Program = require('./models/program');
+const { update } = require("./models/user");
 
 app.use(cors());
 //use .json to solve issues between json and text formats
@@ -228,6 +229,62 @@ app.post(`/client/:clientId/:lessonId/addNote`, (req, res)=>{
         console.log(err)
     });
 })
+
+/* =========================================== DELETE LESSON NOTE ================================================ */
+
+app.delete(`/client/:clientId/:lessonId/:noteId`, (req, res)=>{
+
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+
+         // get the lesson to update
+         const updateLesson = response.lessons.find(lesson=> lesson.id === req.params.lessonId);
+
+        //find the index of the note to delete
+        let foundIndex;
+        updateLesson.notes.filter((item, index) => { foundIndex = index; return item.id == req.params.noteId; });
+        
+        updateLesson.notes.splice(foundIndex, 1);
+
+        res.send(response);
+        response.markModified('lessons');
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+});
+
+// app.delete('/program/:programId/:resourceId', (req,res)=>{
+//     Program.findOne({id:req.params.programId}) //asynchronous
+//     .then((response)=>{
+
+//         //find the index of the resources array to update
+//         let foundIndex;
+//         response.resources.filter((item, index) => { foundIndex = index; return item.id == req.params.resourceId; });
+        
+//         response.resources.splice(foundIndex, 1);
+        
+//         response.save()
+//         .then((response)=>{
+//             //once the data is saved, the database sends us back a new object version of document that was saved
+//             res.send(response);
+//         })
+//         .catch((err)=>{
+//             console.log(err);
+//         })        
+//     })
+//     .catch((err) =>{
+//         console.log(err)
+//     });
+// })
 
 /* =========================================== ADD LESSON HOMEWORK ================================================ */
 
