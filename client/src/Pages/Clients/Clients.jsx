@@ -8,6 +8,15 @@ import ClientProfile from '../../components/ClientProfile/ClientProfile';
 import ClientLessons from '../../components/ClientLessons/ClientLessons';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
+
+// programs={this.state.programs} 
+// clients={this.state.clients} 
+// addNote={this.addNote}
+// addClient={this.addClient}
+// updateClient={this.updateClient}
+// deleteClient={this.deleteClient}
+//updateTrainer - updates trainer state
+
 class Clients extends React.Component {
 
     state={displayResources:[], animateBar:true}
@@ -30,21 +39,21 @@ class Clients extends React.Component {
         this.setState({animateBar:false});
     }
 
-    getclientPrograms(){
-        
-    }
-    
+   
     render(){
 
-        const {clients, programs, addClient, updateClient, deleteClient} = this.props;
+        
+
+        const {clients, programs, addClient, updateClient, deleteClient, updateTrainer} = this.props;
         const page = this.props.match.path.split("/")[3]; 
 
         const currentClient = this.props.clients.find(client=> client.userId ===this.props.match.params.clientId);
+        // console.log(currentClient);
 
-        var clientPrograms=[];
-        currentClient.programs.forEach(programId =>{
-            clientPrograms.push(this.props.programs.find(program=> program.id === programId)) 
-        });
+        // var clientPrograms=[];
+        // currentClient.programs.forEach(programId =>{
+        //     clientPrograms.push(this.props.programs.find(program=> program.id === programId)) 
+        // });
 
         const {fname, lname} = currentClient.userProfile;
         const active = currentClient.status ? "Active" : "Archived";
@@ -62,26 +71,28 @@ class Clients extends React.Component {
                         <Link to={`/clients/${this.props.match.params.clientId}/profile`} onClick={()=> this.removeAnimation()} className="client__nav-left">Profile</Link>
                         <Link to={`/clients/${this.props.match.params.clientId}/lessons`} onClick={()=> this.removeAnimation()} className="client__nav-right">Lessons</Link>
                     </div>
-                    <div className="client__modify">
-                        <ModalContainer 
-                            modalType = "update" 
-                            modalName = "modifyClient" 
-                            buttonText="Modify" 
-                            onSubmitTrainer={updateClient} 
-                            information={currentClient}
-                            />
-                        <ModalContainer 
-                            modalType = "delete" 
-                            modalName = "delete" 
-                            buttonText="Delete" 
-                            onSubmitTrainer={deleteClient}
-                            deleteString={`${fname} ${lname}`}
-                            deleteId={currentClient.userId}/>
-                    </div>
+                    {page === "profile" && 
+                        <div className="client__modify">
+                            <ModalContainer 
+                                modalType = "update" 
+                                modalName = "modifyClient" 
+                                buttonText="Modify" 
+                                onSubmitTrainer={updateClient} 
+                                information={currentClient}
+                                />
+                            <ModalContainer 
+                                modalType = "delete" 
+                                modalName = "delete" 
+                                buttonText="Delete" 
+                                onSubmitTrainer={deleteClient}
+                                deleteString={`${fname} ${lname}`}
+                                deleteId={currentClient.userId}/>
+                        </div>
+                    }
 
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
                     {page === "profile" && <ClientProfile currentClient = {currentClient}/>}
-                    {page === "lessons" && <ClientLessons currentClient = {currentClient} clientPrograms = {clientPrograms}/>}
+                    {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} updateTrainer={updateTrainer}/>}
                    
                 </div>
             </div>

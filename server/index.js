@@ -137,6 +137,7 @@ app.delete('/program/:programId/:resourceId', (req,res)=>{
     Program.findOne({id:req.params.programId}) //asynchronous
     .then((response)=>{
 
+        //find the index of the resources array to update
         let foundIndex;
         response.resources.filter((item, index) => { foundIndex = index; return item.id == req.params.resourceId; });
         
@@ -193,44 +194,40 @@ app.get('/trainer/:username/:trainerId', (req, res) => {
 
 })
 
+/* =========================================== ADD LESSON NOTE ================================================ */
 
+app.post(`/client/:clientId/:lessonId/addNote`, (req, res)=>{
 
+    const {message} = req.body;
 
-// app.get('/clients', (req, res) => {
+    const newNote = {
+        id:uuidv4(),
+        message
+    }
+    
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
 
-//     Client.find() //asynchronous
-//     .then((response)=>{
-//         res.send(response);
-//     })
-//     .catch((err) =>{
-//         console.log(err)
-//     });
-// })
+        // get the lesson to update
+        const updateLesson = response.lessons.find(lesson=> lesson.id === req.params.lessonId);
+        
+        updateLesson.notes.push(newNote);
 
-// app.get('/programs', (req, res) => {
-
-//     Program.find() //asynchronous
-//     .then((response)=>{
-//         res.send(response);
-//     })
-//     .catch((err) =>{
-//         console.log(err)
-//     });
-// })
-
-// app.get('/single-user', (req,res)=>{
-//     User.findById("id")
-//     .then((res)=>{
-//         res.send(res);
-//     })
-//     .catch((err) =>{
-//         console.log(err)
-//     });
-// })
-
-/** end of sandbox routses */
-
-//I am assuming we are creating these routes and then axios to them?
+        //needs to be marked as modified for the database to undertand that an array has been updated
+        response.markModified('lessons');
+        response.save()
+        .then((saveRes)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(saveRes);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
 
 //Blog.find().sort();
 

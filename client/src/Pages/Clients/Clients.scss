@@ -86,29 +86,6 @@
         display:flex;
         margin-bottom:20px;
     }
-    &__programs{
-        width:67%;
-        padding-top:70px;
-        
-        &-content{
-            display:flex;
-            justify-content:space-between;
-            width:100%;
-        }
-
-        &-list{
-            background-color:$medium-background;
-            width:25%;
-            padding:16px;
-
-            &-item{
-                margin-bottom:16px;
-            }
-        }
-        &-resources{
-            width:68%;
-        }
-    }
     &__notes{
         padding-top:70px;
         width:100%;

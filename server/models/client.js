@@ -12,7 +12,7 @@ const clientSchema = new Schema({
         type: String
     },
     yearAdded:{
-        type: Date
+        type: String
     },
     username:{
         type: String

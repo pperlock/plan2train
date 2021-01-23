@@ -5,6 +5,13 @@ import firebase from '../../firebase';
 import ClientList from '../../components/ClientList/ClientList';
 import List from '../../components/List/List';
 
+/**
+ *  programs={this.state.programs} 
+    currentProgramId={match.params.programId} 
+    match={match}
+    addProgram={this.addProgram}
+    addResource={this.addResource} 
+ */
 class Programs extends React.Component {
 
     state={selectedFile:null, showRadio:false, addActivated:false, uploaded:false, uploadType:""}
@@ -16,7 +23,7 @@ class Programs extends React.Component {
     // fired by clicking on a radio button
     uploadType = (event) => {
         const type = event.target.value;
-        if (type =="file"){
+        if (type ==="file"){
                 console.log( this.fileInput)
                 this.fileInput.click()
         }else{
@@ -46,7 +53,7 @@ class Programs extends React.Component {
                 })
             
             let storageLoc = firebase.storage().ref();
-            storageLoc.child('/resources/'+ this.state.selectedFile.name).getDownloadURL()
+            storageLoc.child(`/${this.props.programs.trainerId}/${this.state.selectedFile.name}`).getDownloadURL()
             .then((url)=>{
                 const newResource={
                     name:event.target.uploadName.value,
