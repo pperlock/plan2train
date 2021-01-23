@@ -229,6 +229,41 @@ app.post(`/client/:clientId/:lessonId/addNote`, (req, res)=>{
     });
 })
 
+/* =========================================== ADD LESSON HOMEWORK ================================================ */
+
+app.post(`/client/:clientId/:lessonId/addHomework`, (req, res)=>{
+
+    const {message} = req.body;
+
+    const newHomework = {
+        id:uuidv4(),
+        message
+    }
+    
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+
+        // get the lesson to update
+        const updateLesson = response.lessons.find(lesson=> lesson.id === req.params.lessonId);
+        
+        updateLesson.homework.push(newHomework);
+
+        //needs to be marked as modified for the database to undertand that an array has been updated
+        response.markModified('lessons');
+        response.save()
+        .then((saveRes)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(saveRes);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
 //Blog.find().sort();
 
 
