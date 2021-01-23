@@ -3,7 +3,6 @@ import React from 'react';
 import './List.scss';
 
 function List({id, content, link, description, deleteBtn, deleteFunction, list}) {
-    console.log(deleteFunction)
     return (
         <div className="list__item">
             <a href={link} className="list__item-name" target="_blank">{content}</a>

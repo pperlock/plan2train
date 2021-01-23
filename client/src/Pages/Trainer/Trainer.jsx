@@ -170,7 +170,6 @@ class Trainer extends React.Component{
                         addClient={this.addClient}
                         updateClient={this.updateClient}
                         deleteClient={this.deleteClient}
-                        updateTrainer={this.updateTrainer}
                     />}
                 {(this.state.clients && match.path==="/clients/:clientId/lessons") && 
                     <Clients {...this.props} 
@@ -179,7 +178,6 @@ class Trainer extends React.Component{
                         // addNote={this.addNote}
                         addClient={this.addClient}
                         deleteClient={this.deleteClient}
-                        updateTrainer={this.updateTrainer}
                         />}
                 {(this.state.userProfile && match.path==="/schedule") && <Schedule />}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && <User user={this.state.userProfile} updateUserProfile={this.updateUserProfile}/>}

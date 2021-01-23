@@ -219,7 +219,7 @@ app.post(`/client/:clientId/:lessonId/addNote`, (req, res)=>{
         response.save()
         .then((saveRes)=>{
             //once the data is saved, the database sends us back a new object version of document that was saved
-            res.send(saveRes);
+            res.send(updateLesson.notes);
         })
         .catch((err)=>{
             console.log(err);
@@ -250,7 +250,7 @@ app.delete(`/client/:clientId/:lessonId/:noteId/deleteNote`, (req, res)=>{
         response.save()
         .then((response)=>{
             //once the data is saved, the database sends us back a new object version of document that was saved
-            res.send(response);
+            res.send(updateLesson.notes);
         })
         .catch((err)=>{
             console.log(err);
@@ -286,7 +286,7 @@ app.post(`/client/:clientId/:lessonId/addHomework`, (req, res)=>{
         response.save()
         .then((saveRes)=>{
             //once the data is saved, the database sends us back a new object version of document that was saved
-            res.send(saveRes);
+            res.send(updateLesson.homework);
         })
         .catch((err)=>{
             console.log(err);
@@ -317,7 +317,7 @@ app.delete(`/client/:clientId/:lessonId/:homeworkId/deleteHomework`, (req, res)=
         response.save()
         .then((response)=>{
             //once the data is saved, the database sends us back a new object version of document that was saved
-            res.send(response);
+            res.send(updateLesson.homework);
         })
         .catch((err)=>{
             console.log(err);
