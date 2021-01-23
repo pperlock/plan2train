@@ -195,6 +195,47 @@ app.get('/trainer/:username/:trainerId', (req, res) => {
 
 })
 
+/* =========================================== ADD NEW LESSON ================================================ */
+
+app.post('/client/:clientId/addLesson', (req,res)=>{
+
+    const newLesson = {
+        id:uuidv4(),
+        status:"current",
+        name:"",
+        location:"",
+        date:"",
+        time:"",
+        resources:[],
+        homework:[],
+        notes:[],
+    }
+
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+
+        // get the lesson to update
+        response.lessons.push(newLesson);
+        
+        //needs to be marked as modified for the database to undertand that an array has been updated
+        response.markModified('lessons');
+        response.save()
+        .then((saveRes)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(newLesson);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+
+
+
+})
+
 /* =========================================== ADD LESSON NOTE ================================================ */
 
 app.post(`/client/:clientId/:lessonId/addNote`, (req, res)=>{
