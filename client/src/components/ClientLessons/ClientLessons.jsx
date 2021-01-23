@@ -55,11 +55,34 @@ class ClientLessons extends React.Component {
 
     }
 
+    deleteListItem=(event, list)=>{
+        console.log(event.target.id);
+        if (list==="notes"){
+            axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteNote`)
+            .then(res =>{
+                this.props.updateTrainer();
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        }else{
+            axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteHomework`)
+            .then(res =>{
+                this.props.updateTrainer();
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        }
+
+    }
+
     render(){
         const {programs} = this.props;
         const {lessons} = this.props.currentClient;
         const currentClient = this.props.currentClient
         const currentLesson = this.props.currentClient.lessons.find(lesson=>lesson.status === "current");
+        console.log(this.deleteListItem)
         return (
             <div className="lessons">
                 <div className="component current-lesson">
@@ -74,7 +97,7 @@ class ClientLessons extends React.Component {
 
                         <div className="current-lesson__top-notes">
                             <h2 className="section-title" >Notes</h2>
-                                {currentLesson.notes.map(note=><List key={note.id} content={note.message} id={note.id} deleteBtn={true}/>)}
+                                {currentLesson.notes.map(note=><List key={note.id} content={note.message} id={note.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="notes"/>)}
                             <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
                                 {this.state.showAddNote && 
                                     <div className="current-lesson__form-input">
@@ -114,7 +137,7 @@ class ClientLessons extends React.Component {
                     <div className="current-lesson__homework">
                         <h2 className="section-title">Homework</h2>
                             
-                        {currentLesson.homework.map(item=><List key={item.id} content={item.message} id={item.id} deleteBtn={true}/>)}
+                        {currentLesson.homework.map(item=><List key={item.id} content={item.message} id={item.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="homework"/>)}
 
                         <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
                                 {this.state.showAddHomework && 
