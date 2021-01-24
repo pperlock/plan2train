@@ -15,8 +15,6 @@ import AppliedResources from '../../components/AppliedResources/AppliedResources
  * @param {Object} currentClient - client currently rendered
  */
 
-
-
 function LessonResources({programs, currentLesson, currentClient}) {
 
     const ItemTypes = {
@@ -99,6 +97,7 @@ function LessonResources({programs, currentLesson, currentClient}) {
         })
     }
 
+    //setup for drop componenet from  lessons - available
     const[{isOver}, drop] = useDrop({
         accept: ItemTypes.CARD, //required - tells drop zone it will only accept card components
         drop: (item, monitor)=> removeResource(item.id),
