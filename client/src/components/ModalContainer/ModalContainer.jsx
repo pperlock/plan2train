@@ -128,6 +128,7 @@ class ModalContainer extends React.Component {
         event.preventDefault();
         
         const updatedDetails = {
+            current:this.props.information.current,
             name:event.target.lessonName.value,
             date:event.target.date.value,
             time:event.target.time.value,

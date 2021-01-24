@@ -7,6 +7,7 @@ import './ClientLessons.scss'
 import List from '../../components/List/List';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 import LessonResources from '../../components/LessonResources/LessonResources';
+//import client from '../../../../server/models/client';
 
 
 /**
@@ -142,7 +143,7 @@ class ClientLessons extends React.Component {
 
     //adds a new empty lesson when +New is clicked and saves it to the db
     addNewLesson = () =>{
-        axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/addLesson`)
+        axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addLesson`)
             .then(res =>{
                 const clientCopy = {...this.state.currentClient};
                 clientCopy.lessons.push(res.data)
@@ -154,9 +155,25 @@ class ClientLessons extends React.Component {
     }
 
     updateDetails = (updatedClient) =>{
-        console.log(updatedClient)
+        console.log(this.state.currentLesson.name);
+        axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateLessonDetails`, updatedClient)
+        .then(res =>{
+            console.log(res);
+            const clientCopy = {...this.state.currentClient};
+            const index = clientCopy.lessons.findIndex(lesson=>lesson.id === this.state.currentLesson.id);
+            clientCopy.lessons.splice(index,1);
+            clientCopy.lessons.unshift(res.data);
+            this.setState({currentClient:clientCopy, currentLesson: res.data});
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
 
-        //axios call to backend
+    updateStatus = ()=>{
+        const updatedDetails = {
+            current:true,
+        }
     }
 
     render(){
