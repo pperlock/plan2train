@@ -5,6 +5,7 @@ import axios from 'axios';
 import './ClientLessons.scss'
 
 import List from '../../components/List/List';
+import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 //currentClient
 //programs
@@ -12,9 +13,49 @@ import List from '../../components/List/List';
 class ClientLessons extends React.Component {
 
     state={
+        currentClient:this.props.currentClient,
         currentLesson: this.props.currentClient.lessons.find(lesson=>lesson.status === "current"),
+        availablePrograms:this.props.programs,
         displayResources:this.props.programs[0].resources, 
         showAddNote:false, showAddHomework:false, animateBar:true
+    }
+
+    componentDidMount(){
+
+        //gets an array of all the resource ids that have been applied to all lessons
+        let allApplied = [];
+        const lessons = this.state.currentClient.lessons;
+        lessons.map(lesson=> lesson.resources.map(resource => allApplied.push(resource)));
+        
+        //adds a key for applied to each resource for all trainer programs
+        const programs = this.props.programs;
+        programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
+
+       
+        const copyClient = {...this.props.currentClient};
+
+        //adds the resource information for each lesson resource and adds a value of true for applied to the programs- stored only as ids in the client document in db
+        this.props.programs.forEach(program=>
+            program.resources.forEach(programResource=>
+                copyClient.lessons.forEach(lesson => 
+                    lesson.resources.forEach((resource, i)=> {
+                        if(resource === programResource.id){
+                            //sets a value of true for applied resources
+                            programResource.applied=true;
+                            //remove the single id
+                            lesson.resources.splice(i,1);
+                            //replace the resource with the object
+                            lesson.resources.push(programResource);
+                        }  
+                    })
+                )          
+            )
+        )
+        
+        this.setState({currentClient:copyClient, availablePrograms:programs});
+        
+        console.log(copyClient);
+        console.log(programs);
     }
 
     componentDidUpdate(){
@@ -50,8 +91,6 @@ class ClientLessons extends React.Component {
             const newItem={message:event.target.newHomework.value}
             axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addHomework`, newItem)
             .then(res =>{
-                //console.log(res);
-                //this.props.updateTrainer();
                 const lessonCopy = this.state.currentLesson;
                 lessonCopy.homework = res.data;
                 this.setState({currentLesson:lessonCopy});
@@ -60,7 +99,6 @@ class ClientLessons extends React.Component {
                 console.log(err);
             })
         }
-
     }
 
     deleteListItem=(event, list)=>{
@@ -70,7 +108,6 @@ class ClientLessons extends React.Component {
             .then(res =>{
                 lessonCopy.notes = res.data;
                 this.setState({currentLesson:lessonCopy});
-                // this.props.updateTrainer();
             })
             .catch(err=>{
                 console.log(err);
@@ -85,8 +122,8 @@ class ClientLessons extends React.Component {
                 console.log(err);
             })
         }
-
     }
+   
 
     updateCurrentLesson = (lessonId) =>{
         console.log(lessonId);
@@ -94,11 +131,31 @@ class ClientLessons extends React.Component {
         this.setState({currentLesson:currentLesson});
     }
 
+    addNewLesson = () =>{
+        axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/addLesson`)
+            .then(res =>{
+                const clientCopy = this.state.currentClient;
+                console.log(clientCopy);
+                clientCopy.lessons.push(res.data)
+                this.setState({currentClient:clientCopy, currentLesson: res.data});
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+    }
+
+    updateResources=()=>{
+
+
+    }
+
     render(){
-        const {programs} = this.props;
-        const {lessons} = this.props.currentClient;
-        const currentClient = this.props.currentClient
-        const currentLesson = this.state.currentLesson;
+        //copy of state saved to variables to save time when converted to classful component
+        const programs = [...this.state.availablePrograms];
+        const lessons = [...this.state.currentClient.lessons];
+        const currentClient = {...this.state.currentClient};
+        const currentLesson = {...this.state.currentLesson};
+
         return (
             <div className="lessons">
                 <div className="lessons__list">
@@ -108,7 +165,7 @@ class ClientLessons extends React.Component {
                             <p className="lesson__date">{lesson.date}</p>
                         </div>
                     )}
-                    <p className="lessons__list-new"> + New </p>
+                    <p className="lessons__list-new" onClick={this.addNewLesson}> + New </p>
                 </div>
                 <div className="component current-lesson">
                 <h2 className="component-title">{currentLesson.status !== "current" ? currentLesson.name : `${currentLesson.name} - Next Lesson`}</h2>
@@ -118,6 +175,13 @@ class ClientLessons extends React.Component {
                                 <p>{`Location: ${currentLesson.location}`}</p>
                                 <p>{`Date: ${currentLesson.date}`}</p>
                                 <p>{`Time: ${currentLesson.time}`}</p>
+                                <ModalContainer 
+                                    modalType = "update" 
+                                    modalName = "modifyLesson" 
+                                    buttonText="Update" 
+                                    // onSubmitTrainer={updateClient} 
+                                    information={currentLesson}
+                                />
                             </div>
                             <div>Google Map</div>
                         </div>
@@ -125,7 +189,7 @@ class ClientLessons extends React.Component {
 
                     <div className="lesson-divider"></div>
 
-                    <h2 className="section-title">Resources</h2>
+                    <h2 className="section-title section-title-resources">Resources</h2>
                     <div className="current-lesson__resources">
                         <div className="current-lesson__available">
                             {/* <p>Available Resources</p> */}
@@ -139,12 +203,18 @@ class ClientLessons extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="current-lesson__resources-applied">
+                        <div className= "current-lesson__resources-applied">
                             <p>Lesson Resources</p>
                             {/* {lessons.map(lesson=> 
                                 lesson.resources.map(resource=><List key={resource.id} content={resource.name} id={resource.id} deleteBtn={true}/>)
                             )} */}
+                            {currentLesson.resources.length===0 && 
+                                <div className="empty-container">
+                                    <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                                    <p>Drag and Drop to Add Resources</p>
+                                </div>}
                             {currentLesson.resources.map(resource=><List key={resource.id} content={resource.name} id={resource.id} deleteBtn={true}/>)}
+                            
 
                         </div>
                     </div>
@@ -152,7 +222,12 @@ class ClientLessons extends React.Component {
                     <div className="current-lesson__bottom">
                         <div className="current-lesson__bottom-notes">
                                 <h2 className="section-title" >Notes</h2>
-                                    {currentLesson.notes.map(note=><List key={note.id} content={note.message} id={note.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="notes"/>)}
+                                {currentLesson.notes.length===0 && 
+                                <div onClick={()=> {this.showForm("note")}} className="empty-container">
+                                    <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                                    <p>Click to Add Homework</p>
+                                </div>}
+                                {currentLesson.notes.map(note=><List key={note.id} content={note.message} id={note.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="notes"/>)}
                                 <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
                                     {this.state.showAddNote && 
                                         <div className="current-lesson__form-input">
@@ -164,9 +239,16 @@ class ClientLessons extends React.Component {
                                 </form>
                         </div>
                         <div className="lesson-divider"></div>
+
                         <div className="current-lesson__bottom-homework">
                             <h2 className="section-title">Homework</h2>
                                 
+                            {currentLesson.homework.length===0 && 
+                                <div onClick={()=> {this.showForm("homework")}} className="empty-container">
+                                    <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                                    <p>Click to Add Homework</p>
+                                </div>}
+
                             {currentLesson.homework.map(item=><List key={item.id} content={item.message} id={item.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="homework"/>)}
 
                             <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
