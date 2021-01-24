@@ -9,14 +9,16 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
 import LessonResources from '../../components/LessonResources/LessonResources';
 
 
-//currentClient
-//programs
+/**
+ * @param {Object} currentClient 
+ * @param {Object} programs 
+ */
 
 class ClientLessons extends React.Component {
 
     state={
-        currentClient:this.props.currentClient,
-        currentLesson: this.props.currentClient.lessons.find(lesson=>lesson.status === "current"),
+        currentClient:this.props.currentClient, 
+        currentLesson: this.props.currentClient.lessons.find(lesson=>lesson.status === "current"), //might want to change this to last on the list -
         availablePrograms:this.props.programs,
         displayResources:this.props.programs[0].resources, 
         showAddNote:false, showAddHomework:false, animateBar:true
@@ -29,7 +31,7 @@ class ClientLessons extends React.Component {
         const lessons = this.state.currentClient.lessons;
         lessons.map(lesson=> lesson.resources.map(resource => allApplied.push(resource)));
         
-        //adds a key for applied to each resource for all trainer programs
+        //adds a key name applied to each resource for all trainer programs
         const programs = this.props.programs;
         programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
 
@@ -54,31 +56,33 @@ class ClientLessons extends React.Component {
             )
         )
         
+        // sets the state to reflect the modified objects
         this.setState({currentClient:copyClient, availablePrograms:programs});
-        
-        console.log(copyClient);
-        console.log(programs);
     }
 
     componentDidUpdate(){
         console.log("componentUpdated")
     }
 
+    //updates the resources that are displayed based on which program is chosen in the available resources section
     updateResources=(program)=>{
        this.setState({displayResources:program.resources});
-    
     }
 
+    //shows the textbox used to add a note or homework when the plus button is clicked
     showForm=(form)=>{
         form === "note" ? this.setState({showAddNote:true}) : this.setState({showAddHomework:true});
     }
 
+    //adds an item to either the homework or the notes lists when the form is submitted
     addListItem=(event)=>{
         event.preventDefault();
-        // event.stopPropagation();
+
+        //determine which form to close based on the target name
         !!event.target.newNote ? this.setState({showAddNote:false}) : this.setState({showAddHomework:false});
     
         if (!!event.target.newNote){
+            //if the target is the notes section then save it to the appropriate spot in the db
             const newItem={message:event.target.newNote.value}
             axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addNote`, newItem)
             .then(res =>{
@@ -90,6 +94,7 @@ class ClientLessons extends React.Component {
                 console.log(err);
             })
         }else{
+            //if the target is the homework section then save it to the appropriate spot in the db
             const newItem={message:event.target.newHomework.value}
             axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addHomework`, newItem)
             .then(res =>{
@@ -103,8 +108,10 @@ class ClientLessons extends React.Component {
         }
     }
 
+    //deletes an item from either the homework or the notes lists when the form is submitted
     deleteListItem=(event, list)=>{
-        const lessonCopy = this.state.currentLesson;
+        const lessonCopy = {...this.state.currentLesson};
+        // list variable passed in is used to determine what list to delete the item from
         if (list==="notes"){
             axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteNote`)
             .then(res =>{
@@ -125,19 +132,19 @@ class ClientLessons extends React.Component {
             })
         }
     }
-   
-
+  
+    //changes the lesson being rendered when a lesson is clicked from top list
     updateCurrentLesson = (lessonId) =>{
         console.log(lessonId);
         const currentLesson = this.props.currentClient.lessons.find(lesson => lesson.id === lessonId);
         this.setState({currentLesson:currentLesson});
     }
 
+    //adds a new empty lesson when +New is clicked and saves it to the db
     addNewLesson = () =>{
         axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/addLesson`)
             .then(res =>{
-                const clientCopy = this.state.currentClient;
-                console.log(clientCopy);
+                const clientCopy = {...this.state.currentClient};
                 clientCopy.lessons.push(res.data)
                 this.setState({currentClient:clientCopy, currentLesson: res.data});
             })
@@ -146,9 +153,8 @@ class ClientLessons extends React.Component {
             })
     }
 
-
     render(){
-        //copy of state saved to variables to save time when converted to classful component
+        //copy of state saved to variables - unnecessary but saved time when converted to classful component
         const programs = [...this.state.availablePrograms];
         const lessons = [...this.state.currentClient.lessons];
         const currentClient = {...this.state.currentClient};
@@ -156,6 +162,8 @@ class ClientLessons extends React.Component {
 
         return (
             <div className="lessons">
+
+                {/* list of all client's lessons - click to render a specific lesson */}
                 <div className="lessons__list">
                     {lessons.map(lesson =>  
                         <div id={lesson.id} key={lesson.id} className="lesson" onClick={(event)=>this.updateCurrentLesson(lesson.id)}>
@@ -165,14 +173,20 @@ class ClientLessons extends React.Component {
                     )}
                     <p className="lessons__list-new" onClick={this.addNewLesson}> + New </p>
                 </div>
+
+                {/* displays the chosen lesson set in state */}
                 <div className="component current-lesson">
-                <h2 className="component-title">{currentLesson.status !== "current" ? currentLesson.name : `${currentLesson.name} - Next Lesson`}</h2>
+                <h2 className="component-title">{currentLesson.name}</h2>
                     <div className = "current-lesson__top">
+                        <h2>{currentLesson.status}</h2> 
                         <div className="current-lesson__top-left">
+                            {/* shows the details for the lesson */}
                             <div className="current-lesson__top-details">
                                 <p>{`Location: ${currentLesson.location}`}</p>
                                 <p>{`Date: ${currentLesson.date}`}</p>
                                 <p>{`Time: ${currentLesson.time}`}</p>
+                                
+                                {/* modal to update the lesson details */}
                                 <ModalContainer 
                                     modalType = "update" 
                                     modalName = "modifyLesson" 
@@ -189,10 +203,13 @@ class ClientLessons extends React.Component {
 
                     <h2 className="section-title section-title-resources">Resources</h2>
                       
+                    {/* renders the resource section for the lessons */}
                     <LessonResources programs={programs} currentLesson={currentLesson} currentClient={currentClient}/>
                
-
+                    {/* renders the notes and the homework section */}
                     <div className="current-lesson__bottom">
+                        
+                        {/* Notes section */}
                         <div className="current-lesson__bottom-notes">
                                 <h2 className="section-title" >Notes</h2>
                                 {currentLesson.notes.length===0 && 
@@ -211,8 +228,10 @@ class ClientLessons extends React.Component {
                                     {!this.state.showAddNote && <p className="current-lesson__addBtn" onClick={()=> {this.showForm("note")}}>+</p>}
                                 </form>
                         </div>
+
                         <div className="lesson-divider"></div>
 
+                        {/* Homework Section */}
                         <div className="current-lesson__bottom-homework">
                             <h2 className="section-title">Homework</h2>
                                 

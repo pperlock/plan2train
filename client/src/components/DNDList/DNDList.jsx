@@ -7,7 +7,15 @@ const ItemTypes = {
     CARD:'card',
 };
 
-function DNDList({id, content, link, description, deleteBtn, deleteFunction, list}) {
+/**
+ * 
+ * @param {string} id - resource id 
+ * @param {string} content - text to render
+ * @param {string} link - url for text to link to
+ * @param {string} description- type of resource if it is a resource list
+ * 
+ */
+function DNDList({id, content, link, description}) {
 
     // argument1 = props from the monitor
     const[{isDragging}, drag] = useDrag({
@@ -23,11 +31,10 @@ function DNDList({id, content, link, description, deleteBtn, deleteFunction, lis
     })
 
     return (
-        <div ref={drag} className="list__item" opacity={isDragging ? '0.5' : '1'}>
+        <div ref={drag} className="list__item" opacity={isDragging ? '1' : '1'}>
             <a href={link} className="list__item-name" target="_blank">{content}</a>
             <div className="list__right" >
                 {description && <p className="list__right-type">{description}</p>}
-                {deleteBtn && <button id={id} onClick={(event)=>deleteFunction(event, list)} className="list__right-delete"> x </button>}
             </div>
         </div>
     )

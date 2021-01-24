@@ -8,20 +8,21 @@ import ClientProfile from '../../components/ClientProfile/ClientProfile';
 import ClientLessons from '../../components/ClientLessons/ClientLessons';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
-
-// programs={this.state.programs} 
-// clients={this.state.clients} 
-// addNote={this.addNote}
-// addClient={this.addClient}
-// updateClient={this.updateClient}
-// deleteClient={this.deleteClient}
-//updateTrainer - updates trainer state
+/**
+ * props passed to Clients from Trainer
+ * @param {object} programs - all trainer's programs
+ * @param {object} clients - all trainer's clients
+ * @param {function} addNote - add Note to a client profile - not used yet
+ * @param {function} addClient - add a new client to the db
+ * @param {function} updateClient - update the client information
+ * @param {function} deleteClient - delete a client from the db
+ */
 
 class Clients extends React.Component {
 
-    state={animateBar:true}
+    // This might change from a class to functional - have to check into sliding menu
 
-    
+    state={animateBar:true}
 
     componentDidMount(){
         // console.log("client-mounted");
@@ -39,33 +40,37 @@ class Clients extends React.Component {
    
     render(){
 
-        const {clients, programs, addClient, updateClient, deleteClient, updateTrainer} = this.props;
+        const {clients, programs, addClient, updateClient, deleteClient} = this.props;
+        
+        //used to determine if we are on the lessons page or the profile page
         const page = this.props.match.path.split("/")[3]; 
 
+        //set the rendered client to be the one that matches the path name
         const currentClient = this.props.clients.find(client=> client.userId ===this.props.match.params.clientId);
-        // console.log(currentClient);
-
-        // var clientPrograms=[];
-        // currentClient.programs.forEach(programId =>{
-        //     clientPrograms.push(this.props.programs.find(program=> program.id === programId)) 
-        // });
 
         const {fname, lname} = currentClient.userProfile;
+        
+        //status is a boolean to indicate if a client is current or past - used for filter on client bar
         const active = currentClient.status ? "Active" : "Archived";
 
-        //determine the current client and get the appropriate program data 
         return (
             <div className="clients__container" style={{backgroundImage: "url('/images/sidebar.')"}}>
+                {/* displays the list of clients on the side */}
                 <ClientList list = {clients} match={this.props.match} animate={this.state.animateBar} onSubmitTrainer={addClient} programs={programs}/>
+                
                 <div className="client">
                     <div className="client__title">
                         <p className="client__title-name">{`${fname} ${lname}`} </p>
                         <p className="client__title-status">{`Status: ${active}`}</p>
                     </div>
+
+                    {/* link changes the page variable which changes the componenet rendered */}
                     <div className="client__nav">
                         <Link to={`/clients/${this.props.match.params.clientId}/profile`} onClick={()=> this.removeAnimation()} className="client__nav-left">Profile</Link>
                         <Link to={`/clients/${this.props.match.params.clientId}/lessons`} onClick={()=> this.removeAnimation()} className="client__nav-right">Lessons</Link>
                     </div>
+
+                    {/* add and delete client functionality only shown on the profile page */}
                     {page === "profile" && 
                         <div className="client__modify">
                             <ModalContainer 
@@ -87,7 +92,7 @@ class Clients extends React.Component {
 
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
                     {page === "profile" && <ClientProfile currentClient = {currentClient}/>}
-                    {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} updateTrainer={updateTrainer} displayResources={this.state.dislayResources}/>}
+                    {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs}/>}
                    
                 </div>
             </div>
