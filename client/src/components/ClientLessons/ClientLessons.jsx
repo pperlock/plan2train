@@ -6,6 +6,8 @@ import './ClientLessons.scss'
 
 import List from '../../components/List/List';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
+import LessonResources from '../../components/LessonResources/LessonResources';
+
 
 //currentClient
 //programs
@@ -190,34 +192,9 @@ class ClientLessons extends React.Component {
                     <div className="lesson-divider"></div>
 
                     <h2 className="section-title section-title-resources">Resources</h2>
-                    <div className="current-lesson__resources">
-                        <div className="current-lesson__available">
-                            {/* <p>Available Resources</p> */}
-                            <div className="current-lesson__available-content">
-                                <ul className="current-lesson__available-programs"> 
-                                    {programs.map(program=> <Link key={program.id} to={`/clients/${currentClient.userId}/lessons`}><li onClick={()=>this.updateResources(program)} className="current-lesson__available-programs-item">{program.name}</li></Link>)}
-                                </ul>
-
-                                <div className="list current-lesson__available-resources">
-                                    {this.state.displayResources.map(resource=> <List key={resource.id} content={resource.name} id={resource.id} deleteBtn={false}/>)}
-                                </div>
-                            </div>
-                        </div>
-                        <div className= "current-lesson__resources-applied">
-                            <p>Lesson Resources</p>
-                            {/* {lessons.map(lesson=> 
-                                lesson.resources.map(resource=><List key={resource.id} content={resource.name} id={resource.id} deleteBtn={true}/>)
-                            )} */}
-                            {currentLesson.resources.length===0 && 
-                                <div className="empty-container">
-                                    <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
-                                    <p>Drag and Drop to Add Resources</p>
-                                </div>}
-                            {currentLesson.resources.map(resource=><List key={resource.id} content={resource.name} id={resource.id} deleteBtn={true}/>)}
-                            
-
-                        </div>
-                    </div>
+                      
+                    <LessonResources programs={programs} currentLesson={currentLesson} currentClient={currentClient}/>
+               
 
                     <div className="current-lesson__bottom">
                         <div className="current-lesson__bottom-notes">
