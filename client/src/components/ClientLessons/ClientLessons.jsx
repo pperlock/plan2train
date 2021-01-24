@@ -18,7 +18,7 @@ class ClientLessons extends React.Component {
 
     state={
         currentClient:this.props.currentClient, 
-        currentLesson: this.props.currentClient.lessons.find(lesson=>lesson.status === "current"), //might want to change this to last on the list -
+        currentLesson: this.props.currentClient.lessons.find(lesson=>lesson.current === true), //might want to change this to last on the list -
         availablePrograms:this.props.programs,
         displayResources:this.props.programs[0].resources, 
         showAddNote:false, showAddHomework:false, animateBar:true
@@ -153,6 +153,12 @@ class ClientLessons extends React.Component {
             })
     }
 
+    updateDetails = (updatedClient) =>{
+        console.log(updatedClient)
+
+        //axios call to backend
+    }
+
     render(){
         //copy of state saved to variables - unnecessary but saved time when converted to classful component
         const programs = [...this.state.availablePrograms];
@@ -178,11 +184,15 @@ class ClientLessons extends React.Component {
                 <div className="component current-lesson">
                 <h2 className="component-title">{currentLesson.name}</h2>
                     <div className = "current-lesson__top">
-                        <h2>{currentLesson.status}</h2> 
+                        {currentLesson.current ? 
+                        <p className="current-lesson__top-status current-lesson__top-status--current">Current</p> 
+                        : 
+                        <p className="current-lesson__top-status">Mark as Current</p>}
+
                         <div className="current-lesson__top-left">
                             {/* shows the details for the lesson */}
                             <div className="current-lesson__top-details">
-                                <p>{`Location: ${currentLesson.location}`}</p>
+                                <p>{`Location: ${currentLesson.location.name}`}</p>
                                 <p>{`Date: ${currentLesson.date}`}</p>
                                 <p>{`Time: ${currentLesson.time}`}</p>
                                 
@@ -191,7 +201,7 @@ class ClientLessons extends React.Component {
                                     modalType = "update" 
                                     modalName = "modifyLesson" 
                                     buttonText="Update" 
-                                    // onSubmitTrainer={updateClient} 
+                                    onSubmitTrainer={this.updateDetails} 
                                     information={currentLesson}
                                 />
                             </div>

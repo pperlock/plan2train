@@ -25,6 +25,8 @@ class ModalContainer extends React.Component {
             onSubmit=this.addProgram;
         }else if (modal === "delete"){
             onSubmit=this.deleteItem;
+        }else if (modal === "modifyLesson"){
+            onSubmit=this.updateDetails;
         }
         return onSubmit
     }
@@ -117,6 +119,30 @@ class ModalContainer extends React.Component {
 
     deleteItem = (id) =>{
         this.props.onSubmitTrainer(id)
+        this.closeModal();
+    }
+
+    /** ================================================ UPDATE LESSON ================================================*/
+
+    updateDetails = (event)=>{
+        event.preventDefault();
+        
+        const updatedDetails = {
+            name:event.target.lessonName.value,
+            date:event.target.date.value,
+            time:event.target.time.value,
+            location:{
+                name:event.target.locationName.value,
+                address:event.target.address.value,
+                city:event.target.city.value,
+                province:event.target.province.value,
+                country:event.target.country.value
+            }
+        }
+        
+        console.log(updatedDetails);
+
+        this.props.onSubmitTrainer(updatedDetails);
         this.closeModal();
     }
 

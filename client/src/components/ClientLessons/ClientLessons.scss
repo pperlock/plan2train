@@ -39,9 +39,18 @@
     &__top{
         display:flex;
         justify-content:center;
+        align-items:flex-start;
         min-height:150px;
         margin:70px 0 20px 0;
         padding-bottom:20px;
+        &-status{
+            background-color:grey;
+            padding:10px;
+            border-radius:4px;
+            &--current{
+                background-color:$accent-color;
+            }
+        }
         &-left{
             width:43%;
             background-color:$medium-background;  
