@@ -19,12 +19,9 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 class Clients extends React.Component {
 
-    state={displayResources:[], animateBar:true}
+    state={animateBar:true}
 
-    updateResources=(program)=>{
-       this.setState({displayResources:program.resources});
     
-    }
 
     componentDidMount(){
         // console.log("client-mounted");
@@ -41,8 +38,6 @@ class Clients extends React.Component {
 
    
     render(){
-
-        
 
         const {clients, programs, addClient, updateClient, deleteClient, updateTrainer} = this.props;
         const page = this.props.match.path.split("/")[3]; 
@@ -92,7 +87,7 @@ class Clients extends React.Component {
 
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
                     {page === "profile" && <ClientProfile currentClient = {currentClient}/>}
-                    {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} updateTrainer={updateTrainer}/>}
+                    {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} updateTrainer={updateTrainer} displayResources={this.state.dislayResources}/>}
                    
                 </div>
             </div>

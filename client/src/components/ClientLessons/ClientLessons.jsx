@@ -146,10 +146,6 @@ class ClientLessons extends React.Component {
             })
     }
 
-    updateResources=()=>{
-
-
-    }
 
     render(){
         //copy of state saved to variables to save time when converted to classful component

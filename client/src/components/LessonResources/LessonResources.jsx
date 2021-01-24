@@ -1,6 +1,5 @@
-import React, {useState}  from 'react';
+import React, {useState, useEffect}  from 'react';
 import {Link} from 'react-router-dom';
-import { useDrag } from 'react-dnd'
 import axios from 'axios';
 
 // import './ClientLessons.scss'
@@ -8,34 +7,25 @@ import axios from 'axios';
 import DNDList from '../../components/DNDList/DNDList';
 import AppliedResources from '../../components/AppliedResources/AppliedResources';
 
-
-const ItemTypes = {
-    CARD:'card',
-};
-
 function LessonResources({programs, currentLesson, currentClient}) {
 
+    console.log(currentLesson);
 
     const[displayResources, setResourceList] = useState(programs[0].resources);
     const[currentLessonResources, updateCurrentLesson] = useState(currentLesson);
     
-    const updateResources=(program)=>{
-       setResourceList(program.resources);
-       console.log(displayResources);
+    
+    useEffect(() => {
+        updateCurrentLesson(currentLesson);
+    });
+
+    const updateDisplayed = (program)=>{
+        setResourceList(program.resources);
     }
+    console.log(currentLessonResources);
 
-    // const [collectedProps, drag] = useDrag({
-    //     item: ItemTypes.CARD
-    // })
+    const markAsDone = id => {
 
-  const markAsDone = id => {
-        // const skill = skillList.filter((skill,i)=> skill.id === id);
-        // skill[0].status="in";
-        // setSkillList(skillList.filter((skill,i) => skill.id !== id).concat(skill[0]));
-        // console.log(skillList);
-
-        console.log(displayResources)
-        console.log(id)
         //find the resource to update and set the applied status to true        
         const displays = [...displayResources]
         displays.find(resource=> resource.id === id).applied=true
@@ -49,6 +39,18 @@ function LessonResources({programs, currentLesson, currentClient}) {
         console.log(lessonObject);
         setResourceList(displays);
         updateCurrentLesson(lessonObject);
+
+        const updatedResources = lessonObject.resources.map(resource => resource.id)
+        console.log(updatedResources);
+
+        axios.put(`http://localhost:8080/client/${currentClient.userId}/${currentLessonResources.id}/updateResource`, updatedResources)
+        .then(res =>{
+            console.log(res);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+
     }
 
     return (
@@ -57,7 +59,7 @@ function LessonResources({programs, currentLesson, currentClient}) {
             {/* <p>Available Resources</p> */}
             <div className="current-lesson__available-content">
                 <ul className="current-lesson__available-programs"> 
-                    {programs.map(program=> <Link key={program.id} to={`/clients/${currentClient.userId}/lessons`}><li onClick={()=>updateResources(program)} className="current-lesson__available-programs-item">{program.name}</li></Link>)}
+                    {programs.map(program=> <Link key={program.id} to={`/clients/${currentClient.userId}/lessons`}><li onClick={()=>updateDisplayed(program)} className="current-lesson__available-programs-item">{program.name}</li></Link>)}
                 </ul>
                     <div className="list current-lesson__available-resources">
                         {displayResources.filter(resource => resource.applied === false)
@@ -66,7 +68,7 @@ function LessonResources({programs, currentLesson, currentClient}) {
             </div>
             
         </div>
-            <AppliedResources currentLesson={currentLesson} markAsDone={markAsDone}/>
+            <AppliedResources currentLesson={currentLessonResources} markAsDone={markAsDone}/>
         </div>
     )
 }
