@@ -41,7 +41,7 @@ class SideBar extends React.Component {
 
     render(){
 
-        const {username,trainerId, trainerName, programs, clients, match} = this.props;
+        const {trainerId, trainerName, programs, clients, match} = this.props;
 
         const defaultClientId = clients ? clients[0].userId : match.params.clientId
 

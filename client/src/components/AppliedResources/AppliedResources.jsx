@@ -1,8 +1,6 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {useDrop} from 'react-dnd';
-import axios from 'axios';
 
-import List from '../../components/List/List';
 import DNDList from '../../components/DNDList/DNDList';
 
 const ItemTypes = {
@@ -31,7 +29,7 @@ function AppliedResources({currentLesson, markAsDone}) {
             <p>Lesson Resources</p>
             {currentLesson.resources.length===0 && 
                 <div className="empty-container">
-                    <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                    <img className="empty-container__icon" src="/icons/add-icon.svg" alt="plus sign"></img>
                     <p>Drag and Drop to Add Resources</p>
                 </div>}
             {currentLesson.resources.map(resource=><DNDList key={resource.id} content={resource.name} id={resource.id}/>)}

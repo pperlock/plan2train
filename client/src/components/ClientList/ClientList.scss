@@ -16,7 +16,8 @@
         box-sizing:border-box;
         font-size:20px;
         color: $light-text;
-        position:absolute;
+        // position:absolute;
+        position: fixed;
         height:100vh;
         &--animate{
             animation:sideBarSlideIn 0.5s ease-in;

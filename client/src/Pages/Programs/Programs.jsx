@@ -4,6 +4,7 @@ import firebase from '../../firebase';
 
 import ClientList from '../../components/ClientList/ClientList';
 import List from '../../components/List/List';
+import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 /**
  *  programs={this.state.programs} 
@@ -12,12 +13,24 @@ import List from '../../components/List/List';
     addProgram={this.addProgram}
     addResource={this.addResource} 
  */
+
+/**
+ * Props Passed in by Trainer
+ * @param {Object} currentClient 
+ * @param {string} currentProgramId 
+ * @param {Object} match 
+ * @param {function} addProgram
+ * @param {function} deleteProgram
+ * @param {function} addResource
+ * @param {function} deleteResource
+ */
+ 
 class Programs extends React.Component {
 
     state={selectedFile:null, showRadio:false, addActivated:false, uploaded:false, uploadType:""}
 
     componentDidUpdate(){
-        // console.log("programs - did update")
+        console.log("programs - did update")
     }
 
     // fired by clicking on a radio button
@@ -47,10 +60,10 @@ class Programs extends React.Component {
             let file = this.state.selectedFile;
             let storageRef = firebase.storage().ref(`/${bucketName}/${file.name}`);
             let uploadTask = storageRef.put(file);
-            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-                ()=>{
-                    let downloadURL = uploadTask.snapshot.getDownloadURL;
-                })
+            // uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+            //     ()=>{
+            //         let downloadURL = uploadTask.snapshot.getDownloadURL;
+            //     })
             
             let storageLoc = firebase.storage().ref();
             storageLoc.child(`/${bucketName}/${file.name}`).getDownloadURL()
@@ -94,8 +107,33 @@ class Programs extends React.Component {
                             <p className="program__header-description">{program.description}</p>
                         </div>
 
+                        <ModalContainer 
+                            modalType = "delete" 
+                            modalName = "delete" 
+                            buttonText="Delete" 
+                            onSubmitTrainer={this.props.deleteProgram}
+                            deleteString= {program.name}
+                            deleteId={program.id}
+                        />
+
+                        {program.resources.length === 0 && 
+                            <div onClick={()=>this.setState({addActivated:true, showRadio:true})} className="empty-container">
+                                <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
+                                <p>Click to Add Resources</p>
+                            </div>}     
+
                         <div className="list">
-                                {program.resources.map(resource=> <List key={resource.id} content={resource.name} id={resource.id} link={resource.url} description={resource.type} deleteBtn={true} />)}
+                                {program.resources.map(resource=> 
+                                    <List 
+                                        key={resource.id} 
+                                        content={resource.name} 
+                                        id={resource.id} 
+                                        link={resource.url} 
+                                        description={resource.type} 
+                                        deleteBtn={true}
+                                        deleteType="modal" 
+                                        deleteFunction={this.props.deleteResource}
+                                    />)}
                         </div>
 
                         {/* a reference is a way to reference another element in the dom */}

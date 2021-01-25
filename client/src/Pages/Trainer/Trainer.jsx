@@ -71,6 +71,21 @@ class Trainer extends React.Component{
         
     }
 
+    /** ================================================ DELETE PROGRAM ================================================*/
+    deleteProgram = (programId) =>{
+
+        console.log(programId)
+
+        axios.delete(`http://localhost:8080/program/${this.props.match.params.programId}`)
+        .then(res =>{
+            this.props.history.push(`/programs/${this.state.programs[0].id}`)
+            this.setState({updated:true});//trigger the component did update to pull updated data from db
+        })
+        .catch(err=>{
+            console.log(err);
+        }) 
+    }
+
     /** ================================================ ADD RESOURCE ================================================*/
     addResource=(newResource, programId)=>{
         axios.post(`http://localhost:8080/program/${this.props.match.params.programId}/addResource`, newResource)
@@ -93,28 +108,41 @@ class Trainer extends React.Component{
         
     }
 
+    /** ================================================ DELETE RESOURCE ================================================*/
+    deleteResource = (resourceId) =>{
+
+        axios.delete(`http://localhost:8080/program/${this.props.match.params.programId}/${resourceId}`)
+        .then(res =>{
+            this.setState({updated:true});//trigger the component did update to pull updated data from db
+        })
+        .catch(err=>{
+            console.log(err);
+        }) 
+    }
+
     /** ================================================ UPDATE USER ================================================*/
     updateUserProfile=(updatedProfile)=>{
         this.setState({userProfile:updatedProfile});
     }
 
     /** ================================================ UPDATE CLIENT ================================================*/
-        updateClient=(updatedClient)=>{
-            console.log(updatedClient);
-        //this.setState({userProfile:updatedProfile});
+    updateClient=(updatedClient)=>{
+        console.log(updatedClient);
+    //this.setState({userProfile:updatedProfile});
     }
 
     /** ================================================ DELETE CLIENT ================================================*/
-        deleteClient=(clientId)=>{
-            axios.delete(`http://localhost:8080/client/${clientId}`)
-            .then(res =>{
-                this.props.history.push(`/clients/${this.state.clients[0].userId}/profile`)
-                this.setState({updated:true});//trigger the component did update to pull updated data from db
-            })
-            .catch(err=>{
-                console.log(err);
-            })     
+    deleteClient=(clientId)=>{
+        axios.delete(`http://localhost:8080/client/${clientId}`)
+        .then(res =>{
+            this.props.history.push(`/clients/${this.state.clients[0].userId}/profile`)
+            this.setState({updated:true});//trigger the component did update to pull updated data from db
+        })
+        .catch(err=>{
+            console.log(err);
+        })     
     }
+
     
     /** ================================================ ADD NOTE ================================================*/
     addNote=(event,currentClient)=>{
@@ -160,7 +188,9 @@ class Trainer extends React.Component{
                         currentProgramId={match.params.programId} 
                         match={match}
                         addProgram={this.addProgram}
-                        addResource={this.addResource}    
+                        deleteProgram={this.deleteProgram}
+                        addResource={this.addResource} 
+                        deleteResource={this.deleteResource}   
                         />}
                 {(this.state.clients && match.path==="/clients/:clientId/profile") && 
                     <Clients {...this.props} 

@@ -199,21 +199,21 @@ app.get('/trainer/:username/:trainerId', (req, res) => {
 
 app.post('/client/:clientId/addLesson', (req,res)=>{
 
-    const newLesson = {
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+
+        
+        const newLesson = {
         id:uuidv4(),
-        status:"current",
+        current: response.lessons.length===0 ? true : false,
         name:"",
-        location:"",
+        location:{name:"", address:"", city:"", province:"", country:"" },
         date:"",
         time:"",
         resources:[],
         homework:[],
         notes:[],
     }
-
-    Client.findOne({userId:req.params.clientId}) //asynchronous
-    .then((response)=>{
-
         // get the lesson to update
         response.lessons.push(newLesson);
         
@@ -371,4 +371,80 @@ app.delete(`/client/:clientId/:lessonId/:homeworkId/deleteHomework`, (req, res)=
 
 //Blog.find().sort();
 
+/* =========================================== ADD LESSON RESOURCE ================================================ */
+app.put('/client/:clientId/:lessonId/updateResource', (req,res)=>{
 
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+        const updatedLesson = response.lessons.find(lesson => lesson.id ===req.params.lessonId)
+        updatedLesson.resources=req.body;
+
+        response.markModified('lessons');
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
+/* =========================================== UPDATE LESSON DETAILS ================================================ */
+app.put('/client/:clientId/:lessonId/updateLessonDetails', (req,res)=>{
+
+    const {current, name, date, time, location} = req.body;
+
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+        //find lesson to be updated
+        const updatedLesson = response.lessons.find(lesson => lesson.id ===req.params.lessonId)
+        updatedLesson.current = current;
+        updatedLesson.name = name;
+        updatedLesson.date = date;
+        updatedLesson.time = time;
+        updatedLesson.location = location;
+
+        response.markModified('lessons');
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(updatedLesson);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
+/* =========================================== UPDATE LESSON STATUS ================================================ */
+app.put('/client/:clientId/:lessonId/updateStatus', (req,res)=>{
+
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+        //find lesson to be updated
+        response.lessons.map(lesson => lesson.current = false);
+        const updatedLesson = response.lessons.find(lesson => lesson.id ===req.params.lessonId)
+        updatedLesson.current = true;
+        
+        response.markModified('lessons');
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})

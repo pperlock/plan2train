@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 import './ClientLessons.scss'
@@ -7,7 +6,6 @@ import './ClientLessons.scss'
 import List from '../../components/List/List';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 import LessonResources from '../../components/LessonResources/LessonResources';
-//import client from '../../../../server/models/client';
 
 
 /**
@@ -198,7 +196,7 @@ class ClientLessons extends React.Component {
         if(lessons.length === 0){
             return(                                     
                 <div onClick={this.addNewLesson} className="empty-container">
-                    <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                    <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
                     <p>Click to Add a Lesson</p>
             </div>
             )
@@ -261,7 +259,7 @@ class ClientLessons extends React.Component {
                                     <h2 className="section-title" >Notes</h2>
                                     {currentLesson.notes.length===0 && 
                                     <div onClick={()=> {this.showForm("note")}} className="empty-container">
-                                        <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                                        <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
                                         <p>Click to Add Homework</p>
                                     </div>}
                                     {currentLesson.notes.map(note=><List key={note.id} content={note.message} id={note.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="notes"/>)}
@@ -284,7 +282,7 @@ class ClientLessons extends React.Component {
                                     
                                 {currentLesson.homework.length===0 && 
                                     <div onClick={()=> {this.showForm("homework")}} className="empty-container">
-                                        <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                                        <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
                                         <p>Click to Add Homework</p>
                                     </div>}
 
