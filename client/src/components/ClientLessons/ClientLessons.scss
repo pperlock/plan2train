@@ -47,8 +47,10 @@
             background-color:grey;
             padding:10px;
             border-radius:4px;
+            cursor:pointer;
             &--current{
                 background-color:$accent-color;
+                cursor:default;
             }
         }
         &-left{

@@ -162,7 +162,7 @@ class ClientLessons extends React.Component {
             const clientCopy = {...this.state.currentClient};
             const index = clientCopy.lessons.findIndex(lesson=>lesson.id === this.state.currentLesson.id);
             clientCopy.lessons.splice(index,1);
-            clientCopy.lessons.unshift(res.data);
+            clientCopy.lessons.splice(index, 0, res.data);
             this.setState({currentClient:clientCopy, currentLesson: res.data});
         })
         .catch(err=>{
@@ -171,9 +171,19 @@ class ClientLessons extends React.Component {
     }
 
     updateStatus = ()=>{
-        const updatedDetails = {
-            current:true,
-        }
+           
+        axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateStatus`)
+        .then(res =>{
+            
+            const clientCopy = {...this.state.currentClient};
+            clientCopy.lessons.map(lesson => lesson.current = (lesson.id === this.state.currentLesson.id) ? true : false);
+            console.log(clientCopy);
+            
+            this.setState({currentClient:clientCopy});
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
 
     render(){
@@ -183,108 +193,118 @@ class ClientLessons extends React.Component {
         const currentClient = {...this.state.currentClient};
         const currentLesson = {...this.state.currentLesson};
 
-        return (
-            <div className="lessons">
+        console.log(currentLesson);
 
-                {/* list of all client's lessons - click to render a specific lesson */}
-                <div className="lessons__list">
-                    {lessons.map(lesson =>  
-                        <div id={lesson.id} key={lesson.id} className="lesson" onClick={(event)=>this.updateCurrentLesson(lesson.id)}>
-                            <p className="lesson__name">{lesson.name}</p>
-                            <p className="lesson__date">{lesson.date}</p>
-                        </div>
-                    )}
-                    <p className="lessons__list-new" onClick={this.addNewLesson}> + New </p>
-                </div>
-
-                {/* displays the chosen lesson set in state */}
-                <div className="component current-lesson">
-                <h2 className="component-title">{currentLesson.name}</h2>
-                    <div className = "current-lesson__top">
-                        {currentLesson.current ? 
-                        <p className="current-lesson__top-status current-lesson__top-status--current">Current</p> 
-                        : 
-                        <p className="current-lesson__top-status">Mark as Current</p>}
-
-                        <div className="current-lesson__top-left">
-                            {/* shows the details for the lesson */}
-                            <div className="current-lesson__top-details">
-                                <p>{`Location: ${currentLesson.location.name}`}</p>
-                                <p>{`Date: ${currentLesson.date}`}</p>
-                                <p>{`Time: ${currentLesson.time}`}</p>
-                                
-                                {/* modal to update the lesson details */}
-                                <ModalContainer 
-                                    modalType = "update" 
-                                    modalName = "modifyLesson" 
-                                    buttonText="Update" 
-                                    onSubmitTrainer={this.updateDetails} 
-                                    information={currentLesson}
-                                />
+        if(lessons.length === 0){
+            return(                                     
+                <div onClick={this.addNewLesson} className="empty-container">
+                    <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                    <p>Click to Add a Lesson</p>
+            </div>
+            )
+        }else{
+            return (
+                <div className="lessons">
+                    {/* list of all client's lessons - click to render a specific lesson */}
+                    <div className="lessons__list">
+                        {lessons.map(lesson =>  
+                            <div id={lesson.id} key={lesson.id} className="lesson" onClick={(event)=>this.updateCurrentLesson(lesson.id)}>
+                                <p className="lesson__name">{lesson.name==="" ? "Click Update to Add Title" : lesson.name }</p>
+                                <p className="lesson__date">{lesson.date}</p>
                             </div>
-                            <div>Google Map</div>
-                        </div>
+                        )}
+                        <p className="lessons__list-new" onClick={this.addNewLesson}> + New </p>
                     </div>
 
-                    <div className="lesson-divider"></div>
+                    {/* displays the chosen lesson set in state */}
+                
+                    <div className="component current-lesson">
+                    <h2 className="component-title">{currentLesson.name}</h2>
+                        <div className = "current-lesson__top">
+                            {currentLesson.current ? 
+                            <p className="current-lesson__top-status current-lesson__top-status--current">Current</p> 
+                            : 
+                            <p className="current-lesson__top-status" onClick={this.updateStatus}>Mark as Current</p>}
 
-                    <h2 className="section-title section-title-resources">Resources</h2>
-                      
-                    {/* renders the resource section for the lessons */}
-                    <LessonResources programs={programs} currentLesson={currentLesson} currentClient={currentClient}/>
-               
-                    {/* renders the notes and the homework section */}
-                    <div className="current-lesson__bottom">
-                        
-                        {/* Notes section */}
-                        <div className="current-lesson__bottom-notes">
-                                <h2 className="section-title" >Notes</h2>
-                                {currentLesson.notes.length===0 && 
-                                <div onClick={()=> {this.showForm("note")}} className="empty-container">
-                                    <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
-                                    <p>Click to Add Homework</p>
-                                </div>}
-                                {currentLesson.notes.map(note=><List key={note.id} content={note.message} id={note.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="notes"/>)}
-                                <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
-                                    {this.state.showAddNote && 
-                                        <div className="current-lesson__form-input">
-                                            <input className="client__notes-new" type="text" name="newNote" placeholder="New Note"></input>
-                                            {/* <button type="submit" className="current-lesson__submitBtn"> Add </button> */}
-                                        </div>
-                                    }    
-                                    {!this.state.showAddNote && <p className="current-lesson__addBtn" onClick={()=> {this.showForm("note")}}>+</p>}
-                                </form>
+                            <div className="current-lesson__top-left">
+                                {/* shows the details for the lesson */}
+                                <div className="current-lesson__top-details">
+                                    <p>{`Location: ${currentLesson.location.name}`}</p>
+                                    <p>{`Date: ${currentLesson.date}`}</p>
+                                    <p>{`Time: ${currentLesson.time}`}</p>
+                                    
+                                    {/* modal to update the lesson details */}
+                                    <ModalContainer 
+                                        modalType = "update" 
+                                        modalName = "modifyLesson" 
+                                        buttonText="Update" 
+                                        onSubmitTrainer={this.updateDetails} 
+                                        information={currentLesson}
+                                    />
+                                </div>
+                                <div>Google Map</div>
+                            </div>
                         </div>
 
                         <div className="lesson-divider"></div>
 
-                        {/* Homework Section */}
-                        <div className="current-lesson__bottom-homework">
-                            <h2 className="section-title">Homework</h2>
-                                
-                            {currentLesson.homework.length===0 && 
-                                <div onClick={()=> {this.showForm("homework")}} className="empty-container">
-                                    <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
-                                    <p>Click to Add Homework</p>
-                                </div>}
+                        <h2 className="section-title section-title-resources">Resources</h2>
+                        
+                        {/* renders the resource section for the lessons */}
+                        <LessonResources programs={programs} currentLesson={currentLesson} currentClient={currentClient}/>
+                
+                        {/* renders the notes and the homework section */}
+                        <div className="current-lesson__bottom">
+                            
+                            {/* Notes section */}
+                            <div className="current-lesson__bottom-notes">
+                                    <h2 className="section-title" >Notes</h2>
+                                    {currentLesson.notes.length===0 && 
+                                    <div onClick={()=> {this.showForm("note")}} className="empty-container">
+                                        <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                                        <p>Click to Add Homework</p>
+                                    </div>}
+                                    {currentLesson.notes.map(note=><List key={note.id} content={note.message} id={note.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="notes"/>)}
+                                    <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
+                                        {this.state.showAddNote && 
+                                            <div className="current-lesson__form-input">
+                                                <input className="client__notes-new" type="text" name="newNote" placeholder="New Note"></input>
+                                                {/* <button type="submit" className="current-lesson__submitBtn"> Add </button> */}
+                                            </div>
+                                        }    
+                                        {!this.state.showAddNote && <p className="current-lesson__addBtn" onClick={()=> {this.showForm("note")}}>+</p>}
+                                    </form>
+                            </div>
 
-                            {currentLesson.homework.map(item=><List key={item.id} content={item.message} id={item.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="homework"/>)}
+                            <div className="lesson-divider"></div>
 
-                            <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
-                                    {this.state.showAddHomework && 
-                                        <div className="current-lesson__form-input">
-                                            <input className="client__notes-new" type="text" name="newHomework" placeholder="New Homework"></input>
-                                            {/* <button className="current-lesson__submitBtn"> Add </button> */}
-                                        </div>
-                                    }
-                                    {!this.state.showAddHomework && <p className="current-lesson__addBtn" onClick={()=> {this.showForm("homework")}}>+</p>}
-                            </form>
+                            {/* Homework Section */}
+                            <div className="current-lesson__bottom-homework">
+                                <h2 className="section-title">Homework</h2>
+                                    
+                                {currentLesson.homework.length===0 && 
+                                    <div onClick={()=> {this.showForm("homework")}} className="empty-container">
+                                        <img className="empty-container__icon" src="/icons/add-icon.svg"></img>
+                                        <p>Click to Add Homework</p>
+                                    </div>}
+
+                                {currentLesson.homework.map(item=><List key={item.id} content={item.message} id={item.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="homework"/>)}
+
+                                <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
+                                        {this.state.showAddHomework && 
+                                            <div className="current-lesson__form-input">
+                                                <input className="client__notes-new" type="text" name="newHomework" placeholder="New Homework"></input>
+                                                {/* <button className="current-lesson__submitBtn"> Add </button> */}
+                                            </div>
+                                        }
+                                        {!this.state.showAddHomework && <p className="current-lesson__addBtn" onClick={()=> {this.showForm("homework")}}>+</p>}
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-            </div>
-        )
+            )
+        }
     }
 }
 

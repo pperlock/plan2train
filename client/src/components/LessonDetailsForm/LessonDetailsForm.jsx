@@ -7,7 +7,7 @@ function LessonDetailsForm({onSubmit, closeModal, lesson}) {
     return (
         <form id="modal-form" className="modal-form" onSubmit={onSubmit} >
             <div>
-                <input className="modal-form__input" id="lessonName" name="lessonName" type="text" placeholder="Lesson Name" defaultValue={lesson.name}></input>
+                <input className="modal-form__input" id="lessonName" name="lessonName" type="text" placeholder="Lesson Name" defaultValue={lesson.name} ></input>
             </div>
             <div>
                 <input className="modal-form__input" id="date" name="date" type="date"  defaultValue={date}></input>
