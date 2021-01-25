@@ -135,7 +135,16 @@ class Trainer extends React.Component{
     /** ================================================ UPDATE CLIENT ================================================*/
     updateClient=(updatedClient)=>{
         console.log(updatedClient);
-    //this.setState({userProfile:updatedProfile});
+        console.log(this.props.match.params.clientId);
+
+        axios.put(`http://localhost:8080/client/${this.props.match.params.clientId}/updateDetails`, updatedClient)
+        .then(res =>{
+            //pulls new data from db on component did update
+            this.setState({updated:true})
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
 
     /** ================================================ DELETE CLIENT ================================================*/

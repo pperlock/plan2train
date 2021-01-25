@@ -94,6 +94,28 @@ app.delete('/client/:clientId', (req,res)=>{
     })
 })
 
+/* =========================================== UPDATE CLIENT DETAILS ================================================ */
+app.put('/client/:clientId/updateDetails', (req,res)=>{
+
+    Client.findOne({userId:req.params.clientId}) 
+    .then((response)=>{
+       
+        response.userProfile = req.body;
+
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response.userProfile);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
 /* =========================================== ADD PROGRAM ================================================ */
 app.post('/trainer/:trainerId/addProgram', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?

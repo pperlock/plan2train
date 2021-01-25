@@ -75,7 +75,7 @@ class Clients extends React.Component {
                         <div className="client__modify">
                             <ModalContainer 
                                 modalType = "update" 
-                                modalName = "modifyClient" 
+                                modalName = "updateClient" 
                                 buttonText="Modify" 
                                 onSubmitTrainer={updateClient} 
                                 information={currentClient}
