@@ -43,9 +43,9 @@ class Programs extends React.Component {
 
         // if the resource to be added is a file the save it to firebase and send the resulting url to db
         if (uploadType === "file"){
-            let bucketName = "resources";
+            let bucketName = this.props.programs[0].trainerId;
             let file = this.state.selectedFile;
-            let storageRef = firebase.storage().ref(`${bucketName}/${file.name}`);
+            let storageRef = firebase.storage().ref(`/${bucketName}/${file.name}`);
             let uploadTask = storageRef.put(file);
             uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
                 ()=>{
@@ -53,7 +53,7 @@ class Programs extends React.Component {
                 })
             
             let storageLoc = firebase.storage().ref();
-            storageLoc.child(`/${this.props.programs.trainerId}/${this.state.selectedFile.name}`).getDownloadURL()
+            storageLoc.child(`/${bucketName}/${file.name}`).getDownloadURL()
             .then((url)=>{
                 const newResource={
                     name:event.target.uploadName.value,
