@@ -2,8 +2,12 @@ import React from 'react'
 import './PersonalDetailsForm.scss';
 
 function PersonalDetailsForm({onSubmit, closeModal, userProfile}) {
-    const {lname,fname,username,password,email,phone,address,city,province,country,postal,social} = userProfile;
-    const {facebook,twitter,instagram,linkedIn} = social;
+    // const {lname,fname,username,password,email,phone,address,city,province,country,postal,social} = userProfile;
+    // const {facebook,twitter,instagram,linkedIn} = social;
+
+    const {lname,fname,username,password,email,phone,address,city,province,country,postal} = userProfile.contact;
+    const {facebook, twitter, instagram, linkedIn} = userProfile.social;
+    const {name, description} = userProfile.company;
     return (
         <form id="modal-form" className="modal-form" onSubmit={onSubmit} >
             <div>

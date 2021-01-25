@@ -120,9 +120,16 @@ class Trainer extends React.Component{
         }) 
     }
 
-    /** ================================================ UPDATE USER ================================================*/
+    /** ================================================ UPDATE TRAINER ================================================*/
     updateUserProfile=(updatedProfile)=>{
-        this.setState({userProfile:updatedProfile});
+        console.log(this.state.userProfile.userId);
+        axios.put(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/updateDetails`, updatedProfile)
+        .then(res =>{
+            this.setState({userProfile:updatedProfile});
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
 
     /** ================================================ UPDATE CLIENT ================================================*/

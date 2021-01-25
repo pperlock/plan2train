@@ -34,27 +34,27 @@ class ModalContainer extends React.Component {
     /** ================================================ Update User ================================================*/
     updateUser = (event) =>{
         event.preventDefault();
-        
+
         const updatedProfile = {
-            type: this.props.userProfile.type,
-            username:event.target.username.value,
-            fname:event.target.fname.value,
-            lname:event.target.lname.value,
-            password:event.target.password.value,
-            email:event.target.email.value,
-            phone:event.target.phone.value,
-            address:event.target.address.value,
-            city: event.target.city.value,
-            province: event.target.province.value,
-            country: event.target.country.value,
+            contact:{
+                username:event.target.username.value,
+                fname:event.target.fname.value,
+                lname:event.target.lname.value,
+                password:event.target.password.value,
+                email:event.target.email.value,
+                phone:event.target.phone.value,
+                address:event.target.address.value,
+                city: event.target.city.value,
+                province: event.target.province.value,
+                country: event.target.country.value,
+                postal:event.target.postal.value
+            },
             social:{facebook:event.target.facebook.value, twitter:event.target.twitter.value, instagram: event.target.instagram.value, linkedIn:event.target.linkedIn.value},
-            company:"Dogs North",
-            companyDescription: "Dogs North provides training for the every day owner.  We strive to provide you with personalized training that pertains directly to making your life better with your dog every day.  We are proud to be part of the northern ontario community and are here to build great relationships between dogs and their owners in the Timmins, Porcupine, Matheson and Iroquois Falls region."
+            company:{
+                name:"Dogs North",
+                description: "Dogs North provides training for the every day owner.  We strive to provide you with personalized training that pertains directly to making your life better with your dog every day.  We are proud to be part of the northern ontario community and are here to build great relationships between dogs and their owners in the Timmins, Porcupine, Matheson and Iroquois Falls region."
+            }
         }
-
-        console.log(updatedProfile);
-        console.log(this.props);
-
         this.props.onSubmitTrainer(updatedProfile)
         this.closeModal();
     }
@@ -146,6 +146,7 @@ class ModalContainer extends React.Component {
         this.props.onSubmitTrainer(updatedDetails);
         this.closeModal();
     }
+
 
 
     /** ================================================ MODAL FUNCTIONS ================================================*/

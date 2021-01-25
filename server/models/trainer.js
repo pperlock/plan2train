@@ -8,7 +8,7 @@ const trainerSchema = new Schema({
         type: String,
         required:true
     },
-    userProfile:{
+    contact:{
         type: Object
     },
     company:{

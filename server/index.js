@@ -26,6 +26,32 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //seco
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
 
+
+
+/* =========================================== UPDATE TRAINER DETAILS ================================================ */
+app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
+
+    Trainer.findOne({userId:req.params.trainerId}) 
+    .then((response)=>{
+       
+        response.contact = req.body.contact;
+        response.company = req.body.company;
+        response.social = req.body.social;
+
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
 /* =========================================== ADD CLIENT ================================================ */
 app.post('/trainer/:trainerId/addClient', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
@@ -178,7 +204,7 @@ app.get('/trainer/:username/:trainerId', (req, res) => {
 
     let trainer = {userProfile:{}, programs:[] }
 
-    Trainer.find({userId:req.params.trainerId}) //asynchronous
+    Trainer.findOne({userId:req.params.trainerId}) //asynchronous
     .then((response)=>{
         trainer.userProfile = response;
             

@@ -4,13 +4,12 @@ import "./User.scss"
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 function User({user, updateUserProfile}) {
-    // console.log(user);
+    // console.log(updateUserProfile);
     // console.log(user.userProfile);
-    const {userProfile, company, social} = user[0];
-    // console.log(userProfile);
-    const {lname,fname,username,password,email,phone,address,city,province,country,postal} = userProfile;
-    const {facebook, twitter, instagram, linkedIn} = social;
-    const {name, description} = company;
+        // console.log(userProfile);
+    const {lname,fname,username,password,email,phone,address,city,province,country,postal} = user.contact;
+    const {facebook, twitter, instagram, linkedIn} = user.social;
+    const {name, description} = user.company;
     
 
     return (
@@ -60,7 +59,7 @@ function User({user, updateUserProfile}) {
                             <img className="user-icon" src="/icons/linkedin-icon.svg" alt="linked-in"/><p>{linkedIn}</p>
                         </div>
                     </div>
-                    <ModalContainer modalName = "updateuser" buttonText="Update" information={userProfile} updateUserProfile={updateUserProfile}/>
+                    <ModalContainer modalName = "updateUser" buttonText="Update" information={user} onSubmitTrainer={updateUserProfile}/>
                 </div>
                 <div className="user-profile__description">
                     <div className="user-profile__description-logo"></div>
