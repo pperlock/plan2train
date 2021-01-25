@@ -116,6 +116,38 @@ app.put('/client/:clientId/updateDetails', (req,res)=>{
     });
 })
 
+/* =========================================== ADD LESSON NOTE ================================================ */
+
+app.post(`/client/:clientId/addNote`, (req, res)=>{
+
+    const {message} = req.body;
+
+    const newNote = {
+        id:uuidv4(),
+        message
+    }
+    
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+
+        response.notes.push(newNote);
+
+        // needs to be marked as modified for the database to undertand that an array has been updated
+        response.markModified('notes');
+        response.save()
+        .then((saveRes)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(newNote);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
 /* =========================================== ADD PROGRAM ================================================ */
 app.post('/trainer/:trainerId/addProgram', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
