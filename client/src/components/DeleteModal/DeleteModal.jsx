@@ -18,9 +18,9 @@ function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
             onKeyDown={onKeyDown}>
                 <div className="modal-area modal-delete__area" ref={modalRef} style={{backgroundImage: "url('/images/intro-background.png')"}}>
                     <div className="modal-delete__header">
-                        <h1 className="modal-title modal-delete__header-title">Are you Sure you You Would Like to Delete</h1>
+                        {modalName !== "noDelete" && <h1 className="modal-title modal-delete__header-title">Are you Sure you You Would Like to Delete</h1>}
                         <h2 className= "modal-delete__header-info">{deleteString}</h2>
-                        <p className= "modal-delete__header-warning">This action can not be undone</p>
+                        {modalName !== "noDelete" && <p className= "modal-delete__header-warning">This action can not be undone</p>}
                     </div>
                     <button
                         ref={buttonRef}
@@ -35,7 +35,7 @@ function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                     </button>
                     <div className="modal-body modal-delete__body">
                         <button onClick={closeModal}>Cancel</button>
-                        <button onClick={()=>onSubmit(deleteId)}>Delete</button>
+                        {modalName !== "noDelete" && <button onClick={()=>onSubmit(deleteId)}>Delete</button>}
                     </div>
                 </div>
 

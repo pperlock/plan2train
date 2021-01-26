@@ -152,6 +152,22 @@ class ClientLessons extends React.Component {
             })
     }
 
+    deleteLesson = (lessonId)=>{
+        console.log(lessonId);
+        
+        axios.delete(`http://localhost:8080/client/${this.state.currentClient.userId}/${lessonId}/deleteLesson`)
+            .then(res =>{
+                // console.log(res.data);
+                const clientCopy = {...this.state.currentClient};
+                clientCopy.lessons = (res.data);
+                console.log(clientCopy.lessons);
+                this.setState({currentClient:clientCopy, currentLesson:this.props.currentClient.lessons[0]});   
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+    }
+
     updateDetails = (updatedClient) =>{
         console.log(this.state.currentLesson.name);
         axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateLessonDetails`, updatedClient)
@@ -242,6 +258,25 @@ class ClientLessons extends React.Component {
                                 </div>
                                 <div>Google Map</div>
                             </div>
+                            {!currentLesson.current ?
+                            <ModalContainer 
+                                modalType = "delete" 
+                                modalName = "delete" 
+                                buttonText="Delete" 
+                                onSubmitTrainer={this.deleteLesson}
+                                deleteString={currentLesson.name}
+                                deleteId={currentLesson.id}
+                            />
+                            :
+                            <ModalContainer 
+                                modalType = "delete" 
+                                modalName = "noDelete" 
+                                buttonText="Delete" 
+                                onSubmitTrainer={this.deleteLesson}
+                                deleteString={"Cannot Delete Current Lesson"}
+                                deleteId={currentLesson.id}
+                            />
+                            }
                         </div>
 
                         <div className="lesson-divider"></div>

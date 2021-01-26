@@ -340,9 +340,35 @@ app.post('/client/:clientId/addLesson', (req,res)=>{
     .catch((err) =>{
         console.log(err)
     });
+})
 
+/* =========================================== DELETE LESSON ================================================ */
 
+app.delete('/client/:clientId/:lessonId/deleteLesson', (req,res)=>{
 
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+
+         //find the index of the note to delete
+         let foundIndex;
+         response.lessons.find((lesson, index) => {foundIndex = index; return lesson.id === req.params.lessonId; });
+         
+         response.lessons.splice(foundIndex, 1);
+
+        //needs to be marked as modified for the database to undertand that an array has been updated
+        response.markModified('lessons');
+        response.save()
+        .then((saveRes)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response.lessons);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
 })
 
 /* =========================================== ADD LESSON NOTE ================================================ */

@@ -3,6 +3,7 @@
 .lessons{
     &__list{
         display:flex;
+        flex-wrap:wrap;
         margin: 20px 0;
         justify-content: center;
 
