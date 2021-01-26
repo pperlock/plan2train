@@ -116,7 +116,7 @@ app.put('/client/:clientId/updateDetails', (req,res)=>{
     });
 })
 
-/* =========================================== ADD LESSON NOTE ================================================ */
+/* =========================================== ADD CLIENT NOTE ================================================ */
 
 app.post(`/client/:clientId/addNote`, (req, res)=>{
 
@@ -147,6 +147,35 @@ app.post(`/client/:clientId/addNote`, (req, res)=>{
         console.log(err)
     });
 })
+
+
+/* =========================================== DELETE CLIENT NOTE ================================================ */
+
+app.delete(`/client/:clientId/:noteId/deleteNote`, (req, res)=>{
+
+    Client.findOne({userId:req.params.clientId}) //asynchronous
+    .then((response)=>{
+
+        //find the index of the note to delete
+        let foundIndex;
+        response.notes.find((note, index) => {foundIndex = index; return note.id === req.params.noteId; });
+        
+        response.notes.splice(foundIndex, 1);
+        
+        response.markModified('notes');
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response.notes);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+});
 
 /* =========================================== ADD PROGRAM ================================================ */
 app.post('/trainer/:trainerId/addProgram', (req,res)=>{

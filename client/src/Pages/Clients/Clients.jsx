@@ -91,7 +91,7 @@ class Clients extends React.Component {
                     }
 
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
-                    {page === "profile" && <ClientProfile currentClient = {currentClient}/>}
+                    {page === "profile" && <ClientProfile currentClient = {currentClient} clients={clients} updateTrainer={this.props.updateTrainer} match = {this.props.match}/>}
                     {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs}/>}
                    
                 </div>

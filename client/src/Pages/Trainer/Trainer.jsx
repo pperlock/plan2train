@@ -181,9 +181,8 @@ class Trainer extends React.Component{
     updateTrainer=()=>{
         this.setState({updated:true})
     }
-
-    
-    
+  
+   
     render(){
  
         const {match} = this.props;
@@ -216,6 +215,7 @@ class Trainer extends React.Component{
                         addClient={this.addClient}
                         updateClient={this.updateClient}
                         deleteClient={this.deleteClient}
+                        updateTrainer={this.updateTrainer}
                     />}
                 {(this.state.clients && match.path==="/clients/:clientId/lessons") && 
                     <Clients {...this.props} 

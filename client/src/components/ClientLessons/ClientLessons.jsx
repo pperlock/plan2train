@@ -60,7 +60,7 @@ class ClientLessons extends React.Component {
     }
 
     componentDidUpdate(){
-        console.log("componentUpdated")
+        console.log("client-lessons - componentUpdated")
     }
 
     //updates the resources that are displayed based on which program is chosen in the available resources section

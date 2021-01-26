@@ -9,10 +9,18 @@ class ClientProfile extends React.Component {
  
     state={currentClient:this.props.currentClient}
 
+    componentDidMount(){
+        // this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)})
+    }
+
+    componentDidUpdate(){
+        // console.log("client - did update")
+        this.state.currentClient.userId !==this.props.match.params.clientId && this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)});
+    }
+
     addNote=(event)=>{
         event.preventDefault();
         const newNote={message:event.target.newNote.value};
-
 
         axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addNote`, newNote)
         .then(res =>{
@@ -20,6 +28,8 @@ class ClientProfile extends React.Component {
             const copyClient = {...this.state.currentClient};
             copyClient.notes.push(res.data);
             this.setState({currentClient:copyClient});
+            event.target.newNote.value="";
+            this.props.updateTrainer();
         })
         .catch(err=>{
             console.log(err);
@@ -27,28 +37,18 @@ class ClientProfile extends React.Component {
 
     }
 
-    deleteNote=(event)=>{
-        // const lessonCopy = {...this.state.currentLesson};
-        // // list variable passed in is used to determine what list to delete the item from
-        // if (list==="notes"){
-        //     axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteNote`)
-        //     .then(res =>{
-        //         lessonCopy.notes = res.data;
-        //         this.setState({currentLesson:lessonCopy});
-        //     })
-        //     .catch(err=>{
-        //         console.log(err);
-        //     })
-        // }else{
-        //     axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteHomework`)
-        //     .then(res =>{
-        //         lessonCopy.homework = res.data;
-        //         this.setState({currentLesson:lessonCopy});
-        //     })
-        //     .catch(err=>{
-        //         console.log(err);
-        //     })
-        // }
+    deleteNote=(noteId)=>{
+        axios.delete(`http://localhost:8080/client/${this.state.currentClient.userId}/${noteId}/deleteNote`)
+        .then(res =>{
+            console.log(noteId);
+            const copyClient = {...this.state.currentClient};
+            copyClient.notes = res.data;
+            this.setState({currentClient:copyClient});
+            this.props.updateTrainer();
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
 
     render(){
@@ -77,7 +77,15 @@ class ClientProfile extends React.Component {
                 <div className = "component client__notes">
                     <p className="component-title">Notes</p>
                     <div className="list">
-                        {this.state.currentClient.notes.map(note=> <List key={note.id} content={note.message} id={note.id} deleteFunction = {this.deleteNote} deleteBtn={true}/>)}
+                        {this.state.currentClient.notes.map(note=> 
+                            <List 
+                                key={note.id} 
+                                content={note.message} 
+                                id={note.id} 
+                                deleteFunction = {this.deleteNote} 
+                                deleteBtn={true}
+                                deleteType="modal"
+                            />)}
                     </div>
                     <form className="client__notes-form" onSubmit={(event)=>this.addNote(event)}>
                         <input className="client__notes-new" type="text" name="newNote" placeholder="New Note"></input>
