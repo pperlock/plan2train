@@ -9,8 +9,11 @@
   "author": "pperlock",
   "license": "ISC",
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.1.16",
+    "axios": "^0.21.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "googleapis": "^67.0.0",
     "mongoose": "^5.11.12",
     "uuid": "^8.3.2"
   }

@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const axios = require("axios");
 const cors = require("cors");
 const app = express();
 const { v4: uuidv4 } = require('uuid');
@@ -25,8 +26,6 @@ dbURI = 'mongodb+srv://pperlock:!Exploration105@plan2traindb.6efyn.mongodb.net/p
 mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //second argument stops deprecation warnings - asynchronous promise
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
-
-
 
 /* =========================================== UPDATE TRAINER DETAILS ================================================ */
 app.put('/trainer/:trainerId/updateDetails', (req,res)=>{

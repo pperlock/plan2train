@@ -1,21 +1,43 @@
 import React from 'react';
-import './ClientProfile.scss';
+
 import axios from 'axios';
 
+import './ClientProfile.scss';
+
 import List from '../../components/List/List';
+import Map from '../../components/Map/Map';
 
 // props = currentClient
 class ClientProfile extends React.Component {
  
-    state={currentClient:this.props.currentClient}
+    state={currentClient:this.props.currentClient, mapLocation:null}
 
     componentDidMount(){
-        // this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)})
+        this.geoCode();
     }
 
     componentDidUpdate(){
         // console.log("client - did update")
-        this.state.currentClient.userId !==this.props.match.params.clientId && this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)});
+        //if the userId currently in state doesn't match the userId in the path then update the currentClient in state to match the one in the path
+        if(this.state.currentClient.userId !==this.props.match.params.clientId){
+            this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)},()=>{
+                this.geoCode();
+            });
+        } 
+
+    }
+
+    geoCode = () =>{
+        const {address, city, province} = this.state.currentClient.userProfile;
+        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
+        .then(res=>{
+            console.log(res.data.results[0].locations[0].displayLatLng);
+            this.setState({mapLocation:res.data.results[0].locations[0].displayLatLng});     
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+       
     }
 
     addNote=(event)=>{
@@ -71,7 +93,15 @@ class ClientProfile extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="client__contact-map">google map</div>
+                    <div className = "client__contact-map" style={{width:"346px", height:"253px"}}>
+                            <Map
+                                googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`}
+                                loadingElement={<div style={{height: "100%"}} />}
+                                containerElement={<div style={{height: "100%"}} />}
+                                mapElement={<div style={{height: "100%"}} />}
+                                mapLocation={this.state.mapLocation}
+                            />
+                    </div>
                 </div>
 
                 <div className = "component client__notes">
