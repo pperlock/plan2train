@@ -28,14 +28,39 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //seco
 .catch((err)=>console.log(err))
 
 /* =========================================== GET USER DETAILS ================================================ */
-app.get('/user/:username', (req,res)=>{
+app.get('/user/:profile/:username/:password', (req,res)=>{
 
 User.findOne({username:req.params.username}) 
 .then((response)=>{
-   
-    response.password !== req.body.password && res.send("Incorrect Password");
-    response.profile !== req.body.profile && res.send("Incorrect Profile Type");
-    (response.password === req.body.password && response.profile === req.body.profile) && res.send("success");
+
+    const loginResponse = {
+        loggedIn:false, 
+        error:null, 
+        userId:null, 
+        username:null, 
+        password:null, 
+        profile:req.params.profile
+    };
+
+    if(!response){
+        loginResponse.loggedIn = false;
+        loginResponse.error = "Username Not Found";
+        res.send(loginResponse);
+    }else if(response.password === req.params.password && response.profile === req.params.profile){
+        loginResponse.loggedIn = true;
+        loginResponse.userId = response.userId;
+        loginResponse.username = response.username;
+        loginResponse.password = response.password;
+        res.send(loginResponse);
+    }else if(response.password !== req.params.password){
+        loginResponse.loggedIn = false;
+        loginResponse.error = "Incorrect Password";
+        res.send(loginResponse);
+    }else if(response.profile !== req.params.profile){
+        loginResponse.loggedIn = false;
+        loginResponse.error = "Profile Type Incorrect";
+        res.send(loginResponse);
+    }
 })
 .catch((err) =>{
     console.log(err)

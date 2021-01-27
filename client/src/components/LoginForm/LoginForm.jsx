@@ -2,36 +2,18 @@ import React from 'react';
 
 import './LoginForm.scss';
 
-function LoginForm({onSubmit, closeModal, profile, lesson}) {
-    if (profile === "trainerlogin"){
+function LoginForm({onSubmit, profile}) {
+    
+    const profileType = profile.substring(5, profile.length);
         return (
-            <form id="modal-form" className="modal-form" onSubmit={onSubmit} >
-                <div>
-                    <input className="modal-form__input" id="username" name="username" type="text" placeholder="Username"></input>
-                    <input className="modal-form__input" id="password" name="password" type="password" placeholder="Password"></input>
+            <form id="login-form" className="login__form" onSubmit={(event)=> onSubmit(event, profileType)} >
+                <div className="login__form-input">
+                    <input className="modal-form__input login__form-inputbox" id="username" name="username" type="text" placeholder="Username" required></input>
+                    <input className="modal-form__input login__form-inputbox" id="password" name="password" type="password" placeholder="Password" required></input>
                 </div>
-                <div className="modal-form__submit">
-                    <button className="modal-form__submit-cancel" type="button" onClick={closeModal}>Cancel</button>
-                    <button className="modal-form__submit-button" id="submit" type="submit" form="modal-form">Submit</button>
-                </div>
-                
+                    <button className="modal-form__submit-button login__form-submit" id="submit" type="submit" form="login-form">Sign In</button>
             </form>
         )
-    }else{
-        return (
-            <form id="modal-form" className="modal-form" onSubmit={onSubmit} >
-                <div>
-                    <input className="modal-form__input" id="username" name="username" type="text" placeholder="Username"></input>
-                    <input className="modal-form__input" id="password" name="password" type="password" placeholder="Password"></input>
-                </div>
-                <div className="modal-form__submit">
-                    {/* <button className="modal-form__submit-cancel" type="button" onClick={closeModal}>Cancel</button> */}
-                    <button className="modal-form__submit-button" id="submit" type="submit" form="modal-form">Sign In</button>
-                </div>
-                
-            </form>
-        )
-    }
 }
 
 export default LoginForm

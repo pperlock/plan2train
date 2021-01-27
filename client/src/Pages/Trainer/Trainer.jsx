@@ -11,7 +11,7 @@ import User from '../User/User';
 
 class Trainer extends React.Component{
     
-    state={files:null, username:"bharwood", trainerId: "600616b6c63ec047da27d59f", userProfile:null, programs:null, clients:null, updated:false}
+    state={files:null, username:this.props.match.params.username, trainerId: this.props.match.params.trainerId, userProfile:null, programs:null, clients:null, updated:false}
 
 
     componentDidMount(){

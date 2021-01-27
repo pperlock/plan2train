@@ -1,0 +1,51 @@
+@import '../../styles/globalImports.scss';
+
+.modal-login{
+
+    &__header{
+        text-align:center;
+        &-title{
+            padding-left:0;
+            margin-bottom:20px;
+            color:$accent-color;
+            font-weight:bold;
+
+        }
+        &-info{
+            margin:20px 0;
+        }
+    }
+    &__area{
+        background-size:cover;
+        border-radius:10px;
+        width: 19%;
+        height: 51%;
+        left:39%;
+        top:17%;
+        box-shadow:0 0 9px 0 rgba(255, 255, 255, 0.4);
+    }
+    &__close{
+        top:11px;
+        right:10px;
+    }
+    &__body{
+        &-signup{
+            background-color:transparent;
+            border:none;
+            color:$accent-color;
+            font-weight:bold;
+            font-size:18px;
+            width: 211px;
+            margin-top:18px;
+            margin-top:100px;
+            cursor:pointer;
+        }
+
+        &-error{
+            color:#ff0033;
+            font-weight:bold;
+            font-style:italic;
+        }
+    }
+}
+

@@ -220,14 +220,12 @@ class ModalContainer extends React.Component {
                 {(this.state.isShown && this.props.modalType.substring(0,5) ==="login") && 
                     <LoginModal
                         modalType={this.props.modalType}
-                        //onSubmit={onSubmit}
+                        onSubmit={this.props.onSubmitTrainer}
                         modalRef={n=> this.modal = n}
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
                         onClickOutside={this.onClickOutside}
-                        deleteString={this.props.deleteString}
-                        deleteId = {this.props.deleteId}
                     />}
 
                 {(this.state.isShown && this.props.modalType==="delete") && 

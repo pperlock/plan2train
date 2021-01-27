@@ -139,10 +139,15 @@ ul{
     right: 15px;
     padding: 0.5em;
     line-height: 1;
-    background: #f6f6f7;
+    // background: #f6f6f7;
+    background-color:transparent;
     border: 0;
     box-shadow: 0;
     cursor: pointer;
+    
+    &:focus{
+      outline:none;
+    }
   }
   
   ._modal-close-icon {
