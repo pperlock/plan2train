@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 //make schema that defines the structure
 const userSchema = new Schema({
-    id:{
+    userId:{
         type:String,
         required:true
     },
@@ -21,33 +21,6 @@ const userSchema = new Schema({
         type: String,
         required:true
     },
-    fname: {
-        type: String,
-    },
-    lname: {
-        type: String,
-    },
-    email: {
-        type: String,
-    },
-    phone: {
-        type: String,
-    },
-    address: {
-        type: String,
-    },
-    city: {
-        type: String,
-    },
-    province: {
-        type: String,
-    },
-    country: {
-        type: String,
-    },
-    postal: {
-        type: String,
-    }
 });
 
 //make the model based on that schema

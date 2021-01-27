@@ -2,6 +2,7 @@ import React from 'react';
 
 import Modal from '../Modal/Modal';
 import DeleteModal from '../DeleteModal/DeleteModal';
+import LoginModal from '../LoginModal/LoginModal';
 import TriggerModalButton from '../TriggerModalButton/TriggerModalButton';
 
 class ModalContainer extends React.Component {
@@ -207,7 +208,7 @@ class ModalContainer extends React.Component {
 
     render(){
         const onSubmit = this.getOnSubmit();
-
+        console.log(this.props.modalType)
 
         return (
             <>
@@ -216,6 +217,18 @@ class ModalContainer extends React.Component {
                     buttonRef={n=>this.TriggerButton=n}
                     buttonText={this.props.buttonText}
                 />
+                {(this.state.isShown && this.props.modalType.substring(0,5) ==="login") && 
+                    <LoginModal
+                        modalType={this.props.modalType}
+                        //onSubmit={onSubmit}
+                        modalRef={n=> this.modal = n}
+                        buttonRef={n=> this.closeButton=n}
+                        closeModal={this.closeModal}
+                        onKeyDown={this.onKeyDown}
+                        onClickOutside={this.onClickOutside}
+                        deleteString={this.props.deleteString}
+                        deleteId = {this.props.deleteId}
+                    />}
 
                 {(this.state.isShown && this.props.modalType==="delete") && 
                     <DeleteModal
@@ -230,7 +243,7 @@ class ModalContainer extends React.Component {
                         deleteId = {this.props.deleteId}
                     />}
 
-                {(this.state.isShown && this.props.modalType !=="delete") && 
+                {/* {(this.state.isShown && this.props.modalType !=="delete") && 
                     <Modal
                         modalName={this.props.modalName}
                         onSubmit={onSubmit}
@@ -240,7 +253,7 @@ class ModalContainer extends React.Component {
                         onKeyDown={this.onKeyDown}
                         onClickOutside={this.onClickOutside}
                         information={this.props.information}
-                    />}
+                    />} */}
             </>
 
             

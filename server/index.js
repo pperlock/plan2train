@@ -27,6 +27,21 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //seco
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
 
+/* =========================================== GET USER DETAILS ================================================ */
+app.get('/user/:username', (req,res)=>{
+
+User.findOne({username:req.params.username}) 
+.then((response)=>{
+   
+    response.password !== req.body.password && res.send("Incorrect Password");
+    response.profile !== req.body.profile && res.send("Incorrect Profile Type");
+    (response.password === req.body.password && response.profile === req.body.profile) && res.send("success");
+})
+.catch((err) =>{
+    console.log(err)
+});
+})
+
 /* =========================================== UPDATE TRAINER DETAILS ================================================ */
 app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
 
