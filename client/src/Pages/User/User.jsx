@@ -10,12 +10,20 @@ function User({user, updateUserProfile}) {
     const {lname,fname,username,password,email,phone,address,city,province,country,postal} = user.contact;
     const {facebook, twitter, instagram, linkedIn} = user.social;
     const {name, description} = user.company;
+    const hiddenPassword = password.split("").map(character => "*");
     
 
     return (
-        <div className="user-profile">
+        <div className="user-profile" style={{backgroundImage: "url('/images/main2.jfif')"}}>
             <p className="user-profile__type">Profile: Trainer</p>
             <div className="user-profile__bottom">
+                <div className="user-profile__description">
+                    <div className="user-profile__description-logo-container"><img src="/images/companyLogo2.png" className="user-profile__description-logo"/></div>
+                    <div className="user-profile__description-content">
+                        <p className="user-profile__description-company">{name}</p>
+                        <p className="user-profile__description-description">{description}</p>
+                    </div>
+                </div>
                 <div className="component user-profile__container">
                     <p className="component-title user-profile__title">{`${fname} ${lname}`}</p>
                     
@@ -24,7 +32,7 @@ function User({user, updateUserProfile}) {
                         <p className="user-text"> {username}</p>
 
                         <p className="user-label" >Password: </p>
-                        <p className="user-text"> {password}</p>
+                        <p className="user-text"> {hiddenPassword}</p>
                     </div>
 
                     <div className="user-profile__details">
@@ -36,6 +44,13 @@ function User({user, updateUserProfile}) {
                             <div className="user-profile-item">
                                 <img className="user-icon" src="/icons/phone-icon.svg" alt="phone number"/><p>{phone}</p>
                             </div>
+
+                            <div className="user-profile__social">
+                                <a href={facebook}><img className="user-icon" src="/icons/facebook-icon.svg" alt="facebook"/></a>
+                                <a href={twitter}><img className="user-icon" src="/icons/twitter-icon.svg" alt="twitter"/></a>
+                                <a href={instagram}><img className="user-icon" src="/icons/instagram-icon.svg" alt="instagram"/></a>
+                                <a href={linkedIn}><img className="user-icon" src="/icons/linkedin-icon.svg" alt="linked-in"/></a>
+                            </div>
                         </div>
                         <div className="user-profile__address">
                                 <p className="user-label user-profile__address-title">ADDRESS</p>
@@ -45,30 +60,10 @@ function User({user, updateUserProfile}) {
                         </div>
                     </div>
 
-                    <div className="user-profile__social">
-                        <div className="user-profile-item">
-                            <img className="user-icon" src="/icons/facebook-icon.svg" alt="facebook"/><p>{facebook}</p>
-                        </div>
-                        <div className="user-profile-item">
-                            <img className="user-icon" src="/icons/twitter-icon.svg" alt="twitter"/><p>{twitter}</p>
-                        </div>
-                        <div className="user-profile-item">
-                            <img className="user-icon" src="/icons/instagram-icon.svg" alt="instagram"/><p>{instagram}</p>
-                        </div>
-                        <div className="user-profile-item">
-                            <img className="user-icon" src="/icons/linkedin-icon.svg" alt="linked-in"/><p>{linkedIn}</p>
-                        </div>
-                    </div>
-                    <ModalContainer modalName = "updateUser" buttonText="Update" information={user} onSubmitTrainer={updateUserProfile}/>
-                </div>
-                <div className="user-profile__description">
-                    <div className="user-profile__description-logo"></div>
-                    <div className="user-profile__description-content">
-                        <p className="user-profile__description-company">{name}</p>
-                        <p className="user-profile__description-description">{description}</p>
+                    <ModalContainer modalName = "updateUser" modalType = "update" buttonText="Update" information={user} onSubmitTrainer={updateUserProfile}/>
 
-                    </div>
                 </div>
+                
             </div>
         </div>
     )

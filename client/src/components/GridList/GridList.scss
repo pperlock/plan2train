@@ -1,0 +1,58 @@
+@import '../../styles/globalImports.scss';
+
+.gridlist{
+    display:flex;
+    flex-wrap:wrap;
+    // width:40%;
+    // height:40%;
+    width:80%;
+    
+
+    &__item{
+        position:relative;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+        background-color:$medium-background;
+        padding:16px;
+        margin-bottom:20px;
+        margin-right:20px;
+        width:15%;
+        box-shadow: 2px 11px 32px  black;
+        border-radius:6px; 
+         
+        &-name{
+            text-align:center;
+            padding-bottom:20px;
+            font-size:18px;
+        }
+        &-link{
+            color:$accent-color;
+        }
+        &-image{
+            width:40px;
+            height:40px;
+        }
+
+    }
+
+    &__bottom{
+        display:flex;
+        align-content:baseline;
+        justify-content:space-between;
+        
+        &-delete{
+            border:none;
+            color:grey;
+            border-radius:4px;
+            padding:4px 6px;
+
+            &:hover{
+                background-color:$accent-color;
+                color:$light-text;
+            }
+        }
+    }
+}
+
+

@@ -18,8 +18,8 @@ function Intro () {
             <h2 className= "intro__subtitle"> Organize Your Program Information and Communicate with Your Clients </h2>
             <h2>Choose your Profile</h2>
             <div>
-                <ModalContainer modalType = "logintrainer" buttonText="Trainer"/>
-                <ModalContainer modalType = "loginclient" buttonText="Client"/>
+                <ModalContainer modalType = "logintrainer" buttonText="Trainer" buttonType="accent"/>
+                <ModalContainer modalType = "loginclient" buttonText="Client" buttonType="accent"/>
             </div>
         </div>
     )

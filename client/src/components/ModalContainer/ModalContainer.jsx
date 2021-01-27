@@ -21,7 +21,7 @@ class ModalContainer extends React.Component {
         if(modal ==="addClient"){
             onSubmit=this.addClient;
         }else if (modal === "updateUser"){
-            onSubmit=this.updateUser;
+            //onSubmit=this.updateUser;
         }else if (modal === "addProgram"){
             onSubmit=this.addProgram;
         }else if (modal === "delete"){
@@ -32,34 +32,6 @@ class ModalContainer extends React.Component {
             onSubmit=this.updateclient;
         }
         return onSubmit
-    }
-
-    /** ================================================ Update User ================================================*/
-    updateUser = (event) =>{
-        event.preventDefault();
-
-        const updatedProfile = {
-            contact:{
-                username:event.target.username.value,
-                fname:event.target.fname.value,
-                lname:event.target.lname.value,
-                password:event.target.password.value,
-                email:event.target.email.value,
-                phone:event.target.phone.value,
-                address:event.target.address.value,
-                city: event.target.city.value,
-                province: event.target.province.value,
-                country: event.target.country.value,
-                postal:event.target.postal.value
-            },
-            social:{facebook:event.target.facebook.value, twitter:event.target.twitter.value, instagram: event.target.instagram.value, linkedIn:event.target.linkedIn.value},
-            company:{
-                name:"Dogs North",
-                description: "Dogs North provides training for the every day owner.  We strive to provide you with personalized training that pertains directly to making your life better with your dog every day.  We are proud to be part of the northern ontario community and are here to build great relationships between dogs and their owners in the Timmins, Porcupine, Matheson and Iroquois Falls region."
-            }
-        }
-        this.props.onSubmitTrainer(updatedProfile)
-        this.closeModal();
     }
 
     /** ================================================ ADD CLIENT ================================================*/
@@ -103,7 +75,7 @@ class ModalContainer extends React.Component {
         this.closeModal();
     }
 
-     /** ================================================ Update User ================================================*/
+     /** ================================================ Update CLIENT ================================================*/
      updateclient = (event) =>{
         event.preventDefault();
 
@@ -208,14 +180,16 @@ class ModalContainer extends React.Component {
 
     render(){
         const onSubmit = this.getOnSubmit();
-        console.log(this.props.modalType)
+        // console.log(this.props.modalType)
 
         return (
             <>
                 <TriggerModalButton 
+                    modalType={this.props.modalType}
                     showModal={this.showModal}
                     buttonRef={n=>this.TriggerButton=n}
                     buttonText={this.props.buttonText}
+                    buttonType={this.props.buttonType}
                 />
                 {(this.state.isShown && this.props.modalType.substring(0,5) ==="login") && 
                     <LoginModal
@@ -228,7 +202,7 @@ class ModalContainer extends React.Component {
                         onClickOutside={this.onClickOutside}
                     />}
 
-                {(this.state.isShown && this.props.modalType==="delete") && 
+                {(this.state.isShown && this.props.modalType ==="delete") && 
                     <DeleteModal
                         modalName={this.props.modalName}
                         onSubmit={onSubmit}
@@ -241,17 +215,18 @@ class ModalContainer extends React.Component {
                         deleteId = {this.props.deleteId}
                     />}
 
-                {/* {(this.state.isShown && this.props.modalType !=="delete") && 
+                {(this.state.isShown && this.props.modalType ==="update") && 
                     <Modal
                         modalName={this.props.modalName}
-                        onSubmit={onSubmit}
+                        //onSubmit={onSubmit}
+                        onSubmit = {this.props.onSubmitTrainer}
                         modalRef={n=> this.modal = n}
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
                         onClickOutside={this.onClickOutside}
                         information={this.props.information}
-                    />} */}
+                    />}
             </>
 
             

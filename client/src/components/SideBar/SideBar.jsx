@@ -16,13 +16,18 @@ class SideBar extends React.Component {
     state = {profile:""};
 
     componentDidMount(){
-        const profile = this.props.match.path.split("/")[1];
+        const splitProps = this.props.match.path.split("/")
+        console.log(splitProps);
+        const profile = splitProps.length === 4 ? splitProps[1] : splitProps[4]
         this.setState({profile:profile});
     }
 
     componentDidUpdate(){
         
-        const activeLink = this.props.match.path.split("/")[1];
+        const splitProps = this.props.match.path.split("/")
+        const activeLink = splitProps.length === 4 ? splitProps[1] : splitProps[4]
+
+        console.log(splitProps);
         if(document.getElementById(`${activeLink}-link`)){
             const previouslyActiveLink = document.querySelector(".sidebar__menu-link--active");
             previouslyActiveLink.classList.remove("sidebar__menu-link--active");
@@ -66,12 +71,12 @@ class SideBar extends React.Component {
                             </li>
                         </Link>
                         {programs &&
-                            <Link to={`/programs/${programs[0].id}`}>
+                            <Link to={`/trainer/${trainerName}/${trainerId}/programs/${programs[0].id}`}>
                                 <li id="programs-link" className="sidebar__menu-link"><img id="programs-icon" className="sidebar__menu-icon"src="/icons/programs-icon.svg" alt="list icon"/>Programs</li>
                             </Link>
                         }
                         {clients &&
-                            <Link to={`/clients/${defaultClientId}/profile`}>
+                            <Link to={`/trainer/${trainerName}/${trainerId}/clients/${defaultClientId}/profile`}>
                                 <li id="clients-link" className="sidebar__menu-link"><img  id="clients-icon" className="sidebar__menu-icon" src="/icons/clients-icon.svg" alt="clients icon"/>Clients</li>
                             </Link>
                         }

@@ -8,7 +8,7 @@ function ClientList({list,match, animate, onSubmitTrainer, programs}) {
 
     // console.log(list);
     // console.log(match.path)
-    const page = match.path.split("/")[1];
+    const page = match.path.split("/")[4];
     // console.log(page);
     
     return (
@@ -16,8 +16,8 @@ function ClientList({list,match, animate, onSubmitTrainer, programs}) {
     <div className={animate ? "client-list client-list--animate" : "client-list"}>
         <input className="client-list__search" type="text" placeholder="Search"/>
 
-        {page === "clients" && <ModalContainer modalName = "addClient" buttonText="Add" onSubmitTrainer={onSubmitTrainer} information={programs}/>}
-        {page === "programs" && <ModalContainer modalName = "addProgram" buttonText="Add" onSubmitTrainer={onSubmitTrainer}/>}
+        {page === "clients" && <ModalContainer modalType="update" modalName = "addClient" buttonText="Add" buttonType="accent" onSubmitTrainer={onSubmitTrainer} information={programs}/>}
+        {page === "programs" && <ModalContainer modalType="update" modalName = "addProgram" buttonText="Add" buttonType="accent" onSubmitTrainer={onSubmitTrainer}/>}
         {/* <button className="client-list__add" onClick={()=>addClient()}>+</button> */}
 
         <ul className="client-list__list">

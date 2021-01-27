@@ -73,14 +73,29 @@ app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
     Trainer.findOne({userId:req.params.trainerId}) 
     .then((response)=>{
        
+        //find the trainer and set the new values
         response.contact = req.body.contact;
         response.company = req.body.company;
         response.social = req.body.social;
 
+        //save the updated trainer
         response.save()
         .then((response)=>{
-            //once the data is saved, the database sends us back a new object version of document that was saved
-            res.send(response);
+            //once the trainer is updated, update the user collection
+            User.findOne({userId:req.params.trainerId})
+            .then(userResponse=>{
+                //find the user and set the new username and password
+                userResponse.username=req.body.contact.username;
+                userResponse.password=req.body.contact.password;
+                userResponse.save()
+                .then(saveRes=>{
+                    //once the user is saved, return the new profile from the Trainer document
+                    res.send(response);
+                })
+                .catch((err)=>{
+                    console.log(err);
+                })  
+            })
         })
         .catch((err)=>{
             console.log(err);

@@ -20,8 +20,13 @@ function PersonalDetailsForm({onSubmit, closeModal, information, modalName}) {
         postal = information.userProfile.postal;
     }
 
+    const handleSubmit=(event)=>{
+        onSubmit(event);
+        closeModal();
+    }
+
     return (
-        <form id="modal-form" className="modal-form" onSubmit={onSubmit} >
+        <form id="modal-form" className="modal-form" onSubmit={handleSubmit} >
             <div>
                 <input className="modal-form__input" id="fname" name="fname" type="text" placeholder="First Name" defaultValue={fname}></input>
                 <input className="modal-form__input" id="lname" name="lname" type="text" placeholder="Last Name" defaultValue={lname}></input>
@@ -41,10 +46,16 @@ function PersonalDetailsForm({onSubmit, closeModal, information, modalName}) {
             </div>
             {modalName === "updateUser" && 
                 <div>
-                    <input className="modal-form__input" id="facebook" name="facebook" type="text" placeholder="Facebook" defaultValue={facebook}></input>
-                    <input className="modal-form__input" id="twitter" name="twitter" type="text" placeholder="Twitter" defaultValue={twitter}></input>
-                    <input className="modal-form__input" id="instagram" name="instagram" type="text" placeholder="Instagram" defaultValue={instagram}></input>
-                    <input className="modal-form__input" id="linkedIn" name="linkedIn" type="text" placeholder="Linked In" defaultValue={linkedIn}></input>
+                    <div>
+                        <input className="modal-form__input" id="facebook" name="facebook" type="text" placeholder="Facebook" defaultValue={facebook}></input>
+                        <input className="modal-form__input" id="twitter" name="twitter" type="text" placeholder="Twitter" defaultValue={twitter}></input>
+                        <input className="modal-form__input" id="instagram" name="instagram" type="text" placeholder="Instagram" defaultValue={instagram}></input>
+                        <input className="modal-form__input" id="linkedIn" name="linkedIn" type="text" placeholder="Linked In" defaultValue={linkedIn}></input>
+                    </div>
+                    <div>
+                        <input className="modal-form__input" id="companyName" name="companyName" type="text" placeholder="Company Name" defaultValue={name}></input>
+                        <input className="modal-form__input" id="companyDescription" name="companyDescription" type="text" placeholder="Company Description" defaultValue={description}></input>
+                    </div>
                 </div>
             }
             <div className="modal-form__submit">

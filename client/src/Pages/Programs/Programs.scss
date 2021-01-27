@@ -1,26 +1,36 @@
 @import '../../styles/globalImports.scss';
 
+@keyframes backAnimation{
+
+}
 .programs{
     &__container{
         display:flex;
-        width:80%;
+        align-items:flex-start;
         height:100vh;
         padding-left:300px;
+
+        background-size:cover;
+        background-position:right;
+        
+        &-right{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            margin-left:270px;  
+            margin-top:150px;  
+            width:100%;
+        }
     }
 }
 
 .program{
-    padding:176px 20px 0 20px;
-    height:100vh;
-    width:75%;
-    padding-left:320px;
-    
     &__header{
         width:100%;
         &-title{
             position:absolute;
             width:98%;
-            bottom:95%;
+            bottom:76%;
             right:1%;
             box-sizing:border-box;
             background-color:$accent-color;
@@ -38,29 +48,76 @@
         }
     }
     &__resources{
-        height:100%;
+        width:86%;
+        // height:100%;
         padding:16px;
+        margin-bottom:40px;
 
     }
-
-    
 }
 
 .resource{
     &__add{
-        @include buildButton(30px,30px, $accent-color, white);
-        font-size:12px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        background-color:white;
+        width:87%;
+        height:75px;
+        margin-top:40px;
+        box-shadow: 2px 11px 32px  black;
+        border-radius:4px;
+       
+        &-radios{
+            &-button{
+                width:20px;
+                margin-left:20px;
+            }
+            &-label{
+                color:$accent-color;
+                font-size:22px;
+                margin:0 5px;
+            }
+        }
     }
     &__upload{
         display:flex;
         justify-content:space-between;
+        align-items:center;
+        width: 100%;
+        padding: 0 60px;
+
+        &-name{
+            background-color:white;
+        }
         &-file{
             width:100%;
             padding-left:16px;
             margin-right:16px;
+            background-color:white;
         }
+        
         &-type{
             margin-right:16px;
         }
+        
+        &-submit{
+            @include buildButton(30px,30px, $accent-color, white);
+            font-size:12px;
+        }
+
+        &-back{
+            background-color:transparent;
+            border:none;
+            margin-right:16px;
+            opacity:0.5;
+            &:hover{
+                opacity:1;
+            }
+            &:focus{
+                outline:none;
+            }
+        }
     }
+
 }

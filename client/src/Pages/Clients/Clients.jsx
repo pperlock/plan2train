@@ -43,7 +43,7 @@ class Clients extends React.Component {
         const {clients, programs, addClient, updateClient, deleteClient} = this.props;
         
         //used to determine if we are on the lessons page or the profile page
-        const page = this.props.match.path.split("/")[3]; 
+        const page = this.props.match.path.split("/")[6]; 
 
         //set the rendered client to be the one that matches the path name
         const currentClient = this.props.clients.find(client=> client.userId ===this.props.match.params.clientId);
@@ -66,8 +66,8 @@ class Clients extends React.Component {
 
                     {/* link changes the page variable which changes the componenet rendered */}
                     <div className="client__nav">
-                        <Link to={`/clients/${this.props.match.params.clientId}/profile`} onClick={()=> this.removeAnimation()} className="client__nav-left">Profile</Link>
-                        <Link to={`/clients/${this.props.match.params.clientId}/lessons`} onClick={()=> this.removeAnimation()} className="client__nav-right">Lessons</Link>
+                        <Link to={`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/profile`} onClick={()=> this.removeAnimation()} className="client__nav-left">Profile</Link>
+                        <Link to={`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/lessons`} onClick={()=> this.removeAnimation()} className="client__nav-right">Lessons</Link>
                     </div>
 
                     {/* add and delete client functionality only shown on the profile page */}

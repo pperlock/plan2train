@@ -1,9 +1,15 @@
 import React from 'react'
 
-function TriggerModalButton({buttonText, buttonRef, showModal}) {
+import './TriggerModalButton.scss';
+
+function TriggerModalButton({buttonText, buttonRef, showModal, buttonType}) {
 
     return (
-        <button className="user-profile__update" ref={buttonRef} onClick={showModal}> {buttonText} </button>
+        <>
+            {buttonType === "x" && <button className="trigger-button delete" ref={buttonRef} onClick={showModal}> {buttonText} </button>}
+            {buttonType === "accent" && <button className="user-profile__update" ref={buttonRef} onClick={showModal}> {buttonText} </button>}
+        
+        </>
     );
 };
 

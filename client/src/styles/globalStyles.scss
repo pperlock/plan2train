@@ -41,6 +41,7 @@ ul{
 
     border-radius:4px;
     background-color:white;
+    box-shadow: 2px 11px 32px  black;
 
     position:relative;
     display:flex;
@@ -120,19 +121,7 @@ ul{
     padding-left:0.8em;
     font-weight:normal;
   }
-  
-//   @media screen and (min-width: 500px) {
-//     /* Center the Modal! */
-//     .modal-area {
-//       left: 50%;
-//       top: 50%;
-//       height: auto;
-//       transform: translate(-50%, -50%);
-//       max-width: 30em;
-//       max-height: calc(100% - 1em);
-//     }
-//   }
-  
+
   ._modal-close {
     position: absolute;
     top: 17px;
@@ -175,3 +164,23 @@ ul{
     white-space: nowrap !important;
   }
 
+  .trigger-button{
+    @include buildButton(70px,40px, $accent-color, white);
+    font-size:16px;
+    align-self:flex-end;
+  }
+
+
+  .text-input{
+    padding:10px 5px;
+    border:none;
+    border-bottom:1px solid grey;
+    margin-bottom:10px;
+    margin-right:10px;
+    background-color:$form-input-background;
+
+    &:focus{
+        outline:none;
+        border-bottom:1px solid grey;
+    }
+  }

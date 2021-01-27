@@ -21,7 +21,8 @@ function Modal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal,onSub
             // onClick={onClickOutside}
             onKeyDown={onKeyDown}>
                 <div className="modal-area" ref={modalRef} style={{backgroundImage: "url('/images/intro-background.png')"}}>
-                    <h1 className="modal-title">Personal Details</h1>
+                    {modalName==="updateUser" && <h1 className="modal-title">Trainer Details</h1>}
+                    {modalName==="updateClient" && <h1 className="modal-title">Client Details</h1>}
                     <button
                         ref={buttonRef}
                         aria-label='Close Modal'

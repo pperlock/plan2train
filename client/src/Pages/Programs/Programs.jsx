@@ -3,7 +3,7 @@ import "./Programs.scss";
 import firebase from '../../firebase';
 
 import ClientList from '../../components/ClientList/ClientList';
-import List from '../../components/List/List';
+import GridList from '../../components/GridList/GridList';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 /**
@@ -27,7 +27,7 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
  
 class Programs extends React.Component {
 
-    state={selectedFile:null, showRadio:false, addActivated:false, uploaded:false, uploadType:""}
+    state={selectedFile:null, showRadio:true, uploaded:false, uploadType:""}
 
     componentDidUpdate(){
         console.log("programs - did update")
@@ -53,7 +53,9 @@ class Programs extends React.Component {
     // fired by clicking the upload button
     fileUpload=(event,uploadType)=>{
         event.preventDefault();
-
+        const selectedIndex = event.target.uploadType.options.selectedIndex
+        const selectedType = event.target.uploadType.options[selectedIndex].value;
+        
         // if the resource to be added is a file the save it to firebase and send the resulting url to db
         if (uploadType === "file"){
             let bucketName = this.props.programs[0].trainerId;
@@ -71,7 +73,7 @@ class Programs extends React.Component {
                 const newResource={
                     name:event.target.uploadName.value,
                     url:url,
-                    type:"pdf"
+                    type: selectedType
                 }
                 this.props.addResource(newResource, this.props.match.params.programId);
             })
@@ -89,53 +91,63 @@ class Programs extends React.Component {
         }
 
         // return the add button to the screen and hide the resource input elements
-        this.setState({addActivated:false, uploadType:""});
+        this.setState({uploadType:"",  showRadio:true});
     }
 
 
     render(){
         const {programs, match, addProgram}=this.props;
         const program = programs.find(program=>program.id===match.params.programId)
+
+        console.log(programs);
+
+
         
         return (
-            <div className="programs__container">
+            <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >
                 <ClientList list={programs} match={match} onSubmitTrainer={addProgram}/>
-                <div className="program">
-                    <div className="component program__resources">
-                        <div className="program__header">
-                            <p className="program__header-title">{program.name}</p>
-                            <p className="program__header-description">{program.description}</p>
+                <div className="programs__container-right">
+                    {/* <div className="program"> */}
+                        <div className="component program__resources">
+                            <div className="program__header">
+                                <p className="program__header-title">{program.name}</p>
+                                <p className="program__header-description">{program.description}</p>
+                            </div>
+
+                            <ModalContainer 
+                                modalType = "delete" 
+                                modalName = "delete" 
+                                buttonText="Delete" 
+                                buttonType="x"
+                                onSubmitTrainer={this.props.deleteProgram}
+                                deleteString= {program.name}
+                                deleteId={program.id}
+                            />
+
+                            {program.resources.length === 0 && 
+                                <div onClick={()=>this.setState({showRadio:true})} className="empty-container">
+                                    <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
+                                    <p>Click to Add Resources</p>
+                                </div>}  
+
+                        </div>   
+                    {/* </div> */}
+                        <div className="gridlist">
+                            {program.resources.map(resource=> 
+                                <GridList 
+                                    key={resource.id} 
+                                    content={resource.name}
+                                    resourceType={resource.type} 
+                                    id={resource.id} 
+                                    link={resource.url} 
+                                    description={resource.type} 
+                                    deleteBtn={true}
+                                    deleteType="modal" 
+                                    deleteFunction={this.props.deleteResource}
+                                />)}
                         </div>
 
-                        <ModalContainer 
-                            modalType = "delete" 
-                            modalName = "delete" 
-                            buttonText="Delete" 
-                            onSubmitTrainer={this.props.deleteProgram}
-                            deleteString= {program.name}
-                            deleteId={program.id}
-                        />
-
-                        {program.resources.length === 0 && 
-                            <div onClick={()=>this.setState({addActivated:true, showRadio:true})} className="empty-container">
-                                <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
-                                <p>Click to Add Resources</p>
-                            </div>}     
-
-                        <div className="list">
-                                {program.resources.map(resource=> 
-                                    <List 
-                                        key={resource.id} 
-                                        content={resource.name} 
-                                        id={resource.id} 
-                                        link={resource.url} 
-                                        description={resource.type} 
-                                        deleteBtn={true}
-                                        deleteType="modal" 
-                                        deleteFunction={this.props.deleteResource}
-                                    />)}
-                        </div>
-
+                    <div className="resource__add">
                         {/* a reference is a way to reference another element in the dom */}
                         {/* ref takes a function that binds a property of our class to a reference of this input */}        
                         {/* input box used to access the file picker */}
@@ -149,41 +161,41 @@ class Programs extends React.Component {
                         </input>
 
                         {this.state.showRadio && 
-                            <div>
+                            <div className="resource__add-radios">
                                 {/* clicking an input box sets which resource type options to show */}
-                                <input type="radio" id="url" name="addResource" value="url" onClick={this.uploadType}/>
-                                <label htmlFor="url">Add URL</label>
-                                <input type="radio" id="file" name="addResource" value="file" onClick={this.uploadType}/>
-                                <label htmlFor="file">Upload File</label>
+                                <input className="resource__add-radios-button" type="radio" id="url" name="addResource" value="url" onClick={this.uploadType}/>
+                                <label className="resource__add-radios-label" htmlFor="url">Add URL</label>
+                                <input className="resource__add-radios-button" type="radio" id="file" name="addResource" value="file" onClick={this.uploadType}/>
+                                <label className="resource__add-radios-label" htmlFor="file">Upload File</label>
                             </div>
                         }
                         
-                        {this.state.uploadType==="file" && 
+                        {(this.state.uploadType==="file" && !this.state.showRadio) &&
                             <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
-                                <input className="resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
-                                <input className="resource__upload-file" name="uploadURL" type="text" value={this.state.selectedFile.name} readOnly></input>
-                                <select className="resource__upload-type">
+                                <input className="text-input resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
+                                <input className="text-input resource__upload-file" name="uploadURL" type="text" value={this.state.selectedFile.name} readOnly></input>
+                                <select className="resource__upload-type" name="uploadType">
                                     <option value="pdf">pdf</option>
                                     <option value="doc">doc</option>
                                     <option value="video">video</option>
                                     <option value="image">image</option>
                                 </select>
-                                <button type="submit" className="resource__add">Upload</button>
+                                <button  className="resource__upload-back" onClick={()=>{ this.setState({showRadio:true})}}><img src="/icons/arrow_back-24px.svg"/></button> 
+                                <button className="resource__upload-submit" type="submit">Add</button>  
                             </form>
                         }
 
-                        {this.state.uploadType==="url" && 
+                        {(this.state.uploadType==="url" && !this.state.showRadio) &&
                             <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
-                                <input className="resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
-                                <input className="resource__upload-file" name="uploadURL" type="text" placeholder="Enter URL"></input>
-                                <button type="submit" className="resource__add">Upload</button>
+                                <input className="text-input resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
+                                <input className="text-input resource__upload-file" name="uploadURL" type="text" placeholder="Enter URL" required></input>
+                                <button  className="resource__upload-back" onClick={()=>{ this.setState({showRadio:true})}}><img src="/icons/arrow_back-24px.svg"/></button> 
+                                <button className="resource__upload-submit" type="submit">Add</button>    
                             </form>
                         }
-
-                        {!this.state.addActivated && <button className="add resource__add" onClick={()=>this.setState({addActivated:true, showRadio:true})}>+</button>}
-                        
                     </div>
                 </div>
+                
             </div>
         )
     }
