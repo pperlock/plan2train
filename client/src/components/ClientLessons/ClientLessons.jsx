@@ -263,16 +263,17 @@ class ClientLessons extends React.Component {
                     {/* list of all client's lessons - click to render a specific lesson */}
                     <div className="lessons__list">
 
-                    <GridList>
-
-
-                    />
-                        {lessons.map(lesson =>  
-                            <div id={lesson.id} key={lesson.id} className="lesson" onClick={(event)=>this.updateCurrentLesson(lesson.id)}>
-                                <p className="lesson__name">{lesson.name==="" ? "Click Update to Add Title" : lesson.name }</p>
-                                <p className="lesson__date">{lesson.date}</p>
-                            </div>
-                        )}
+                    {lessons.map(lesson=> 
+                        <GridList 
+                            key={lesson.id} 
+                            content={{name:lesson.name, date: lesson.date, time:lesson.time}}
+                            id={lesson.id} 
+                            modalName={!lesson.current ? "delete" : "noDelete"}
+                            deleteBtn={true}
+                            deleteType="modal" 
+                            deleteString = {!lesson.current ? lesson.name : "Cannot Delete Current Lesson"}
+                            deleteFunction={this.deleteLesson}
+                        />)}
                         <p className="lessons__list-new" onClick={this.addNewLesson}> + New </p>
                     </div>
 
@@ -281,10 +282,16 @@ class ClientLessons extends React.Component {
                     <div className="component current-lesson">
                     <h2 className="component-title">{currentLesson.name}</h2>
                         <div className = "current-lesson__top">
-                            {currentLesson.current ? 
+                            {/* {currentLesson.current ? 
                             <p className="current-lesson__top-status current-lesson__top-status--current">Current</p> 
                             : 
-                            <p className="current-lesson__top-status" onClick={this.updateStatus}>Mark as Current</p>}
+                            <p className="current-lesson__top-status" onClick={this.updateStatus}>Mark as Current</p>} */}
+
+                            <div className="current-lesson__top-status">
+                                <input className="current-lesson__top-status-check" type="checkbox" id="current"/>
+                                <div className="slidinggroove"></div>
+                                <label className="current-lesson__top-status" htmlFor="current" name="current"><p className="current-lesson__top-status-label"> Current</p></label>
+                            </div>
 
                             <div className="current-lesson__top-left">
                                 {/* shows the details for the lesson */}
@@ -292,13 +299,14 @@ class ClientLessons extends React.Component {
                                     <p>{`Location: ${currentLesson.location.name}`}</p>
                                     <p>{`Date: ${currentLesson.date}`}</p>
                                     <p>{`Time: ${currentLesson.time}`}</p>
+
                                     
                                     {/* modal to update the lesson details */}
                                     <ModalContainer 
                                         modalType = "update" 
                                         modalName = "modifyLesson" 
-                                        buttonText="Update" 
-                                        buttonType="accent"
+                                        buttonType="image"
+                                        url="/icons/edit-icon.svg"
                                         onSubmit={this.updateDetails} 
                                         information={currentLesson}
                                     />
@@ -313,16 +321,6 @@ class ClientLessons extends React.Component {
                                 />
                             </div>
                             </div>
-                            {/* {!currentLesson.current ? */}
-                            <ModalContainer 
-                                modalType = "delete" 
-                                modalName = {!currentLesson.current ? "delete" : "noDelete"}
-                                buttonText="Delete" 
-                                buttonType="accent"
-                                onSubmit={this.deleteLesson}
-                                deleteString= {!currentLesson.current ? currentLesson.name : "Cannot Delete Current Lesson"}
-                                deleteId={currentLesson.id}
-                            />
                         </div>
 
                         <div className="lesson-divider"></div>

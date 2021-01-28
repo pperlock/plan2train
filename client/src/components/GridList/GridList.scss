@@ -26,6 +26,15 @@
             padding-bottom:20px;
             font-size:18px;
         }
+        &-title{
+            color:$accent-color;
+            font-weight:bold;
+            font-size:18px;
+        }
+        &-multi{
+            text-align:center;
+            margin-bottom:5px;
+        }
         &-link{
             color:$accent-color;
         }

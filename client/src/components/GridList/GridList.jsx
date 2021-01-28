@@ -5,7 +5,7 @@ import './GridList.scss';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 
-function GridList({id, content, link, deleteBtn, deleteFunction, list, deleteType, resourceType}) {
+function GridList({id, content, modalName, link, deleteBtn, deleteFunction, deleteString, list, deleteType, resourceType}) {
 
     let resourceURL=""
     if (resourceType === "pdf"){
@@ -22,21 +22,31 @@ function GridList({id, content, link, deleteBtn, deleteFunction, list, deleteTyp
 
     return (
             <div className="gridlist__item">
-                <a className="gridlist__item-link" href={link} target="_blank">
-                    <p className="gridlist__item-name">{content}</p>
-                </a>
+                {resourceType ?
+                    <a className="gridlist__item-link" href={link} target="_blank">
+                        <p className="gridlist__item-name">{content}</p>
+                    </a>
+                    :
+                    <div>
+                        <p className="gridlist__item-multi gridlist__item-title">{content.name}</p>
+                        <p className="gridlist__item-multi">{content.date}</p>
+                        <p className="gridlist__item-multi">{content.time}</p>
+                    </div>
+                }
+
+                
                 <div className="gridlist__bottom">
                     {(deleteType !== "modal" && deleteBtn) && <button id={id} onClick={(event)=>deleteFunction(event, list)} className="gridlist__right-delete"> x </button>}
 
-                    <img className="gridlist__item-image" src={resourceURL} alt="icon"/>
+                    {resourceType && <img className="gridlist__item-image" src={resourceURL} alt="icon"/>}
                     {deleteType==="modal" &&
                         <ModalContainer 
                             modalType = "delete" 
-                            modalName = "delete"
+                            modalName = {modalName}
                             buttonType="x" 
                             buttonText="x" 
-                            onSubmitTrainer={deleteFunction}
-                            deleteString= {content}
+                            onSubmit={deleteFunction}
+                            deleteString= {deleteString}
                             deleteId={id}
                         />
                     }
