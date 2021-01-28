@@ -60,7 +60,7 @@ function User({user, updateUserProfile}) {
                         </div>
                     </div>
 
-                    <ModalContainer modalName = "updateUser" modalType = "update" buttonText="Update" information={user} onSubmitTrainer={updateUserProfile}/>
+                    <ModalContainer modalName = "updateUser" modalType = "update" buttonText="Update" buttonType="accent" information={user} onSubmit={updateUserProfile}/>
 
                 </div>
                 

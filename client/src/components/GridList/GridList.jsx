@@ -7,7 +7,6 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 function GridList({id, content, link, deleteBtn, deleteFunction, list, deleteType, resourceType}) {
 
-    console.log(resourceType)
     let resourceURL=""
     if (resourceType === "pdf"){
         resourceURL = "/icons/pdf.png"

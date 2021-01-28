@@ -6,6 +6,11 @@ import "./DeleteModal.scss";
 
 function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal, onSubmit, deleteString, deleteId, modalName}) {
 
+    const handleClick=()=>{
+        onSubmit(deleteId);
+        closeModal();
+    }
+
     return ReactDOM.createPortal(
         <FocusTrap>
             <aside 
@@ -35,7 +40,7 @@ function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                     </button>
                     <div className="modal-body modal-delete__body">
                         <button onClick={closeModal}>Cancel</button>
-                        {modalName !== "noDelete" && <button onClick={()=>onSubmit(deleteId)}>Delete</button>}
+                        {modalName !== "noDelete" && <button onClick={handleClick}>Delete</button>}
                     </div>
                 </div>
 

@@ -1,8 +1,14 @@
 import React from 'react'
 
 function NewClientForm({onSubmit, closeModal, programs}) {
+
+    const handleSubmit=(event)=>{
+        onSubmit(event);
+        closeModal();
+    }
+
     return (
-        <form id="modal-form" className="modal-form" onSubmit={onSubmit} >
+        <form id="modal-form" className="modal-form" onSubmit={handleSubmit} >
             <div>
                 <input className="modal-form__input" id="fname" name="fname" type="text" placeholder="First Name" ></input>
                 <input className="modal-form__input" id="lname" name="lname" type="text" placeholder="Last Name" ></input>

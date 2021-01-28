@@ -17,7 +17,7 @@ class SideBar extends React.Component {
 
     componentDidMount(){
         const splitProps = this.props.match.path.split("/")
-        console.log(splitProps);
+        // console.log(splitProps);
         const profile = splitProps.length === 4 ? splitProps[1] : splitProps[4]
         this.setState({profile:profile});
     }
@@ -27,7 +27,6 @@ class SideBar extends React.Component {
         const splitProps = this.props.match.path.split("/")
         const activeLink = splitProps.length === 4 ? splitProps[1] : splitProps[4]
 
-        console.log(splitProps);
         if(document.getElementById(`${activeLink}-link`)){
             const previouslyActiveLink = document.querySelector(".sidebar__menu-link--active");
             previouslyActiveLink.classList.remove("sidebar__menu-link--active");

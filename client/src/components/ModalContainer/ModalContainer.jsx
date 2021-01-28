@@ -9,142 +9,11 @@ class ModalContainer extends React.Component {
 
     //props 
     //buttonText 
-    //onSubmitTrainer= function that updates trainer state 
+    //onSubmit= function that updates trainer state 
     //information - information needed in form; 
     //modalName - used to conditionally pass onsubmit
     //modalType - used to determine which modal to render
     state = {isShown:false}
-
-    getOnSubmit = ()=>{
-        let onSubmit = null;
-        const modal = this.props.modalName;
-        if(modal ==="addClient"){
-            onSubmit=this.addClient;
-        }else if (modal === "updateUser"){
-            //onSubmit=this.updateUser;
-        }else if (modal === "addProgram"){
-            onSubmit=this.addProgram;
-        }else if (modal === "delete"){
-            onSubmit=this.deleteItem;
-        }else if (modal === "modifyLesson"){
-            onSubmit=this.updateDetails;
-        }else if (modal === "updateClient"){
-            onSubmit=this.updateclient;
-        }
-        return onSubmit
-    }
-
-    /** ================================================ ADD CLIENT ================================================*/
-    addClient = (event) =>{
-        event.preventDefault();
-
-        console.log(event.target.programs);
-
-        const options = event.target.programs.options;
-        let opt="";
-
-        let programs = [];
-        for(var i=0; i<options.length; i++){
-            opt = options[i];
-            opt.selected && programs.push(opt.value);
-        }
-
-        const newClient = {
-            trainerId:"",
-            username:event.target.username.value,
-            password:event.target.password.value,
-            profile:"client",
-            status:"active",
-            userProfile:{
-                fname:event.target.fname.value,
-                lname:event.target.lname.value,
-                email:event.target.email.value,
-                phone:event.target.phone.value,
-                address:event.target.address.value,
-                city: event.target.city.value,
-                province: event.target.province.value,
-                country: event.target.country.value
-            },
-            programs:programs
-        }
-
-        console.log(newClient);
-
-
-        this.props.onSubmitTrainer(newClient)
-        this.closeModal();
-    }
-
-     /** ================================================ Update CLIENT ================================================*/
-     updateclient = (event) =>{
-        event.preventDefault();
-
-        const updatedProfile = {
-                fname:event.target.fname.value,
-                lname:event.target.lname.value,
-                email:event.target.email.value,
-                phone:event.target.phone.value,
-                address:event.target.address.value,
-                city: event.target.city.value,
-                province: event.target.province.value,
-                country: event.target.country.value,
-                postal:event.target.postal.value
-        }
-        console.log(updatedProfile);
-        this.props.onSubmitTrainer(updatedProfile)
-        this.closeModal();
-    }
-
-    /** ================================================ ADD CLIENT ================================================*/
-    addProgram = (event) =>{
-        event.preventDefault();
-
-        const newProgram = {
-            name:event.target.programName.value,
-            description:event.target.programDescription.value
-        }
-
-        console.log(newProgram);
-
-        this.props.onSubmitTrainer(newProgram)
-        this.closeModal();
-    }
-
-    /** ================================================ DELETE ITEM ================================================*/
-
-    deleteItem = (id) =>{
-        this.props.onSubmitTrainer(id)
-        this.closeModal();
-    }
-
-    /** ================================================ UPDATE LESSON ================================================*/
-
-    updateDetails = (event)=>{
-        event.preventDefault();
-        
-        const updatedDetails = {
-            current:this.props.information.current,
-            name:event.target.lessonName.value,
-            date:event.target.date.value,
-            time:event.target.time.value,
-            location:{
-                name:event.target.locationName.value,
-                address:event.target.address.value,
-                city:event.target.city.value,
-                province:event.target.province.value,
-                country:event.target.country.value
-            }
-        }
-        
-        console.log(updatedDetails);
-
-        this.props.onSubmitTrainer(updatedDetails);
-        this.closeModal();
-    }
-
-
-
-    /** ================================================ MODAL FUNCTIONS ================================================*/
 
     showModal = () =>{
         this.setState({isShown:true}, 
@@ -179,22 +48,20 @@ class ModalContainer extends React.Component {
 
 
     render(){
-        const onSubmit = this.getOnSubmit();
-        // console.log(this.props.modalType)
+        const {modalType, modalName, deleteString, deleteId, information, buttonText, buttonType, onSubmit} = this.props;
 
         return (
             <>
                 <TriggerModalButton 
-                    modalType={this.props.modalType}
+                    modalType={modalType}
                     showModal={this.showModal}
                     buttonRef={n=>this.TriggerButton=n}
-                    buttonText={this.props.buttonText}
-                    buttonType={this.props.buttonType}
+                    buttonText={buttonText}
+                    buttonType={buttonType}
                 />
-                {(this.state.isShown && this.props.modalType.substring(0,5) ==="login") && 
+                {(this.state.isShown && modalType.substring(0,5) ==="login") && 
                     <LoginModal
-                        modalType={this.props.modalType}
-                        onSubmit={this.props.onSubmitTrainer}
+                        modalType={modalType}
                         modalRef={n=> this.modal = n}
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
@@ -202,30 +69,29 @@ class ModalContainer extends React.Component {
                         onClickOutside={this.onClickOutside}
                     />}
 
-                {(this.state.isShown && this.props.modalType ==="delete") && 
+                {(this.state.isShown && modalType ==="delete") && 
                     <DeleteModal
-                        modalName={this.props.modalName}
+                        modalName={modalName}
                         onSubmit={onSubmit}
                         modalRef={n=> this.modal = n}
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
                         onClickOutside={this.onClickOutside}
-                        deleteString={this.props.deleteString}
-                        deleteId = {this.props.deleteId}
+                        deleteString={deleteString}
+                        deleteId = {deleteId}
                     />}
 
-                {(this.state.isShown && this.props.modalType ==="update") && 
+                {(this.state.isShown && modalType ==="update") && 
                     <Modal
-                        modalName={this.props.modalName}
-                        //onSubmit={onSubmit}
-                        onSubmit = {this.props.onSubmitTrainer}
+                        modalName={modalName}
+                        onSubmit = {onSubmit}
                         modalRef={n=> this.modal = n}
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
                         onClickOutside={this.onClickOutside}
-                        information={this.props.information}
+                        information={information}
                     />}
             </>
 

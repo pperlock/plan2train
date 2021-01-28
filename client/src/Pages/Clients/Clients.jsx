@@ -56,7 +56,7 @@ class Clients extends React.Component {
         return (
             <div className="clients__container" style={{backgroundImage: "url('/images/sidebar.')"}}>
                 {/* displays the list of clients on the side */}
-                <ClientList list = {clients} match={this.props.match} animate={this.state.animateBar} onSubmitTrainer={addClient} programs={programs}/>
+                <ClientList list = {clients} match={this.props.match} animate={this.state.animateBar} onSubmit={addClient} programs={programs}/>
                 
                 <div className="client">
                     <div className="client__title">
@@ -77,14 +77,16 @@ class Clients extends React.Component {
                                 modalType = "update" 
                                 modalName = "updateClient" 
                                 buttonText="Modify" 
-                                onSubmitTrainer={updateClient} 
+                                buttonType="accent"
+                                onSubmit={updateClient} 
                                 information={currentClient}
                                 />
                             <ModalContainer 
                                 modalType = "delete" 
                                 modalName = "delete" 
-                                buttonText="Delete" 
-                                onSubmitTrainer={deleteClient}
+                                buttonText="Delete"
+                                buttonType="accent" 
+                                onSubmit={deleteClient}
                                 deleteString={`${fname} ${lname}`}
                                 deleteId={currentClient.userId}/>
                         </div>
@@ -92,7 +94,7 @@ class Clients extends React.Component {
 
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
                     {page === "profile" && <ClientProfile currentClient = {currentClient} clients={clients} updateTrainer={this.props.updateTrainer} match = {this.props.match}/>}
-                    {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs}/>}
+                    {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} match = {this.props.match}/>}
                    
                 </div>
             </div>

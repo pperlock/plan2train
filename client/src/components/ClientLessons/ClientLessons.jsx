@@ -191,7 +191,24 @@ class ClientLessons extends React.Component {
             })
     }
 
-    updateDetails = (updatedClient) =>{
+    updateDetails = (event) =>{
+
+        event.preventDefault();
+        
+        const updatedClient = {
+            current:this.state.currentLesson.current,
+            name:event.target.lessonName.value,
+            date:event.target.date.value,
+            time:event.target.time.value,
+            location:{
+                name:event.target.locationName.value,
+                address:event.target.address.value,
+                city:event.target.city.value,
+                province:event.target.province.value,
+                country:event.target.country.value
+            }
+        }
+
         console.log(this.state.currentLesson.name);
         axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateLessonDetails`, updatedClient)
         .then(res =>{
@@ -230,7 +247,7 @@ class ClientLessons extends React.Component {
         const currentClient = {...this.state.currentClient};
         const currentLesson = {...this.state.currentLesson};
 
-        console.log(this.state.mapLocation);
+        console.log(this.props);
 
         if(lessons.length === 0){
             return(                                     
@@ -275,7 +292,8 @@ class ClientLessons extends React.Component {
                                         modalType = "update" 
                                         modalName = "modifyLesson" 
                                         buttonText="Update" 
-                                        onSubmitTrainer={this.updateDetails} 
+                                        buttonType="accent"
+                                        onSubmit={this.updateDetails} 
                                         information={currentLesson}
                                     />
                                 </div>
@@ -289,25 +307,16 @@ class ClientLessons extends React.Component {
                                 />
                             </div>
                             </div>
-                            {!currentLesson.current ?
+                            {/* {!currentLesson.current ? */}
                             <ModalContainer 
                                 modalType = "delete" 
-                                modalName = "delete" 
+                                modalName = {!currentLesson.current ? "delete" : "noDelete"}
                                 buttonText="Delete" 
-                                onSubmitTrainer={this.deleteLesson}
-                                deleteString={currentLesson.name}
+                                buttonType="accent"
+                                onSubmit={this.deleteLesson}
+                                deleteString= {!currentLesson.current ? currentLesson.name : "Cannot Delete Current Lesson"}
                                 deleteId={currentLesson.id}
                             />
-                            :
-                            <ModalContainer 
-                                modalType = "delete" 
-                                modalName = "noDelete" 
-                                buttonText="Delete" 
-                                onSubmitTrainer={this.deleteLesson}
-                                deleteString={"Cannot Delete Current Lesson"}
-                                deleteId={currentLesson.id}
-                            />
-                            }
                         </div>
 
                         <div className="lesson-divider"></div>
@@ -315,7 +324,7 @@ class ClientLessons extends React.Component {
                         <h2 className="section-title section-title-resources">Resources</h2>
                         
                         {/* renders the resource section for the lessons */}
-                        <LessonResources programs={programs} currentLesson={currentLesson} currentClient={currentClient}/>
+                        <LessonResources programs={programs} currentLesson={currentLesson} currentClient={currentClient} match={this.props.match}/>
                 
                         {/* renders the notes and the homework section */}
                         <div className="current-lesson__bottom">

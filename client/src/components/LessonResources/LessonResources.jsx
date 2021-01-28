@@ -15,7 +15,7 @@ import AppliedResources from '../../components/AppliedResources/AppliedResources
  * @param {Object} currentClient - client currently rendered
  */
 
-function LessonResources({programs, currentLesson, currentClient}) {
+function LessonResources({programs, currentLesson, currentClient, match}) {
 
     const ItemTypes = {
         CARD:'card',
@@ -112,7 +112,7 @@ function LessonResources({programs, currentLesson, currentClient}) {
                 {/* <p>Available Resources</p> */}
                 <div className="current-lesson__available-content">
                     <ul className="current-lesson__available-programs"> 
-                        {programs.map(program=> <Link key={program.id} to={`/clients/${currentClient.userId}/lessons`}><li onClick={()=>updateDisplayed(program)} className="current-lesson__available-programs-item">{program.name}</li></Link>)}
+                        {programs.map(program=> <Link key={program.id} to={`/trainer/${match.params.username}/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}><li onClick={()=>updateDisplayed(program)} className="current-lesson__available-programs-item">{program.name}</li></Link>)}
                     </ul>
                         <div ref={drop} className="list current-lesson__available-resources">
                             {displayResources.filter(resource => resource.applied === false)

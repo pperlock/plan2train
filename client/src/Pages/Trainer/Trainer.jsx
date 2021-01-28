@@ -45,23 +45,55 @@ class Trainer extends React.Component{
         }
     }
 
-    /** ================================================ ADD CLIENT ================================================*/
+    /** ================================================ UPDATE TRAINER ================================================*/
+    updateUserProfile=(event)=>{
+        
+        event.preventDefault();
 
-    addClient=(newClient)=>{
+        const updatedProfile = {
+            contact:{
+                username:event.target.username.value,
+                fname:event.target.fname.value,
+                lname:event.target.lname.value,
+                password:event.target.password.value,
+                email:event.target.email.value,
+                phone:event.target.phone.value,
+                address:event.target.address.value,
+                city: event.target.city.value,
+                province: event.target.province.value,
+                country: event.target.country.value,
+                postal:event.target.postal.value
+            },
+            social:{facebook:event.target.facebook.value, twitter:event.target.twitter.value, instagram: event.target.instagram.value, linkedIn:event.target.linkedIn.value},
+            company:{
+                name:event.target.companyName.value,
+                description: event.target.companyDescription.value
+            }
+        }
 
-        axios.post(`http://localhost:8080/trainer/${this.state.userProfile[0].userId}/addClient`, newClient)
+        console.log(this.state.userProfile.userId);
+        axios.put(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/updateDetails`, updatedProfile)
         .then(res =>{
-            this.setState({clients:[...this.state.clients, res.data]})
+            this.setState({userProfile:updatedProfile});
         })
         .catch(err=>{
             console.log(err);
         })
-        
     }
 
     /** ================================================ ADD PROGRAM ================================================*/
-    addProgram=(newProgram)=>{
-        axios.post(`http://localhost:8080/trainer/${this.state.userProfile[0].userId}/addProgram`, newProgram)
+    addProgram=(event)=>{
+
+        event.preventDefault();
+
+        const newProgram = {
+            name:event.target.programName.value,
+            description:event.target.programDescription.value
+        }
+
+        console.log(newProgram);
+        
+        axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addProgram`, newProgram)
         .then(res =>{
             this.setState({programs:[...this.state.programs, res.data]})
         })
@@ -120,46 +152,80 @@ class Trainer extends React.Component{
         }) 
     }
 
-    /** ================================================ UPDATE TRAINER ================================================*/
-    updateUserProfile=(event)=>{
-        
+    /** ================================================ ADD CLIENT ================================================*/
+
+    addClient=(event)=>{
+
         event.preventDefault();
 
-        const updatedProfile = {
-            contact:{
-                username:event.target.username.value,
+        console.log(event.target.programs);
+
+        const options = event.target.programs.options;
+        let opt="";
+
+        let programs = [];
+        for(var i=0; i<options.length; i++){
+            opt = options[i];
+            opt.selected && programs.push(opt.value);
+        }
+
+        const newClient = {
+            trainerId:"",
+            username:event.target.username.value,
+            password:event.target.password.value,
+            profile:"client",
+            status:"active",
+            userProfile:{
                 fname:event.target.fname.value,
                 lname:event.target.lname.value,
-                password:event.target.password.value,
                 email:event.target.email.value,
                 phone:event.target.phone.value,
                 address:event.target.address.value,
                 city: event.target.city.value,
                 province: event.target.province.value,
-                country: event.target.country.value,
-                postal:event.target.postal.value
+                country: event.target.country.value
             },
-            social:{facebook:event.target.facebook.value, twitter:event.target.twitter.value, instagram: event.target.instagram.value, linkedIn:event.target.linkedIn.value},
-            company:{
-                name:event.target.companyName.value,
-                description: event.target.companyDescription.value
-            }
+            programs:programs
         }
 
-        console.log(this.state.userProfile.userId);
-        axios.put(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/updateDetails`, updatedProfile)
+        axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
         .then(res =>{
-            this.setState({userProfile:updatedProfile});
+            this.setState({clients:[...this.state.clients, res.data]})
         })
         .catch(err=>{
             console.log(err);
         })
+
+    }
+
+    /** ================================================ DELETE CLIENT ================================================*/
+        deleteClient=(clientId)=>{
+        
+        axios.delete(`http://localhost:8080/client/${clientId}`)
+        .then(res =>{
+            this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.state.clients[0].userId}/profile`)
+            this.setState({updated:true});//trigger the component did update to pull updated data from db
+        })
+        .catch(err=>{
+            console.log(err);
+        })     
     }
 
     /** ================================================ UPDATE CLIENT ================================================*/
-    updateClient=(updatedClient)=>{
-        console.log(updatedClient);
-        console.log(this.props.match.params.clientId);
+    updateClient=(event)=>{
+        event.preventDefault();
+
+        const updatedClient = {
+            fname:event.target.fname.value,
+            lname:event.target.lname.value,
+            email:event.target.email.value,
+            phone:event.target.phone.value,
+            address:event.target.address.value,
+            city: event.target.city.value,
+            province: event.target.province.value,
+            country: event.target.country.value,
+            postal:event.target.postal.value
+        }
 
         axios.put(`http://localhost:8080/client/${this.props.match.params.clientId}/updateDetails`, updatedClient)
         .then(res =>{
@@ -169,18 +235,6 @@ class Trainer extends React.Component{
         .catch(err=>{
             console.log(err);
         })
-    }
-
-    /** ================================================ DELETE CLIENT ================================================*/
-    deleteClient=(clientId)=>{
-        axios.delete(`http://localhost:8080/client/${clientId}`)
-        .then(res =>{
-            this.props.history.push(`/clients/${this.state.clients[0].userId}/profile`)
-            this.setState({updated:true});//trigger the component did update to pull updated data from db
-        })
-        .catch(err=>{
-            console.log(err);
-        })     
     }
 
     
@@ -210,10 +264,10 @@ class Trainer extends React.Component{
     render(){
  
         const {match} = this.props;
-        console.log(this.state.programs)
-        console.log(this.state.userProfile)
-        console.log(this.state.username);
-        console.log(this.state.trainerId)
+        // console.log(this.state.programs)
+        // console.log(this.state.userProfile)
+        // console.log(this.state.username);
+        // console.log(this.state.trainerId)
 
         return (
             <>

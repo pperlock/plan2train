@@ -105,7 +105,7 @@ class Programs extends React.Component {
         
         return (
             <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >
-                <ClientList list={programs} match={match} onSubmitTrainer={addProgram}/>
+                <ClientList list={programs} match={match} onSubmit={addProgram}/>
                 <div className="programs__container-right">
                     {/* <div className="program"> */}
                         <div className="component program__resources">

@@ -4,8 +4,14 @@ import './LessonDetailsForm.scss';
 function LessonDetailsForm({onSubmit, closeModal, lesson}) {
     const {date, time, location} = lesson;
     const {name,address, city, province, country} = location;
+
+    const handleSubmit=(event)=>{
+        onSubmit(event);
+        closeModal();
+    }
+
     return (
-        <form id="modal-form" className="modal-form" onSubmit={onSubmit} >
+        <form id="modal-form" className="modal-form" onSubmit={handleSubmit} >
             <div>
                 <input className="modal-form__input" id="lessonName" name="lessonName" type="text" placeholder="Lesson Name" defaultValue={lesson.name} ></input>
             </div>
