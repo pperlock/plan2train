@@ -158,8 +158,6 @@ class Trainer extends React.Component{
 
         event.preventDefault();
 
-        console.log(event.target.programs);
-
         const options = event.target.programs.options;
         let opt="";
 
@@ -190,6 +188,7 @@ class Trainer extends React.Component{
 
         axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
         .then(res =>{
+            console.log(res.data)
             this.setState({clients:[...this.state.clients, res.data]})
         })
         .catch(err=>{

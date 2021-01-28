@@ -36,8 +36,11 @@ const clientSchema = new Schema({
     lessons: {
         type: Array
     },
+    // notes:{
+    //     type:Array
+    // },
     notes:{
-        type:Array
+        type:String
     },
     photos:{
         type:Array

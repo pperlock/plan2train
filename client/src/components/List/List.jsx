@@ -11,6 +11,8 @@ function List({id, content, link, description, deleteBtn, deleteFunction, list, 
             <a href={link} className="list__item-name" target="_blank">{content}</a>
             <div className="list__right" >
                 {description && <p className="list__right-type">{description}</p>}
+                
+                {/* conditionally renders a delete button depending on the deleteType variable - won't show for current lesson - don't want to allow deletion */}
                 {(deleteType !== "modal" && deleteBtn) && <button id={id} onClick={(event)=>deleteFunction(event, list)} className="list__right-delete"> x </button>}
                 
                 {deleteType==="modal" &&
@@ -18,12 +20,12 @@ function List({id, content, link, description, deleteBtn, deleteFunction, list, 
                         modalType = "delete" 
                         modalName = "delete" 
                         buttonText="x" 
-                        onSubmitTrainer={deleteFunction}
+                        onSubmit={deleteFunction}
                         deleteString= {content}
                         deleteId={id}
+                        buttonType="x"
                     />
                 }
-                {/* {deleteBtn && <button onClick={()=>log("Patti")} className="list__right-delete"> x </button>} */}
             </div>
         </div>
     )

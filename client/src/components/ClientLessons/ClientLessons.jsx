@@ -4,6 +4,7 @@ import axios from 'axios';
 import './ClientLessons.scss'
 
 import List from '../../components/List/List';
+import GridList from '../../components/GridList/GridList';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 import LessonResources from '../../components/LessonResources/LessonResources';
 
@@ -261,6 +262,11 @@ class ClientLessons extends React.Component {
                 <div className="lessons">
                     {/* list of all client's lessons - click to render a specific lesson */}
                     <div className="lessons__list">
+
+                    <GridList>
+
+
+                    />
                         {lessons.map(lesson =>  
                             <div id={lesson.id} key={lesson.id} className="lesson" onClick={(event)=>this.updateCurrentLesson(lesson.id)}>
                                 <p className="lesson__name">{lesson.name==="" ? "Click Update to Add Title" : lesson.name }</p>

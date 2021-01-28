@@ -6,6 +6,7 @@ import "./Clients.scss";
 import ClientList from '../../components/ClientList/ClientList';
 import ClientProfile from '../../components/ClientProfile/ClientProfile';
 import ClientLessons from '../../components/ClientLessons/ClientLessons';
+import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 /**
  * props passed to Clients from Trainer
@@ -29,7 +30,21 @@ class Clients extends React.Component {
     }
 
     componentDidUpdate(){
-        // console.log("client-updated")
+
+        console.log("client did update");
+
+        const splitProps = this.props.match.path.split("/")
+        const activeLink = splitProps[6]
+        console.log(activeLink)
+
+        if (document.querySelector(".active-link")){
+            const previouslyActiveLink = document.querySelector(".active-link");
+            previouslyActiveLink.classList.remove("active-link");
+            
+            const activeLinkElement = document.getElementById(activeLink);
+            activeLinkElement.classList.add("active-link");
+        }
+   
     }
 
     removeAnimation = ()=>{
@@ -41,7 +56,7 @@ class Clients extends React.Component {
 
         const {clients, programs, addClient, updateTrainer, updateClient, deleteClient, match} = this.props;
 
-        console.log(clients);
+        // console.log(clients);
         
         //used to determine if we are on the lessons page or the profile page
         const page = this.props.match.path.split("/")[6]; 
@@ -51,49 +66,48 @@ class Clients extends React.Component {
 
         const {fname, lname} = currentClient.userProfile;
 
-        console.log(currentClient);
+        // console.log(currentClient);
         
         //status is a boolean to indicate if a client is current or past - used for filter on client bar
         const active = currentClient.status ? "Active" : "Archived";
 
         return (
-            <div className="clients__container" style={{backgroundImage: "url('/images/sidebar.')"}}>
+            <div className="clients__container">
                 {/* displays the list of clients on the side */}
                 <ClientList list = {clients} match={this.props.match} animate={this.state.animateBar} onSubmit={addClient} programs={programs}/>
                 
-                <div className="client">
-                    <div className="client__title">
-                        <p className="client__title-name">{`${fname} ${lname}`} </p>
-                        <p className="client__title-status">{`Status: ${active}`}</p>
-                    </div>
+                <div className="client" style={{backgroundImage: "url('/images/main2.jfif')"}}>
+                    <div className="client__header">
+                        <div className="client__header-title">
+                            <p className="client__header-title-name">{`${fname} ${lname}`} </p>
+                            <p className="client__header-title-status">{`Status: ${active}`}</p>
+                        </div>
 
-                    {/* link changes the page variable which changes the componenet rendered */}
-                    <div className="client__nav">
-                        <Link to={`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/profile`} onClick={()=> this.removeAnimation()} className="client__nav-left">Profile</Link>
-                        <Link to={`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/lessons`} onClick={()=> this.removeAnimation()} className="client__nav-right">Lessons</Link>
-                    </div>
-
-                    {/* add and delete client functionality only shown on the profile page */}
-                    {/* {page === "profile" && 
-                        <div className="client__modify">
-                            <ModalContainer 
-                                modalType = "update" 
-                                modalName = "updateClient" 
-                                buttonText="Modify" 
-                                buttonType="accent"
-                                onSubmit={updateClient} 
-                                information={currentClient}
-                                />
+                        {/* link changes the page variable which changes the componenet rendered */}
+                        <div className="client__header-nav">
+                            <Link to={`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/profile`} 
+                                id="profile"
+                                onClick={()=> this.removeAnimation()} 
+                                className="client__header-nav-link active-link">Profile
+                            </Link>
+                            <Link to={`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/lessons`} 
+                                id="lessons"
+                                onClick={()=> this.removeAnimation()} 
+                                className="client__header-nav-link">Lessons
+                            </Link>
+                        </div>
+                        <div className="client__header-title-delete">
                             <ModalContainer 
                                 modalType = "delete" 
                                 modalName = "delete" 
                                 buttonText="Delete"
-                                buttonType="accent" 
-                                onSubmit={deleteClient}
+                                buttonType="x" 
+                                onSubmit={this.props.deleteClient}
                                 deleteString={`${fname} ${lname}`}
-                                deleteId={currentClient.userId}/>
+                                deleteId={currentClient.userId}
+                            />
                         </div>
-                    } */}
+                    </div>
 
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
                     {page === "profile" && 

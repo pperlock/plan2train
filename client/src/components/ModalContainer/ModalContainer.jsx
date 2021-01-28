@@ -3,6 +3,7 @@ import React from 'react';
 import Modal from '../Modal/Modal';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import LoginModal from '../LoginModal/LoginModal';
+import NoteModal from '../NoteModal/NoteModal';
 import TriggerModalButton from '../TriggerModalButton/TriggerModalButton';
 
 class ModalContainer extends React.Component {
@@ -48,7 +49,7 @@ class ModalContainer extends React.Component {
 
 
     render(){
-        const {modalType, modalName, deleteString, deleteId, information, buttonText, buttonType, onSubmit} = this.props;
+        const {modalType, modalName, deleteString, deleteId, information, buttonText, buttonType, onSubmit,url} = this.props;
 
         return (
             <>
@@ -58,6 +59,7 @@ class ModalContainer extends React.Component {
                     buttonRef={n=>this.TriggerButton=n}
                     buttonText={buttonText}
                     buttonType={buttonType}
+                    imageURL={url} 
                 />
                 {(this.state.isShown && modalType.substring(0,5) ==="login") && 
                     <LoginModal
@@ -93,6 +95,18 @@ class ModalContainer extends React.Component {
                         onClickOutside={this.onClickOutside}
                         information={information}
                     />}
+
+                {(this.state.isShown && modalType ==="note") && 
+                    <NoteModal
+                        modalName={modalName}
+                        onSubmit = {onSubmit}
+                        modalRef={n=> this.modal = n}
+                        buttonRef={n=> this.closeButton=n}
+                        closeModal={this.closeModal}
+                        onKeyDown={this.onKeyDown}
+                        onClickOutside={this.onClickOutside}
+                        information={information}
+                />}
             </>
 
             

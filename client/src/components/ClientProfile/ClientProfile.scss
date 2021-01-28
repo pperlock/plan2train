@@ -3,13 +3,15 @@
 .client{
     &__profile{
         display:flex;
+        justify-content:center;
         margin-bottom:40px;
+        width:90%;
     }
 
     &__contact{
         padding-top:70px;
         margin-right:20px;
-        height:500px;
+        height:540px;
         width:33%;
 
         &-info{
@@ -21,50 +23,58 @@
             margin-bottom:16px;
             &-top{
                 display:flex;
+                flex-direction:column;
                 justify-content: space-between;
             }
         }
-
-        &-add{
-            @include buildButton(50px,30px, $accent-color, white);
-            font-size:12px;
+        &-address{
+            display:flex;
+            width:100%;
+            margin-bottom:20px;
         }
         &-item{
-            padding-bottom:5px;
-            // border-bottom:1px solid $dark-background;
-            margin-bottom:10px;
+            display:flex;
+            align-items:center;
+            margin-bottom:8px;
+        }
+        &-icon{
+
         }
         &-map{
             border:1px solid grey;
             height:50%;
         }
-
-    }
-    &__modify{
-        display:flex;
-        margin-bottom:20px;
-    }
-    &__notes{
-        padding-top:70px;
-        width:100%;
-
-        &-form{
+        &-modify{
             display:flex;
-            justify-content:space-between;
-            align-items:baseline;
+            justify-content:flex-end;
         }
 
-        &-new{
-            background-color:white;
-            border:0;
-            border-bottom:1px solid grey;
-            padding:16px;
-            width:100%;
-            margin-right:16px;
+    }
+   
+    &__notes{
+        width:475px;
+        height:740px;
+        background-size:contain;
+        background-repeat:no-repeat;
+
+        &-body{
+            margin-top:43px;
+            margin-left:56px;
         }
-        &-add{
-            @include buildButton(30px,30px, $accent-color, white);
-            font-size:12px;
+
+        &-title{
+            font-weight:bold;
+            font-size:24px;
+            font-style:italic;
         }
+
+        &-text{
+            margin:20px 0;
+            white-space: pre-wrap;
+        }
+        &-submit{
+            margin-left:75%;
+        }
+
     }
 }

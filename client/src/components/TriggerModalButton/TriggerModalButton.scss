@@ -7,3 +7,10 @@
     padding: 2px 5px 4px 5px;
     border-radius: 4px;
 }
+
+.trigger-button__image{
+    height:50px;
+    width:50px;
+    cursor:pointer;
+    filter: invert(69%) sepia(13%) saturate(526%) hue-rotate(158deg) brightness(82%) contrast(86%);
+}

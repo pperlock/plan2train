@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import './ClientProfile.scss';
 
-import List from '../../components/List/List';
 import Map from '../../components/Map/Map';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
@@ -18,7 +17,7 @@ class ClientProfile extends React.Component {
     }
 
     componentDidUpdate(){
-        console.log("client profile - did update")
+        // console.log("client profile - did update")
         //if the userId currently in state doesn't match the userId in the path then update the currentClient in state to match the one in the path
         if(this.state.currentClient.userId !==this.props.match.params.clientId){
             this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)},()=>{
@@ -41,17 +40,20 @@ class ClientProfile extends React.Component {
        
     }
 
-    addNote=(event)=>{
-        event.preventDefault();
-        const newNote={message:event.target.newNote.value};
+    addNote=(note)=>{
+        // const newNote={message:event.target.newNote.value};
+        console.log(note);
+
+        const newNote={
+            note:note
+        }
 
         axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addNote`, newNote)
         .then(res =>{
             console.log(res.data);
             const copyClient = {...this.state.currentClient};
-            copyClient.notes.push(res.data);
+            copyClient.notes = (res.data);
             this.setState({currentClient:copyClient});
-            event.target.newNote.value="";
             this.props.updateTrainer();
         })
         .catch(err=>{
@@ -75,45 +77,38 @@ class ClientProfile extends React.Component {
     }
 
     render(){
-        const {fname,lname,address, city, province, country, postal, email, phone} = this.props.currentClient.userProfile;
+        const {address, city, province, country, postal, email, phone} = this.props.currentClient.userProfile;
         return (
             <div className = "client__profile">
                 <div className = "component client__contact">
                     <div className="client__contact-info">
                         <div className="client__contact-info-top">
+                        <p className="component-title client__contact-title">Contact</p>
                             <div className="client__contact-address"> 
-                                <p className="component-title client__contact-title">Contact</p>
-                                <p className="client__contact-item"> {address}</p>
-                                <p className="client__contact-item"> {city}</p>
-                                <p className="client__contact-item"> {`${province},  ${country}`}</p>
-                                <p className="client__contact-item"> {postal}</p>
+                                <img className="contact-icon"src="/icons/map-marker.svg" alt="address"/>
+                                <div>
+                                    <p className="client__contact-item"> {address}</p>
+                                    <p className="client__contact-item">  {`${city}, ${province}, ${country}`}</p>
+                                    <p className="client__contact-item"> {postal}</p>
+                                </div>
                             </div>
                             <div className="client__contact-contact">
-                                <a className="client__contact-item" href={`mailto:${email}`}> {email}</a>
-                                <p className="client__contact-item"> {phone}</p>
-                            </div>
-                            <div className="client__contact-modify">
-                                <ModalContainer 
-                                    modalType = "update" 
-                                    modalName = "updateClient" 
-                                    buttonText="Modify" 
-                                    buttonType="accent"
-                                    onSubmit={this.props.updateClient} 
-                                    information={this.props.currentClient}
-                                    />
-                                <ModalContainer 
-                                    modalType = "delete" 
-                                    modalName = "delete" 
-                                    buttonText="Delete"
-                                    buttonType="x" 
-                                    onSubmit={this.props.deleteClient}
-                                    deleteString={`${fname} ${lname}`}
-                                    deleteId={this.props.currentClient.userId}
-                                />
+                                <p className="client__contact-item"><img className="contact-icon" src="/icons/email-icon.svg" alt="email"/> <a href={`mailto:${email}`}> {email}</a></p>
+                                <p className="client__contact-item"><img className="contact-icon" src="/icons/phone-icon.svg" alt="phone"/> {phone}</p>
                             </div>
                         </div>
+                        <div className="client__contact-modify">
+                            <ModalContainer 
+                                modalType = "update" 
+                                modalName = "updateClient" 
+                                buttonType="image"
+                                url="/icons/user-edit.svg"
+                                onSubmit={this.props.updateClient} 
+                                information={this.props.currentClient}
+                                />
+                        </div>
                     </div>
-                    <div className = "client__contact-map" style={{width:"346px", height:"253px"}}>
+                    <div className = "client__contact-map">
                             <Map
                                 googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`}
                                 loadingElement={<div style={{height: "100%"}} />}
@@ -124,24 +119,22 @@ class ClientProfile extends React.Component {
                     </div>
                 </div>
 
-                <div className = "component client__notes">
-                    <p className="component-title">Notes</p>
-                    <div className="list">
-                        {this.state.currentClient.notes.map(note=> 
-                            <List 
-                                key={note.id} 
-                                content={note.message} 
-                                id={note.id} 
-                                deleteFunction = {this.deleteNote} 
-                                deleteBtn={true}
-                                deleteType="modal"
-                            />)}
+                <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                    <div className = "client__notes-body">
+                        <p className="client__notes-title">Things to Remember ...</p>
+                        <div className="client__notes-text"> {this.state.currentClient.notes}</div>
+                        <div className="client__notes-submit">
+                            <ModalContainer 
+                                modalType = "note" 
+                                modalName = "addNote" 
+                                buttonText="Add" 
+                                buttonType="accent"
+                                information = {this.state.currentClient.notes}
+                                onSubmit={this.addNote} 
+                            />
+                        </div>
                     </div>
-                    <form className="client__notes-form" onSubmit={(event)=>this.addNote(event)}>
-                        <input className="client__notes-new" type="text" name="newNote" placeholder="New Note"></input>
-                        <button className=" add client__notes-add"> + </button>
-                    </form>
-                </div>
+                 </div>
             </div>
         )
     }

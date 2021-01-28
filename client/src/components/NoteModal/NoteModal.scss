@@ -1,0 +1,50 @@
+@import '../../styles/globalImports.scss';
+
+.modal-note{
+
+    &__area{
+        width: 52%;
+        height: 80%;
+        left:27%;
+        top:4%;
+        padding:0;
+        position:relative;
+    }
+
+    &__header{
+        position:absolute;
+        top:9%;
+        left:25%;
+        width:39%;
+        height:33%;
+        &-form{
+            position:absolute;
+            width:100%;
+            height:100%;
+            display:flex;
+            flex-direction:column;
+            align-items:flex-start;
+
+            &-input{
+                resize:none;
+                background-color: transparent;
+                border:none;
+                font-size:16px;
+                width:100%;
+                &:focus{
+                    outline:none;
+                }
+            }
+            &-submit{
+                margin-left:auto;
+            }
+        }
+    }
+    &__image{
+        width:90%;
+    }
+    &__close{
+        top:7%;
+        right:35%;
+    }
+}

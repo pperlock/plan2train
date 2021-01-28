@@ -39,17 +39,17 @@ function User({user, updateUserProfile}) {
                         <div className="user-profile__contact">
                             <p className="user-label user-profile__contact-title"> CONTACT </p> 
                             <div className="user-profile-item">
-                                <img className="user-icon" src="/icons/email-icon.svg" alt="email"/><p>{email}</p>
+                                <img className="contact-icon" src="/icons/email-icon.svg" alt="email"/><p>{email}</p>
                             </div>
                             <div className="user-profile-item">
-                                <img className="user-icon" src="/icons/phone-icon.svg" alt="phone number"/><p>{phone}</p>
+                                <img className="contact-icon" src="/icons/phone-icon.svg" alt="phone number"/><p>{phone}</p>
                             </div>
 
                             <div className="user-profile__social">
-                                <a href={facebook}><img className="user-icon" src="/icons/facebook-icon.svg" alt="facebook"/></a>
-                                <a href={twitter}><img className="user-icon" src="/icons/twitter-icon.svg" alt="twitter"/></a>
-                                <a href={instagram}><img className="user-icon" src="/icons/instagram-icon.svg" alt="instagram"/></a>
-                                <a href={linkedIn}><img className="user-icon" src="/icons/linkedin-icon.svg" alt="linked-in"/></a>
+                                <a href={facebook}><img className="contact-icon" src="/icons/facebook-icon.svg" alt="facebook"/></a>
+                                <a href={twitter}><img className="contact-icon" src="/icons/twitter-icon.svg" alt="twitter"/></a>
+                                <a href={instagram}><img className="contact-icon" src="/icons/instagram-icon.svg" alt="instagram"/></a>
+                                <a href={linkedIn}><img className="contact-icon" src="/icons/linkedin-icon.svg" alt="linked-in"/></a>
                             </div>
                         </div>
                         <div className="user-profile__address">
