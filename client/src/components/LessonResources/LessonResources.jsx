@@ -31,7 +31,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
     //update the resources of the current lesson when state changes
     useEffect(() => {
         updateCurrentLesson(currentLesson);
-    });
+    },[currentLesson]);
 
     // update the resources being displayed when a program is chosen
     const updateDisplayed = (program)=>{

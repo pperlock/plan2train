@@ -229,8 +229,10 @@ class Trainer extends React.Component{
 
         axios.put(`http://localhost:8080/client/${this.props.match.params.clientId}/updateDetails`, updatedClient)
         .then(res =>{
+            console.log(res);
             //pulls new data from db on component did update
             this.setState({updated:true})
+            // this.setState()
         })
         .catch(err=>{
             console.log(err);

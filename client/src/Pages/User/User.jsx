@@ -18,7 +18,7 @@ function User({user, updateUserProfile}) {
             <p className="user-profile__type">Profile: Trainer</p>
             <div className="user-profile__bottom">
                 <div className="user-profile__description">
-                    <div className="user-profile__description-logo-container"><img src="/images/companyLogo2.png" className="user-profile__description-logo"/></div>
+                    <div className="user-profile__description-logo-container"><img src="/images/companyLogo2.png" alt ="company logo" className="user-profile__description-logo"/></div>
                     <div className="user-profile__description-content">
                         <p className="user-profile__description-company">{name}</p>
                         <p className="user-profile__description-description">{description}</p>

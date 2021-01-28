@@ -6,7 +6,6 @@ import "./Clients.scss";
 import ClientList from '../../components/ClientList/ClientList';
 import ClientProfile from '../../components/ClientProfile/ClientProfile';
 import ClientLessons from '../../components/ClientLessons/ClientLessons';
-import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 /**
  * props passed to Clients from Trainer
@@ -40,15 +39,19 @@ class Clients extends React.Component {
    
     render(){
 
-        const {clients, programs, addClient, updateClient, deleteClient} = this.props;
+        const {clients, programs, addClient, updateTrainer, updateClient, deleteClient, match} = this.props;
+
+        console.log(clients);
         
         //used to determine if we are on the lessons page or the profile page
         const page = this.props.match.path.split("/")[6]; 
 
         //set the rendered client to be the one that matches the path name
-        const currentClient = this.props.clients.find(client=> client.userId ===this.props.match.params.clientId);
+        const currentClient = this.props.clients.find(client=> client.userId ===match.params.clientId);
 
         const {fname, lname} = currentClient.userProfile;
+
+        console.log(currentClient);
         
         //status is a boolean to indicate if a client is current or past - used for filter on client bar
         const active = currentClient.status ? "Active" : "Archived";
@@ -71,7 +74,7 @@ class Clients extends React.Component {
                     </div>
 
                     {/* add and delete client functionality only shown on the profile page */}
-                    {page === "profile" && 
+                    {/* {page === "profile" && 
                         <div className="client__modify">
                             <ModalContainer 
                                 modalType = "update" 
@@ -90,11 +93,20 @@ class Clients extends React.Component {
                                 deleteString={`${fname} ${lname}`}
                                 deleteId={currentClient.userId}/>
                         </div>
-                    }
+                    } */}
 
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
-                    {page === "profile" && <ClientProfile currentClient = {currentClient} clients={clients} updateTrainer={this.props.updateTrainer} match = {this.props.match}/>}
-                    {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} match = {this.props.match}/>}
+                    {page === "profile" && 
+                        <ClientProfile 
+                            currentClient = {currentClient} 
+                            clients={clients} 
+                            updateTrainer={updateTrainer}
+                            match = {match}
+                            updateClient={updateClient}
+                            deleteClient={deleteClient}
+                        />}
+
+                    {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} match = {match}/>}
                    
                 </div>
             </div>

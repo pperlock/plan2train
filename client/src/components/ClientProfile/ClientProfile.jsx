@@ -6,6 +6,7 @@ import './ClientProfile.scss';
 
 import List from '../../components/List/List';
 import Map from '../../components/Map/Map';
+import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 // props = currentClient
 class ClientProfile extends React.Component {
@@ -17,7 +18,7 @@ class ClientProfile extends React.Component {
     }
 
     componentDidUpdate(){
-        // console.log("client - did update")
+        console.log("client profile - did update")
         //if the userId currently in state doesn't match the userId in the path then update the currentClient in state to match the one in the path
         if(this.state.currentClient.userId !==this.props.match.params.clientId){
             this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)},()=>{
@@ -31,7 +32,7 @@ class ClientProfile extends React.Component {
         const {address, city, province} = this.state.currentClient.userProfile;
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
-            console.log(res.data.results[0].locations[0].displayLatLng);
+            // console.log(res.data.results[0].locations[0].displayLatLng);
             this.setState({mapLocation:res.data.results[0].locations[0].displayLatLng});     
         })
         .catch(err=>{
@@ -74,9 +75,9 @@ class ClientProfile extends React.Component {
     }
 
     render(){
-        const {address, city, province, country, postal, email, phone} = this.state.currentClient.userProfile;
+        const {fname,lname,address, city, province, country, postal, email, phone} = this.props.currentClient.userProfile;
         return (
-            <div className = "client__middle">
+            <div className = "client__profile">
                 <div className = "component client__contact">
                     <div className="client__contact-info">
                         <div className="client__contact-info-top">
@@ -88,8 +89,27 @@ class ClientProfile extends React.Component {
                                 <p className="client__contact-item"> {postal}</p>
                             </div>
                             <div className="client__contact-contact">
-                                <p className="client__contact-item"> {email}</p>
+                                <a className="client__contact-item" href={`mailto:${email}`}> {email}</a>
                                 <p className="client__contact-item"> {phone}</p>
+                            </div>
+                            <div className="client__contact-modify">
+                                <ModalContainer 
+                                    modalType = "update" 
+                                    modalName = "updateClient" 
+                                    buttonText="Modify" 
+                                    buttonType="accent"
+                                    onSubmit={this.props.updateClient} 
+                                    information={this.props.currentClient}
+                                    />
+                                <ModalContainer 
+                                    modalType = "delete" 
+                                    modalName = "delete" 
+                                    buttonText="Delete"
+                                    buttonType="x" 
+                                    onSubmit={this.props.deleteClient}
+                                    deleteString={`${fname} ${lname}`}
+                                    deleteId={this.props.currentClient.userId}
+                                />
                             </div>
                         </div>
                     </div>

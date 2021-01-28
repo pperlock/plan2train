@@ -37,7 +37,7 @@ class LoginModal extends React.Component {
     }
 
     render(){
-        const {onClickOutside, onKeyDown, modalRef, buttonRef, closeModal, onSubmit, modalType} = this.props;
+        const {onKeyDown, modalRef, buttonRef, closeModal, modalType} = this.props;
         const {loggedIn, error, userId, username, profile} = this.state.loginResponse;
 
         const blankSignUpProfile={

@@ -1,12 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {GoogleMap, Marker, InfoWindow,withGoogleMap, withScriptjs} from 'react-google-maps';
-import axios from 'axios';
 
 import mapStyles from '../../mapStyles';
 
 const Map = withScriptjs(withGoogleMap(({mapLocation}) => {
  
-    console.log(mapLocation);
+    // console.log(mapLocation);
     const [showInfo, setShowInfo]=useState(false);
 
     if(!mapLocation){

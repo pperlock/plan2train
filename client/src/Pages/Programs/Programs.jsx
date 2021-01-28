@@ -180,7 +180,7 @@ class Programs extends React.Component {
                                     <option value="video">video</option>
                                     <option value="image">image</option>
                                 </select>
-                                <button  className="resource__upload-back" onClick={()=>{ this.setState({showRadio:true})}}><img src="/icons/arrow_back-24px.svg"/></button> 
+                                <button  className="resource__upload-back" onClick={()=>{ this.setState({showRadio:true})}}><img src="/icons/arrow_back-24px.svg" alt="back"/></button> 
                                 <button className="resource__upload-submit" type="submit">Add</button>  
                             </form>
                         }
@@ -189,7 +189,7 @@ class Programs extends React.Component {
                             <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
                                 <input className="text-input resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
                                 <input className="text-input resource__upload-file" name="uploadURL" type="text" placeholder="Enter URL" required></input>
-                                <button  className="resource__upload-back" onClick={()=>{ this.setState({showRadio:true})}}><img src="/icons/arrow_back-24px.svg"/></button> 
+                                <button  className="resource__upload-back" onClick={()=>{ this.setState({showRadio:true})}}><img src="/icons/arrow_back-24px.svg" alt="back"/></button> 
                                 <button className="resource__upload-submit" type="submit">Add</button>    
                             </form>
                         }
