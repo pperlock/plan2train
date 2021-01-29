@@ -294,14 +294,14 @@ class Trainer extends React.Component{
  
         const {match} = this.props;
         // console.log(this.state.programs)
-        // console.log(this.state.clients)
+        console.log(this.state.clients)
         // console.log(this.state.userProfile)
         // console.log(this.state.username);
         // console.log(this.state.trainerId)
 
         return (
             <>
-                {this.state.userProfile  &&  
+                {this.state.userProfile &&  
                     <SideBar
                         clients={this.state.clients} 
                         programs={this.state.programs} 
@@ -335,7 +335,7 @@ class Trainer extends React.Component{
                         addResource={this.addResource} 
                         deleteResource={this.deleteResource}   
                     />}
-                {(this.state.clients && match.path==="/trainer/:username/:trainerId/clients/:clientId/profile") && 
+                {(this.state.clients && this.state.clients.length !== 0 && match.path==="/trainer/:username/:trainerId/clients/:clientId/profile") && 
                     <Clients {...this.props} 
                         programs={this.state.programs} 
                         clients={this.state.clients} 
@@ -345,7 +345,7 @@ class Trainer extends React.Component{
                         deleteClient={this.deleteClient}
                         updateTrainer={this.updateTrainer}
                     />}
-                {(this.state.clients && match.path==="/trainer/:username/:trainerId/clients/:clientId/lessons") && 
+                {(this.state.clients  && this.state.clients.length !== 0 && match.path==="/trainer/:username/:trainerId/clients/:clientId/lessons") && 
                     <Clients {...this.props} 
                         programs={this.state.programs} 
                         clients={this.state.clients} 

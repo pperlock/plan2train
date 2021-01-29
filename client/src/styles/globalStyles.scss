@@ -198,8 +198,19 @@ ul{
     text-align:center;
     color: rgba(177, 164, 148, 0.8);
 
+    &:hover{
+      background-color:$dark-background;
+      opacity:0.5;
+      color:$accent-color;
+      font-weight:bold;
+    }
+
     &__icon{
         width:30%;
         opacity:0.3;
+    
+      &:hover{
+        filter: invert(68%) sepia(15%) saturate(437%) hue-rotate(158deg) brightness(82%) contrast(86%);
+      }
     }
 }

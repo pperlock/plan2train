@@ -64,6 +64,8 @@ class Clients extends React.Component {
         //set the rendered client to be the one that matches the path name
         const currentClient = this.props.clients.find(client=> client.userId ===match.params.clientId);
 
+        console.log(this.props);
+
         const {fname, lname} = currentClient.userProfile;
 
         // console.log(currentClient);

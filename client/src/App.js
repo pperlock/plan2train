@@ -7,7 +7,6 @@ import {DndProvider} from 'react-dnd';
 import Intro from './Pages/Intro/Intro';
 import Trainer from './Pages/Trainer/Trainer';
 import Client from './Pages/Client/Client';
-import EmptyPage from './Pages/EmptyPage/EmptyPage';
 
 function App() {
   return (
@@ -22,9 +21,10 @@ function App() {
                   <Route path="/trainer/:username/:trainerId/programs" exact render={(props)=>(<Trainer {...props}/>)}/>
                   <Route path="/trainer/:username/:trainerId/programs/:programId" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - clients */}
-                  <Route path="/trainer/:username/:trainerId/clients" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  
                   <Route path="/trainer/:username/:trainerId/clients/:clientId/profile" exact render={(props)=>(<Trainer {...props}/>)}/>
                   <Route path="/trainer/:username/:trainerId/clients/:clientId/lessons" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  <Route path="/trainer/:username/:trainerId/clients" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - schedule */}
                   <Route path="/schedule" render={(props)=>(<Trainer {...props}/>)}/>
                   

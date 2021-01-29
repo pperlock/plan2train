@@ -105,8 +105,6 @@ class Programs extends React.Component {
         console.log(program);
         console.log(programs[0]);
 
-
-        
         return (
             <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >
                 <ClientList list={programs} match={match} onSubmit={addProgram}/>

@@ -172,3 +172,8 @@ input:checked + .slidinggroove:after{
 input:checked + .slidinggroove-on:after{
     transform:translateX(-30px);
 }
+
+.empty-lessons{
+    width:55%;
+    font-size:22px;
+}

@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import './ClientLessons.scss'
 
-import List from '../../components/List/List';
 import GridList from '../../components/GridList/GridList';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 import LessonResources from '../../components/LessonResources/LessonResources';
@@ -263,7 +262,7 @@ class ClientLessons extends React.Component {
 
         if(lessons.length===0){
             return(                                     
-                <div onClick={this.addNewLesson} className="empty-container">
+                <div onClick={this.addNewLesson} className="empty-container empty-lessons">
                     <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
                     <p>Click to Add a Lesson</p>
                 </div>

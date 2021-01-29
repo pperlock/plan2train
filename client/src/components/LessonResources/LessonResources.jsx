@@ -112,10 +112,19 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
     const[{isOver}, drop] = useDrop({
         accept: ItemTypes.CARD, //required - tells drop zone it will only accept card components
         drop: (item, monitor)=> removeResource(item.id),
-        collect: monitor => ({
-            isOver: !!monitor.isOver(),
-        }),
+        // collect: monitor => ({
+        //     isOver: !!monitor.isOver(),
+        // }),
     });
+
+    // //setup for drop componenet from  lessons - available
+    // const[{isOver}, drop] = useDrop({
+    //     accept: ItemTypes.CARD, //required - tells drop zone it will only accept card components
+    //     drop: (item, monitor)=> removeResource(item.id),
+    //     // collect: monitor => ({
+    //     //     isOver: !!monitor.isOver(),
+    //     // }),
+    // });
 
     if(programs.length===0){
         return(                                     
