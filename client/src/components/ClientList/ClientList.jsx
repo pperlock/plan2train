@@ -15,10 +15,10 @@ function ClientList({list,match, animate, onSubmit, programs}) {
 
     <div className={animate ? "client-list client-list--animate" : "client-list"}>
         <input className="client-list__search" type="text" placeholder="Search"/>
-
-        {page === "clients" && <ModalContainer modalType="update" modalName = "addClient" buttonText="Add" buttonType="accent" onSubmit={onSubmit} information={programs}/>}
-        {page === "programs" && <ModalContainer modalType="update" modalName = "addProgram" buttonText="Add" buttonType="accent" onSubmit={onSubmit}/>}
-        {/* <button className="client-list__add" onClick={()=>addClient()}>+</button> */}
+        <div className="client-list__add">
+            {page === "clients" && <ModalContainer modalType="update" modalName = "addClient"  buttonType="image" url="/icons/add-user.svg" onSubmit={onSubmit} information={programs}/>}
+            {page === "programs" && <ModalContainer modalType="update" modalName = "addProgram" buttonText="Add" buttonType="accent" onSubmit={onSubmit}/>}
+        </div>
 
         <ul className="client-list__list">
             {page === "clients" && list.map(item => <Link key={item.userId} to={`/trainer/${match.params.username}/${match.params.trainerId}/clients/${item.userId}/profile`}><li className="client-list__client">{`${item.userProfile.lname}, ${item.userProfile.fname}`}</li></Link>)}

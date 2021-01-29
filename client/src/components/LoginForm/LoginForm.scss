@@ -5,6 +5,9 @@
         display:flex;
         flex-direction:column;
         align-items:center;
+        &:focus{
+            
+        }
         
     }
     &-inputbox{
@@ -13,6 +16,6 @@
         width:95%;
     }
     &-submit{
-        margin-left: 255px;
+        margin-left: 250px;
     }
 }

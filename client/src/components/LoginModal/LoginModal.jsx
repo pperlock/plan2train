@@ -36,23 +36,25 @@ class LoginModal extends React.Component {
         this.setState({showSignUp:!this.state.showSignUp, showSignIn:!this.state.showSignIn});
     }
 
+    createTrainer = (event)=>{
+        event.preventDefault();
+        
+        const {username, password, email, fname, lname} = event.target;
+
+        const newTrainer={
+            username:username.value,
+            password:password.value,
+            email:email.value,
+            fname:fname.value,
+            lname:lname.value
+        }
+        console.log(newTrainer);
+    }
+
     render(){
         const {onKeyDown, modalRef, buttonRef, closeModal, modalType} = this.props;
         const {loggedIn, error, userId, username, profile} = this.state.loginResponse;
 
-        const blankSignUpProfile={
-            userProfile:{
-                lname: "",
-                fname: "",
-                email: "",
-                phone: "",
-                address: "",
-                city: "",
-                province: "",
-                country:"",
-                postal : "",
-            }
-        }
         return ReactDOM.createPortal(
             <FocusTrap>
                 <aside 
@@ -82,7 +84,7 @@ class LoginModal extends React.Component {
                         </button>
                         <div className="modal-body modal-login__body">
                             {this.state.showSignIn &&<LoginForm onSubmit={this.checkCredentials} profile={modalType} signIn={this.state.showSignIn}/>}
-                            {this.state.showSignUp && <PersonalDetailsForm onSubmit={this.checkCredentials} profile={modalType} information={blankSignUpProfile}/>}
+                            {this.state.showSignUp && <LoginForm onSubmit={this.createTrainer} profile={modalType} signIn={this.state.showSignIn}/>}
                             {error && <p className="modal-login__body-error">{error}</p>}  
                             {this.state.noUser && <p className="modal-login__body-error">"Username Not Found"</p>}
                             {(modalType === "logintrainer" && this.state.showSignIn) && <button className="modal-login__body-signup" onClick={this.toggleLoginForm}>New to the Community? Click Here to Join Us</button>}

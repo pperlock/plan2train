@@ -4,7 +4,7 @@
     &__profile{
         display:flex;
         justify-content:center;
-        margin-bottom:40px;
+        margin:40px 0;
         width:90%;
     }
 
@@ -37,18 +37,15 @@
             align-items:center;
             margin-bottom:8px;
         }
-        &-icon{
-
-        }
-        &-map{
+         &-map{
             border:1px solid grey;
             height:50%;
         }
         &-modify{
             display:flex;
-            justify-content:flex-end;
             width:40px;
             height:40px;
+            margin-left:auto;
         }
 
     }

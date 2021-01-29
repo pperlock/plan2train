@@ -39,32 +39,12 @@
         color:$light-text;
     }
 
-    // &__add{
-    //     @include buildButton(30px,30px,$light-text,$accent-color);
-    //     font-weight:bold;
-    //     margin-right:16px;
-    //     font-size:12px;
-    //     align-self:flex-end;
-    //     text-align:center;
-    //     position:relative;
-    //     margin:20px;
-
-    //     &:hover{
-    //         width:60px;
-    //         animation:expandButton 0.1s linear;
-    //         padding-right:21px;
-    //     }
-
-    //     &::after{
-    //         position:absolute;
-    //         opacity:0;
-    //         content:"Add";
-    //         left:25px;
-    //     }
-    //     &:hover::after{
-    //         opacity:1;
-    //         left:28px;
-    //     }
-    // }
-
+    &__add{
+        width:40px;
+        height:40px;
+        align-self:flex-end;
+        &:hover{
+            opacity:0.7;
+        }
+    }
 }

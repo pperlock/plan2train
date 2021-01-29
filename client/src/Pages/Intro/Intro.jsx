@@ -15,9 +15,13 @@ function Intro () {
             <div className = "intro__divider"></div>
             <h2 className= "intro__subtitle"> Organize Your Program Information and Communicate with Your Clients </h2>
             <h2>Choose your Profile</h2>
-            <div>
-                <ModalContainer modalType = "logintrainer" buttonText="Trainer" buttonType="accent"/>
-                <ModalContainer modalType = "loginclient" buttonText="Client" buttonType="accent"/>
+            <div className = "intro__login">
+                <div className = "intro__login-button">
+                    <ModalContainer modalType = "logintrainer" buttonText="Trainer" buttonType="intro"/>
+                </div>
+                <div className = "intro__login-button">
+                    <ModalContainer modalType = "loginclient" buttonText="Client" buttonType="intro"/>
+                </div>
             </div>
         </div>
     )

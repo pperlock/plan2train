@@ -43,9 +43,18 @@
         margin-bottom:32px;
     }
 
-    &__button{
-        @include buildButton(200px,50px, $accent-color, white);
-        font-size:24px;
+    // &__button{
+    //     @include buildButton(200px,50px, $accent-color, white);
+    //     font-size:24px;
+    // }
+
+    &__login{
+        display:flex;
+        margin-top:20px;
+        &-button{
+            margin-left:20px;
+            font-size:24px;
+        }
     }
 
 

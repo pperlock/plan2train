@@ -50,42 +50,45 @@ class SideBar extends React.Component {
         const defaultClientId = clients ? clients[0].userId : match.params.clientId
 
         return (
-                
-                <div className="sidebar" style={{backgroundImage: "url('/images/main-background.jfif')"}}>
+                <>
+                    <div className="sidebar" style={{backgroundImage: "url('/images/main-background.jfif')"}}>
 
-                <Link  to="/">
-                        <div className="sidebar__logo">
-                            <h1 className="sidebar__logo-title" >P</h1>
-                            <span className="sidebar__logo-bigLetter">2</span> 
-                            <h1 className="sidebar__logo-title"> T</h1>
+                    <Link  to="/">
+                            <div className="sidebar__logo">
+                                <h1 className="sidebar__logo-title" >P</h1>
+                                <span className="sidebar__logo-bigLetter">2</span> 
+                                <h1 className="sidebar__logo-title"> T</h1>
+                            </div>
+                        </Link>
+                        <div className = "sidebar__divider"></div>
+                        <div className="sidebar__logout">
+                            <div className="sidebar__logout-text">Log Out</div>
+                            <Link to="/"><img className="sidebar__logout-icon" src="/icons/log-out.svg" alt="sign out"/></Link>
                         </div>
-                    </Link>
-                    <div className = "sidebar__divider"></div>
-                    <div className="sidebar__user">pperlock</div>
-                    <ul className="sidebar__menu">
-                        <Link to={`/trainer/${trainerName}/${trainerId}`}>
-                            <li id="trainer-link" className="sidebar__menu-link sidebar__menu-link--active">
-                                <img id="trainer-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/user-profile-icon.svg" alt="user profile"/>
-                                User Profile
-                            </li>
-                        </Link>
-                        {programs &&
-                            <Link to={`/trainer/${trainerName}/${trainerId}/programs/${programs[0].id}`}>
-                                <li id="programs-link" className="sidebar__menu-link"><img id="programs-icon" className="sidebar__menu-icon"src="/icons/programs-icon.svg" alt="list icon"/>Programs</li>
+                        <ul className="sidebar__menu">
+                            <Link to={`/trainer/${trainerName}/${trainerId}`}>
+                                <li id="trainer-link" className="sidebar__menu-link sidebar__menu-link--active">
+                                    <img id="trainer-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/user-profile-icon.svg" alt="user profile"/>
+                                    User Profile
+                                </li>
                             </Link>
-                        }
-                        {clients &&
-                            <Link to={`/trainer/${trainerName}/${trainerId}/clients/${defaultClientId}/profile`}>
-                                <li id="clients-link" className="sidebar__menu-link"><img  id="clients-icon" className="sidebar__menu-icon" src="/icons/clients-icon.svg" alt="clients icon"/>Clients</li>
+                            {programs &&
+                                <Link to={`/trainer/${trainerName}/${trainerId}/programs/${programs[0].id}`}>
+                                    <li id="programs-link" className="sidebar__menu-link"><img id="programs-icon" className="sidebar__menu-icon"src="/icons/programs-icon.svg" alt="list icon"/>Programs</li>
+                                </Link>
+                            }
+                            {clients &&
+                                <Link to={`/trainer/${trainerName}/${trainerId}/clients/${defaultClientId}/profile`}>
+                                    <li id="clients-link" className="sidebar__menu-link"><img  id="clients-icon" className="sidebar__menu-icon" src="/icons/clients-icon.svg" alt="clients icon"/>Clients</li>
+                                </Link>
+                            }
+                            <Link to="/schedule">
+                                <li id="schedule-link" className="sidebar__menu-link"><img id="schedule-icon" className="sidebar__menu-icon" src="/icons/calendar-icon.svg" alt="calendar icon"/>Schedule</li>
                             </Link>
-                        }
-                        <Link to="/schedule">
-                            <li id="schedule-link" className="sidebar__menu-link"><img id="schedule-icon" className="sidebar__menu-icon" src="/icons/calendar-icon.svg" alt="calendar icon"/>Schedule</li>
-                        </Link>
-                    </ul>
-                
-                </div>
-            
+                        </ul>
+                    </div>
+                    
+                </>
         )
     }
 }
