@@ -22,7 +22,9 @@ function Modal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal,onSub
             onKeyDown={onKeyDown}>
                 <div className="modal-area" ref={modalRef} style={{backgroundImage: "url('/images/intro-background.png')"}}>
                     {modalName==="updateUser" && <h1 className="modal-title">Trainer Details</h1>}
-                    {modalName==="updateClient" && <h1 className="modal-title">Client Details</h1>}
+                    {(modalName==="updateClient" || modalName==="addClient") && <h1 className="modal-title">Client Details</h1>}
+                    {modalName==="addProgram" && <h1 className="modal-title">Program Details</h1>}
+                    
                     <button
                         ref={buttonRef}
                         aria-label='Close Modal'

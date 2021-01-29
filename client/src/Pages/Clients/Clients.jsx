@@ -104,7 +104,7 @@ class Clients extends React.Component {
                                 modalName = "delete" 
                                 buttonText="Delete"
                                 buttonType="image"
-                                url="/icons/delete-user.svg" 
+                                url="/icons/trash.svg" 
                                 onSubmit={this.props.deleteClient}
                                 deleteString={`${fname} ${lname}`}
                                 deleteId={currentClient.userId}

@@ -116,15 +116,17 @@ class Programs extends React.Component {
                                 <p className="program__header-description">{program.description}</p>
                             </div>
 
-                            <ModalContainer 
-                                modalType = "delete" 
-                                modalName = "delete" 
-                                buttonText="Delete" 
-                                buttonType="x"
-                                onSubmit={this.props.deleteProgram}
-                                deleteString= {program.name}
-                                deleteId={program.id}
-                            />
+                            <div className="program__header-delete">
+                                <ModalContainer 
+                                    modalType = "delete" 
+                                    modalName = "deleteProgram" 
+                                    buttonType="image"
+                                    url="/icons/trash.svg"
+                                    onSubmit={this.props.deleteProgram}
+                                    deleteString= {program.name}
+                                    deleteId={program.id}
+                                />
+                            </div>
 
                         </div>   
                     {/* </div> */}

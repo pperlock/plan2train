@@ -363,7 +363,7 @@ class ClientLessons extends React.Component {
                                         modalType = "note" 
                                         modalName = "addNote" 
                                         buttonType="image"
-                                        url="/icons/edit-icon.svg" 
+                                        url="/icons/add-note.svg" 
                                         information = {this.state.currentLesson.notes}
                                         onSubmit={this.addListItem} 
                                     />
@@ -380,7 +380,7 @@ class ClientLessons extends React.Component {
                                         modalType = "note" 
                                         modalName = "addHomework" 
                                         buttonType="image"
-                                        url="/icons/edit-icon.svg" 
+                                        url="/icons/add-note.svg" 
                                         information = {this.state.currentLesson.homework}
                                         onSubmit={this.addListItem} 
                                     />

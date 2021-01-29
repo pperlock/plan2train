@@ -25,6 +25,7 @@ function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                     <div className="modal-delete__header">
                         {modalName !== "noDelete" && <h1 className="modal-title modal-delete__header-title">Are you Sure you You Would Like to Delete</h1>}
                         <h2 className= "modal-delete__header-info">{deleteString}</h2>
+                        {modalName === "deleteProgram" && <h1 className="modal-title modal-delete__header-title">And All It's Resources?</h1>}
                         {modalName !== "noDelete" && <p className= "modal-delete__header-warning">This action can not be undone</p>}
                     </div>
                     <button
@@ -39,8 +40,8 @@ function DeleteModal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                         </svg>
                     </button>
                     <div className="modal-body modal-delete__body">
-                        <button onClick={closeModal}>Cancel</button>
-                        {modalName !== "noDelete" && <button onClick={handleClick}>Delete</button>}
+                        <button className="modal-form__submit-cancel" onClick={closeModal}>Cancel</button>
+                        {modalName !== "noDelete" && <button className="modal-form__submit-button" onClick={handleClick}>Delete</button>}
                     </div>
                 </div>
 

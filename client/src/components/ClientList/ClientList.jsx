@@ -16,7 +16,7 @@ function ClientList({list, match, animate, onSubmit, programs}) {
         <input className="client-list__search" type="text" placeholder="Search"/>
         <div className="client-list__add">
             {page === "clients" && <ModalContainer modalType="update" modalName = "addClient"  buttonType="image" url="/icons/add-user.svg" onSubmit={onSubmit} information={programs}/>}
-            {page === "programs" && <ModalContainer modalType="update" modalName = "addProgram" buttonText="Add" buttonType="accent" onSubmit={onSubmit}/>}
+            {page === "programs" && <ModalContainer modalType="update" modalName = "addProgram" buttonType="image" url="/icons/new-program.svg" onSubmit={onSubmit}/>}
         </div>
 
         <ul className="client-list__list">

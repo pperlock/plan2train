@@ -22,11 +22,21 @@
         margin-top:20px;
         &-button{
             @include buildButton(50px, 40px, $accent-color, $light-text);
+        
+            &:hover{
+                opacity:0.7;
+            }
         }
         &-cancel{
             border:none;
             margin-right:10px;
             cursor:pointer;
+            &:hover{
+                font-weight:bold;
+            }
+            &:focus{
+                outline:none;
+            }
         }
     }
 

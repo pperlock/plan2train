@@ -1,0 +1,20 @@
+@import '../../styles/globalImports.scss';
+
+.new-program{
+
+    &__input{
+        display:flex;
+        flex-direction:column;
+        align-items: flex-start;
+
+    }
+    &__text{
+        width:50%;
+    }
+    &__textarea{
+        margin-top:10px;
+        font-family: "SourceSansPro"; 
+        font-size:14px;
+        resize:none;
+    }
+}

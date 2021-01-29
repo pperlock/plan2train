@@ -11,13 +11,19 @@
             margin:20px 0;
         }
         &-warning{
+            padding-top:5px;
             font-size: 18px;
+            color:#ff0033;
+            font-weight:bold;
         }
     }
     &__area{
         width: 33%;
         height: 27%;
-        left:33%
+        left:33%;
+        display:flex;
+        flex-direction:column;
+        justify-content: space-between;
     }
     &__close{
         top:11px;
@@ -26,7 +32,8 @@
     &__body{
         display:flex;
         justify-content:flex-end;
-        margin:50px 20px;;
+        // margin:35px 20px;
+        padding:0 16px 0 0;
     }
 }
 

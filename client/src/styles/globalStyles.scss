@@ -57,29 +57,29 @@ ul{
     box-sizing:border-box;
 }
 
-.add{
-    font-size:12px;
-    align-self:flex-end;
-    text-align:center;
-    position:relative;
+// .add{
+//     font-size:12px;
+//     align-self:flex-end;
+//     text-align:center;
+//     position:relative;
 
-    &:hover{
-        width:60px;
-        animation:expandButton 0.1s linear;
-        padding-right:21px;
-    }
+//     &:hover{
+//         width:60px;
+//         animation:expandButton 0.1s linear;
+//         padding-right:21px;
+//     }
 
-    &::after{
-        position:absolute;
-        opacity:0;
-        content:"Add";
-        left:25px;
-    }
-    &:hover::after{
-        opacity:1;
-        left:28px;
-    }
-}
+//     &::after{
+//         position:absolute;
+//         opacity:0;
+//         content:"Add";
+//         left:25px;
+//     }
+//     &:hover::after{
+//         opacity:1;
+//         left:28px;
+//     }
+// }
 
 .user{
     &-label{
@@ -96,8 +96,7 @@ ul{
 
 .scroll-lock {
     overflow: hidden;
-    // margin-right: 17px;
-  }
+}
 
   
 .modal-cover {

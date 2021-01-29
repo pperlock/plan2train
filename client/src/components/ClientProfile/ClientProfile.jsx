@@ -128,7 +128,7 @@ class ClientProfile extends React.Component {
                             <ModalContainer 
                                 modalType = "note" 
                                 modalName = "addNote" 
-                                url="/icons/edit-icon.svg" 
+                                url="/icons/add-note.svg" 
                                 buttonType="image"
                                 information = {this.state.currentClient.notes}
                                 onSubmit={this.addNote} 
