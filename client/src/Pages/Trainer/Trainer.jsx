@@ -8,6 +8,7 @@ import Programs from '../Programs/Programs';
 import Clients from '../Clients/Clients';
 import Schedule from '../Schedule/Schedule';
 import User from '../User/User';
+import EmptyPage from '../EmptyPage/EmptyPage';
 
 class Trainer extends React.Component{
     
@@ -279,7 +280,9 @@ class Trainer extends React.Component{
                         match={match}
                         trainerId={this.state.trainerId}
                         trainerName={this.state.username}
-                        />}
+                    />}
+                {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/programs") && 
+                    <EmptyPage />}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/programs/:programId") && 
                     <Programs 
                         programs={this.state.programs} 

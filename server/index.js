@@ -27,44 +27,109 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //seco
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
 
-/* =========================================== GET USER DETAILS ================================================ */
+/* =========================================== SIGN UP - CREATE TRAINER ================================================ */
+app.post('/addTrainer', (req,res)=>{
+
+    const {username,password,fname,lname,email} = req.body;
+
+    const userId = uuidv4();
+
+    const user = new User({
+        //pass an object with the different properties in the schema
+        userId:userId,
+        username,
+        password,
+        profile:"trainer",
+    });
+        
+    const trainer = new Trainer({
+        userId:userId,
+        contact:{
+            username,
+            password,
+            fname,
+            lname,
+            email,
+            phone:"",
+            address:"",
+            city:"",
+            province:"",
+            country:"",
+            postal:""
+        },
+        company:{
+            name:"",
+            description:""
+        },
+        social:{
+            facebook:"",
+            twitter:"",
+            instagram:"",
+            linkedIn:""
+        }
+    })
+
+    user.save() ///asynchronous - returns a promise
+    .then((response)=>{
+        //once the data is saved, the database sends us back a new object version of document that was saved
+        trainer.save()
+        .then(trainerRes=>{
+            const loginResponse = {
+                loggedIn:true, 
+                error:null, 
+                userId:userId, 
+                username, 
+                password, 
+                profile:"trainer"
+            };
+            res.send(loginResponse);
+        })
+        .catch((err)=>{
+            console.log(err);
+        });
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
+});
+/* =========================================== SIGN IN - GET USER DETAILS ================================================ */
 app.get('/user/:profile/:username/:password', (req,res)=>{
 
-User.findOne({username:req.params.username}) 
-.then((response)=>{
+    User.findOne({username:req.params.username}) 
+    .then((response)=>{
 
-    const loginResponse = {
-        loggedIn:false, 
-        error:null, 
-        userId:null, 
-        username:null, 
-        password:null, 
-        profile:req.params.profile
-    };
+        const loginResponse = {
+            loggedIn:false, 
+            error:null, 
+            userId:null, 
+            username:null, 
+            password:null, 
+            profile:req.params.profile
+        };
 
-    if(!response){
-        loginResponse.loggedIn = false;
-        loginResponse.error = "Username Not Found";
-        res.send(loginResponse);
-    }else if(response.password === req.params.password && response.profile === req.params.profile){
-        loginResponse.loggedIn = true;
-        loginResponse.userId = response.userId;
-        loginResponse.username = response.username;
-        loginResponse.password = response.password;
-        res.send(loginResponse);
-    }else if(response.password !== req.params.password){
-        loginResponse.loggedIn = false;
-        loginResponse.error = "Incorrect Password";
-        res.send(loginResponse);
-    }else if(response.profile !== req.params.profile){
-        loginResponse.loggedIn = false;
-        loginResponse.error = "Profile Type Incorrect";
-        res.send(loginResponse);
-    }
-})
-.catch((err) =>{
-    console.log(err)
-});
+        if(!response){
+            loginResponse.loggedIn = false;
+            loginResponse.error = "Username Not Found";
+            res.send(loginResponse);
+        }else if(response.password === req.params.password && response.profile === req.params.profile){
+            loginResponse.loggedIn = true;
+            loginResponse.userId = response.userId;
+            loginResponse.username = response.username;
+            loginResponse.password = response.password;
+            res.send(loginResponse);
+        }else if(response.password !== req.params.password){
+            loginResponse.loggedIn = false;
+            loginResponse.error = "Incorrect Password";
+            res.send(loginResponse);
+        }else if(response.profile !== req.params.profile){
+            loginResponse.loggedIn = false;
+            loginResponse.error = "Profile Type Incorrect";
+            res.send(loginResponse);
+        }
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
 })
 
 /* =========================================== UPDATE TRAINER DETAILS ================================================ */

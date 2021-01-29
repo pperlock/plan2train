@@ -5,9 +5,9 @@ import {DndProvider} from 'react-dnd';
 
 
 import Intro from './Pages/Intro/Intro';
-import Login from './Pages/Login/Login';
 import Trainer from './Pages/Trainer/Trainer';
 import Client from './Pages/Client/Client';
+import EmptyPage from './Pages/EmptyPage/EmptyPage';
 
 function App() {
   return (
@@ -16,13 +16,19 @@ function App() {
           <BrowserRouter>
               <Switch>
                   <Route path="/" exact component={Intro}/>  {/* // make an axios call to get username and id on sign in*/}
-                  <Route path="/trainerlogin" component={Login}/>
-                  <Route path="/clientlogin" component={Login}/>
-                  <Route path="/trainer/:username/:trainerId/programs/:programId" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  {/* Trainer - userprofile */}
                   <Route path="/trainer/:username/:trainerId" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  {/* Trainer - programs */}
+                  <Route path="/trainer/:username/:trainerId/programs" exact render={(props)=>(<EmptyPage {...props}/>)}/>
+                  <Route path="/trainer/:username/:trainerId/programs/:programId" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  {/* Trainer - clients */}
+                  <Route path="/trainer/:username/:trainerId/clients" exact render={(props)=>(<EmptyPage {...props}/>)}/>
                   <Route path="/trainer/:username/:trainerId/clients/:clientId/profile" exact render={(props)=>(<Trainer {...props}/>)}/>
                   <Route path="/trainer/:username/:trainerId/clients/:clientId/lessons" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  {/* Trainer - schedule */}
                   <Route path="/schedule" render={(props)=>(<Trainer {...props}/>)}/>
+                  
+                  {/* Client */}
                   <Route path="/trainer/:username/:trainerId/client/:username/:clientId" exact render={(props)=>(<Client {...props}/>)}/>
 
               </Switch>

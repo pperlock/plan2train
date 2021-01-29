@@ -47,7 +47,9 @@ class SideBar extends React.Component {
 
         const {trainerId, trainerName, programs, clients, match} = this.props;
 
-        const defaultClientId = clients ? clients[0].userId : match.params.clientId
+        const defaultClientId = (clients && clients.length !==0) ? clients[0].userId : match.params.clientId
+        console.log(programs);
+
 
         return (
                 <>
@@ -73,12 +75,12 @@ class SideBar extends React.Component {
                                 </li>
                             </Link>
                             {programs &&
-                                <Link to={`/trainer/${trainerName}/${trainerId}/programs/${programs[0].id}`}>
+                                <Link to= {programs.length === 0 ? `/trainer/${trainerName}/${trainerId}/programs` : `/trainer/${trainerName}/${trainerId}/programs/${programs[0].id}`}>
                                     <li id="programs-link" className="sidebar__menu-link"><img id="programs-icon" className="sidebar__menu-icon"src="/icons/programs-icon.svg" alt="list icon"/>Programs</li>
                                 </Link>
                             }
                             {clients &&
-                                <Link to={`/trainer/${trainerName}/${trainerId}/clients/${defaultClientId}/profile`}>
+                                <Link to= {clients.length === 0 ? `/trainer/${trainerName}/${trainerId}/clients` : `/trainer/${trainerName}/${trainerId}/clients/${defaultClientId}/profile`}>
                                     <li id="clients-link" className="sidebar__menu-link"><img  id="clients-icon" className="sidebar__menu-icon" src="/icons/clients-icon.svg" alt="clients icon"/>Clients</li>
                                 </Link>
                             }

@@ -24,7 +24,6 @@ class LoginModal extends React.Component {
 
         axios.get(`http://localhost:8080/user/${profile}/${event.target.username.value}/${event.target.password.value}`)
             .then(res =>{
-                console.log(res.data);
                 this.setState({loginResponse:res.data})
             })
             .catch(err =>{
@@ -48,7 +47,14 @@ class LoginModal extends React.Component {
             fname:fname.value,
             lname:lname.value
         }
-        console.log(newTrainer);
+
+        axios.post(`http://localhost:8080/addTrainer`, newTrainer)
+        .then(res =>{
+            this.setState({loginResponse:res.data})
+        })
+        .catch(err =>{
+            console.log(err);
+        })
     }
 
     render(){
