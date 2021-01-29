@@ -50,16 +50,17 @@ app.post('/addTrainer', (req,res)=>{
             fname,
             lname,
             email,
-            phone:"",
-            address:"",
-            city:"",
-            province:"",
-            country:"",
-            postal:""
+            phone:"Phone Number",
+            address:"Street Address",
+            city:"City",
+            province:"Province",
+            country:"Country",
+            postal:"Postal"
         },
         company:{
-            name:"",
-            description:""
+            name:"Add Company Name",
+            description:"Add Company Description",
+            logo:""
         },
         social:{
             facebook:"",

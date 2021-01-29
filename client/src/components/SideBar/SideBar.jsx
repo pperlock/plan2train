@@ -48,7 +48,7 @@ class SideBar extends React.Component {
         const {trainerId, trainerName, programs, clients, match} = this.props;
 
         const defaultClientId = (clients && clients.length !==0) ? clients[0].userId : match.params.clientId
-        console.log(programs);
+        // console.log(programs);
 
 
         return (

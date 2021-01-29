@@ -12,7 +12,7 @@ import EmptyPage from '../EmptyPage/EmptyPage';
 
 class Trainer extends React.Component{
     
-    state={files:null, username:this.props.match.params.username, trainerId: this.props.match.params.trainerId, userProfile:null, programs:null, clients:null, updated:false}
+    state={files:null, username:this.props.match.params.username, trainerId: this.props.match.params.trainerId, userProfile:null, programs:[], clients:[], updated:false, empty:false}
 
 
     componentDidMount(){
@@ -96,7 +96,9 @@ class Trainer extends React.Component{
         
         axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addProgram`, newProgram)
         .then(res =>{
-            this.setState({programs:[...this.state.programs, res.data]})
+            this.setState({programs:[...this.state.programs, res.data]},()=>{
+                this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${res.data.id}`)
+            })
         })
         .catch(err=>{
             console.log(err);
@@ -111,8 +113,14 @@ class Trainer extends React.Component{
 
         axios.delete(`http://localhost:8080/program/${this.props.match.params.programId}`)
         .then(res =>{
-            this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${this.state.programs[0].id}`)
-            this.setState({updated:true});//trigger the component did update to pull updated data from db
+            // const programsLength = this.state.programs.length-1;
+            this.setState({updated:true},()=>{
+                if((this.state.programs.length - 1) === 0){
+                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs`)
+                }else{
+                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${this.state.programs[0].id}`)
+                }
+            });//trigger the component did update to pull updated data from db
         })
         .catch(err=>{
             console.log(err);
@@ -190,7 +198,10 @@ class Trainer extends React.Component{
         axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
         .then(res =>{
             console.log(res.data)
-            this.setState({clients:[...this.state.clients, res.data]})
+            this.setState({clients:[...this.state.clients, res.data]},()=>{
+                this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
+            })
+            
         })
         .catch(err=>{
             console.log(err);
@@ -203,8 +214,13 @@ class Trainer extends React.Component{
         
         axios.delete(`http://localhost:8080/client/${clientId}`)
         .then(res =>{
-            this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.state.clients[0].userId}/profile`)
-            this.setState({updated:true});//trigger the component did update to pull updated data from db
+            this.setState({updated:true},()=>{
+                if((this.state.clients.length - 1) === 0){
+                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients`)
+                }else{
+                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.state.clients[0].userId}/profile`)
+                }
+            });
         })
         .catch(err=>{
             console.log(err);
@@ -267,13 +283,14 @@ class Trainer extends React.Component{
  
         const {match} = this.props;
         // console.log(this.state.programs)
+        // console.log(this.state.clients)
         // console.log(this.state.userProfile)
         // console.log(this.state.username);
         // console.log(this.state.trainerId)
 
         return (
             <>
-                {this.state.userProfile && 
+                {this.state.userProfile  &&  
                     <SideBar
                         clients={this.state.clients} 
                         programs={this.state.programs} 
@@ -282,7 +299,21 @@ class Trainer extends React.Component{
                         trainerName={this.state.username}
                     />}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/programs") && 
-                    <EmptyPage />}
+                    <EmptyPage 
+                        match={match}
+                        list={this.state.programs} 
+                        onSubmit={this.addProgram}
+                        programs={this.state.programs}
+                    />}
+
+                {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/clients") && 
+                    <EmptyPage 
+                        match={match}
+                        list={this.state.clients}
+                        onSubmit={this.addClient}
+                        programs={this.state.programs}
+                    />}
+                
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/programs/:programId") && 
                     <Programs 
                         programs={this.state.programs} 
@@ -292,7 +323,7 @@ class Trainer extends React.Component{
                         deleteProgram={this.deleteProgram}
                         addResource={this.addResource} 
                         deleteResource={this.deleteResource}   
-                        />}
+                    />}
                 {(this.state.clients && match.path==="/trainer/:username/:trainerId/clients/:clientId/profile") && 
                     <Clients {...this.props} 
                         programs={this.state.programs} 
@@ -307,7 +338,6 @@ class Trainer extends React.Component{
                     <Clients {...this.props} 
                         programs={this.state.programs} 
                         clients={this.state.clients} 
-                        // addNote={this.addNote}
                         addClient={this.addClient}
                         deleteClient={this.deleteClient}
                         />}

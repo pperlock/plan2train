@@ -119,7 +119,7 @@ class Programs extends React.Component {
                                 modalName = "delete" 
                                 buttonText="Delete" 
                                 buttonType="x"
-                                onSubmitTrainer={this.props.deleteProgram}
+                                onSubmit={this.props.deleteProgram}
                                 deleteString= {program.name}
                                 deleteId={program.id}
                             />

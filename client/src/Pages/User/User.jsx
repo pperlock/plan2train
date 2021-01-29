@@ -9,7 +9,7 @@ function User({user, updateUserProfile}) {
         // console.log(userProfile);
     const {lname,fname,username,password,email,phone,address,city,province,country,postal} = user.contact;
     const {facebook, twitter, instagram, linkedIn} = user.social;
-    const {name, description} = user.company;
+    const {name, description, logo} = user.company;
     const hiddenPassword = password.split("").map(character => "*");
     
 
@@ -18,7 +18,7 @@ function User({user, updateUserProfile}) {
             <p className="user-profile__type">Profile: Trainer</p>
             <div className="user-profile__bottom">
                 <div className="user-profile__description">
-                    <div className="user-profile__description-logo-container"><img src="/images/companyLogo2.png" alt ="company logo" className="user-profile__description-logo"/></div>
+                    <div className="user-profile__description-logo-container"><img src={logo} alt ="company logo" className="user-profile__description-logo"/></div>
                     <div className="user-profile__description-content">
                         <p className="user-profile__description-company">{name}</p>
                         <p className="user-profile__description-description">{description}</p>
@@ -60,7 +60,9 @@ function User({user, updateUserProfile}) {
                         </div>
                     </div>
 
-                    <ModalContainer modalName = "updateUser" modalType = "update" buttonText="Update" buttonType="accent" information={user} onSubmit={updateUserProfile}/>
+                    <div className="user-profile__update">
+                        <ModalContainer modalName = "updateUser" modalType = "update" buttonText="Update" buttonType="image" url="/icons/user-edit.svg" information={user} onSubmit={updateUserProfile}/>
+                    </div>
 
                 </div>
                 

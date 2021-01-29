@@ -19,10 +19,10 @@ function App() {
                   {/* Trainer - userprofile */}
                   <Route path="/trainer/:username/:trainerId" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - programs */}
-                  <Route path="/trainer/:username/:trainerId/programs" exact render={(props)=>(<EmptyPage {...props}/>)}/>
+                  <Route path="/trainer/:username/:trainerId/programs" exact render={(props)=>(<Trainer {...props}/>)}/>
                   <Route path="/trainer/:username/:trainerId/programs/:programId" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - clients */}
-                  <Route path="/trainer/:username/:trainerId/clients" exact render={(props)=>(<EmptyPage {...props}/>)}/>
+                  <Route path="/trainer/:username/:trainerId/clients" exact render={(props)=>(<Trainer {...props}/>)}/>
                   <Route path="/trainer/:username/:trainerId/clients/:clientId/profile" exact render={(props)=>(<Trainer {...props}/>)}/>
                   <Route path="/trainer/:username/:trainerId/clients/:clientId/lessons" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - schedule */}

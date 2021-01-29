@@ -1,5 +1,26 @@
 @import '../../styles/globalImports.scss';
 
 .empty{
-    margin-left:400px;
+    padding-left:300px;
+    width:100vw;
+    height:100vh;
+    background-size:cover;
+    &__message{
+        display:flex;
+        align-items:flex-start;
+        padding-left:300px;
+        position:absolute;
+        top:32px;
+        left:160px;
+
+        &-text{
+            margin-top:20px;
+            text-align:center;
+        }
+        
+        &-image{
+            width:70px;
+            transform: scaleX(-1) rotate(90deg);
+        }
+    }
 }

@@ -62,9 +62,12 @@
     }
 
     &__update{
-        @include buildButton(70px,40px, $accent-color, white);
-        font-size:16px;
+        width:40px;
+        height:40px;
         align-self:flex-end;
+        &:hover{
+            opacity:0.7;
+        }
     }
 
     &__social{
