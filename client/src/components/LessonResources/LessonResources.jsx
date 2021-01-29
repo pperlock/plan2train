@@ -3,7 +3,7 @@ import {useDrop} from 'react-dnd';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-// import './ClientLessons.scss'
+import './LessonResources.scss'
 
 import DNDList from '../../components/DNDList/DNDList';
 import AppliedResources from '../../components/AppliedResources/AppliedResources';
@@ -35,6 +35,16 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
 
     // update the resources being displayed when a program is chosen
     const updateDisplayed = (program)=>{
+
+        if (document.querySelector(".active-program")){
+            const previouslyActiveLink = document.querySelector(".active-program");
+            previouslyActiveLink.classList.remove("active-program");
+            console.log(previouslyActiveLink);
+            
+            const activeLinkElement = document.getElementById(program.id);
+            activeLinkElement.classList.add("active-program");
+            console.log(activeLinkElement);
+        }
         setResourceList(program.resources);
     }
 
@@ -112,7 +122,12 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
                 {/* <p>Available Resources</p> */}
                 <div className="current-lesson__available-content">
                     <ul className="current-lesson__available-programs"> 
-                        {programs.map(program=> <Link key={program.id} to={`/trainer/${match.params.username}/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}><li onClick={()=>updateDisplayed(program)} className="current-lesson__available-programs-item">{program.name}</li></Link>)}
+                        {programs.map((program,i) => 
+                            <Link key={program.id} to={`/trainer/${match.params.username}/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}>
+                                <li id={program.id} onClick={()=>updateDisplayed(program)} 
+                                    className={i===0 ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
+                                </li>
+                            </Link>)}
                     </ul>
                         <div ref={drop} className="list current-lesson__available-resources">
                             {displayResources.filter(resource => resource.applied === false)

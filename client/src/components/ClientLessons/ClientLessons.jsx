@@ -66,8 +66,8 @@ class ClientLessons extends React.Component {
 
     componentDidUpdate(prevProp, prevState){
         console.log("client-lessons - componentUpdated")
-        console.log(prevProp);
-        console.log(prevState);
+        // console.log(prevProp);
+        // console.log(prevState);
         if(prevState.currentLesson.location.address !==this.state.currentLesson.location.address){
             this.geoCode();
         }
@@ -231,10 +231,11 @@ class ClientLessons extends React.Component {
         .then(res =>{
             
             const clientCopy = {...this.state.currentClient};
+            const lessonCopy = {...this.state.currentLesson};
             clientCopy.lessons.map(lesson => lesson.current = (lesson.id === this.state.currentLesson.id) ? true : false);
+            lessonCopy.current = true;
             console.log(clientCopy);
-            
-            this.setState({currentClient:clientCopy});
+            this.setState({currentClient:clientCopy, currentLesson:lessonCopy});
         })
         .catch(err=>{
             console.log(err);
@@ -247,6 +248,8 @@ class ClientLessons extends React.Component {
         const lessons = [...this.state.currentClient.lessons];
         const currentClient = {...this.state.currentClient};
         const currentLesson = {...this.state.currentLesson};
+
+        console.log(currentLesson.current);
 
         console.log(this.props);
 
@@ -266,13 +269,15 @@ class ClientLessons extends React.Component {
                     {lessons.map(lesson=> 
                         <GridList 
                             key={lesson.id} 
-                            content={{name:lesson.name, date: lesson.date, time:lesson.time}}
+                            content={{name:lesson.name, date: lesson.date, time:lesson.time, current:lesson.current}}
                             id={lesson.id} 
                             modalName={!lesson.current ? "delete" : "noDelete"}
                             deleteBtn={true}
                             deleteType="modal" 
                             deleteString = {!lesson.current ? lesson.name : "Cannot Delete Current Lesson"}
                             deleteFunction={this.deleteLesson}
+                            onClick={this.updateCurrentLesson}
+                            updateStatus={this.updateStatus}
                         />)}
                         <p className="lessons__list-new" onClick={this.addNewLesson}> + New </p>
                     </div>
@@ -287,21 +292,29 @@ class ClientLessons extends React.Component {
                             : 
                             <p className="current-lesson__top-status" onClick={this.updateStatus}>Mark as Current</p>} */}
 
-                            <div className="current-lesson__top-status">
-                                <input className="current-lesson__top-status-check" type="checkbox" id="current"/>
-                                <div className="slidinggroove"></div>
+                            {/* <div className="current-lesson__top-status">
+                                <input onClick={this.updateStatus} className="current-lesson__top-status-check" type="checkbox" id="current"/>
+                                <div className={currentLesson.current ? "slidinggroove slidinggroove-on" : "slidinggroove"}></div>
                                 <label className="current-lesson__top-status" htmlFor="current" name="current"><p className="current-lesson__top-status-label"> Current</p></label>
-                            </div>
+                            </div> */}
 
-                            <div className="current-lesson__top-left">
-                                {/* shows the details for the lesson */}
-                                <div className="current-lesson__top-details">
-                                    <p>{`Location: ${currentLesson.location.name}`}</p>
-                                    <p>{`Date: ${currentLesson.date}`}</p>
-                                    <p>{`Time: ${currentLesson.time}`}</p>
-
-                                    
-                                    {/* modal to update the lesson details */}
+                            {/* shows the details for the lesson */}
+                            <div className="current-lesson__top-details">
+                                <div className="current-lesson__top-details-text">
+                                    <div className="current-lesson__top-details-where">
+                                        <p className="current-lesson__top-details-title">Where</p>
+                                        <p className="current-lesson__top-details-item">{currentLesson.location.name}</p>
+                                        <p className="current-lesson__top-details-item">{`${currentLesson.location.address}, ${currentLesson.location.city}`}</p>
+                                    </div>
+                                    <div className="current-lesson__top-details-when">
+                                        <p className="current-lesson__top-details-title">When</p>
+                                        <p className="current-lesson__top-details-item">{`Date: ${currentLesson.date}`}</p>
+                                        <p className="current-lesson__top-details-item">{`Time: ${currentLesson.time}`}</p>
+                                    </div>
+                                    {/* <p>{currentLesson.current ? "current" : "Not"}</p> */}
+                                </div>
+                                {/* modal to update the lesson details */}
+                                <div className="current-lesson__top-details-edit">
                                     <ModalContainer 
                                         modalType = "update" 
                                         modalName = "modifyLesson" 
@@ -311,7 +324,9 @@ class ClientLessons extends React.Component {
                                         information={currentLesson}
                                     />
                                 </div>
-                            <div className = "client__contact-map" style={{width:"346px", height:"253px"}}>
+                            </div>
+                            
+                            <div className = "client__contact-map" style={{width:"346px", height:"268px"}}>
                                 <Map
                                     googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`}
                                     loadingElement={<div style={{height: "100%"}} />}
@@ -319,7 +334,6 @@ class ClientLessons extends React.Component {
                                     mapElement={<div style={{height: "100%"}} />}
                                     mapLocation={this.state.mapLocation}
                                 />
-                            </div>
                             </div>
                         </div>
 
