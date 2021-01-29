@@ -69,6 +69,7 @@ class ModalContainer extends React.Component {
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
                         onClickOutside={this.onClickOutside}
+                        toggleScrollLock={this.toggleScrollLock}
                     />}
 
                 {(this.state.isShown && modalType ==="delete") && 

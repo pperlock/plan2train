@@ -37,7 +37,7 @@ class Programs extends React.Component {
     uploadType = (event) => {
         const type = event.target.value;
         if (type ==="file"){
-                console.log( this.fileInput)
+                console.log(this.fileInput)
                 this.fileInput.click()
         }else{
             this.setState({uploadType:type, showRadio:false})
@@ -52,12 +52,15 @@ class Programs extends React.Component {
 
     // fired by clicking the upload button
     fileUpload=(event,uploadType)=>{
+        console.log(uploadType)
         event.preventDefault();
-        const selectedIndex = event.target.uploadType.options.selectedIndex
-        const selectedType = event.target.uploadType.options[selectedIndex].value;
         
+       
         // if the resource to be added is a file the save it to firebase and send the resulting url to db
         if (uploadType === "file"){
+            const selectedIndex = event.target.uploadType.options.selectedIndex
+            const selectedType = event.target.uploadType.options[selectedIndex].value;
+            
             let bucketName = this.props.programs[0].trainerId;
             let file = this.state.selectedFile;
             let storageRef = firebase.storage().ref(`/${bucketName}/${file.name}`);
@@ -99,7 +102,8 @@ class Programs extends React.Component {
         const {programs, match, addProgram}=this.props;
         const program = programs.find(program=>program.id===match.params.programId)
 
-        console.log(programs);
+        console.log(program);
+        console.log(programs[0]);
 
 
         
@@ -124,29 +128,31 @@ class Programs extends React.Component {
                                 deleteId={program.id}
                             />
 
-                            {program.resources.length === 0 && 
-                                <div onClick={()=>this.setState({showRadio:true})} className="empty-container">
-                                    <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
-                                    <p>Click to Add Resources</p>
-                                </div>}  
-
                         </div>   
                     {/* </div> */}
-                        <div className="gridlist">
-                            {program.resources.map(resource=> 
-                                <GridList 
-                                    key={resource.id} 
-                                    content={resource.name}
-                                    resourceType={resource.type} 
-                                    id={resource.id} 
-                                    link={resource.url} 
-                                    description={resource.type} 
-                                    deleteBtn={true}
-                                    deleteType="modal" 
-                                    deleteFunction={this.props.deleteResource}
-                                />)}
-                        </div>
-
+                        
+                            {program.resources.length === 0 ? 
+                                    <div onClick={()=>this.setState({showRadio:true})} className="empty-container empty-resources">
+                                        {/* <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img> */}
+                                        <p>Choose a Resource Type Below to Add Resources</p>
+                                    </div>
+                                    :  
+                                <div className="gridlist">
+                                    {program.resources.map(resource=> 
+                                        <GridList 
+                                            key={resource.id} 
+                                            content={resource.name}
+                                            resourceType={resource.type} 
+                                            id={resource.id} 
+                                            link={resource.url} 
+                                            description={resource.type} 
+                                            deleteBtn={true}
+                                            deleteType="modal" 
+                                            deleteFunction={this.props.deleteResource}
+                                        />)}
+                                </div>
+                            }
+  
                     <div className="resource__add">
                         {/* a reference is a way to reference another element in the dom */}
                         {/* ref takes a function that binds a property of our class to a reference of this input */}        

@@ -109,31 +109,32 @@ class ClientProfile extends React.Component {
                         </div>
                     </div>
                     <div className = "client__contact-map">
-                            <Map
-                                googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`}
-                                loadingElement={<div style={{height: "100%"}} />}
-                                containerElement={<div style={{height: "100%"}} />}
-                                mapElement={<div style={{height: "100%"}} />}
-                                mapLocation={this.state.mapLocation}
-                            />
+                        <Map
+                            googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`}
+                            loadingElement={<div style={{height: "100%"}} />}
+                            containerElement={<div style={{height: "100%"}} />}
+                            mapElement={<div style={{height: "100%"}} />}
+                            mapLocation={this.state.mapLocation}
+                        />
                     </div>
                 </div>
 
                 <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
                     <div className = "client__notes-body">
-                        <p className="client__notes-title">Things to Remember ...</p>
+                        <p className="client__notes-title">Notes to Self ...</p>
                         <div className="client__notes-text"> {this.state.currentClient.notes}</div>
+                    </div>
                         <div className="client__notes-submit">
                             <ModalContainer 
                                 modalType = "note" 
                                 modalName = "addNote" 
-                                buttonText="Add" 
-                                buttonType="accent"
+                                url="/icons/edit-icon.svg" 
+                                buttonType="image"
                                 information = {this.state.currentClient.notes}
                                 onSubmit={this.addNote} 
                             />
                         </div>
-                    </div>
+                    
                  </div>
             </div>
         )

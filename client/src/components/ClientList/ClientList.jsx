@@ -9,7 +9,6 @@ function ClientList({list, match, animate, onSubmit, programs}) {
     // console.log(list);
     // console.log(match.path)
     const page = match.path.split("/")[4];
-    console.log(page);
     
     return (
 

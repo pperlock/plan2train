@@ -93,7 +93,6 @@
                 margin-bottom:5px;
             }
 
-            
             &-edit{
                 align-self:flex-end;
                 width:30px;
@@ -126,17 +125,6 @@
     margin-bottom:10px;
     &-resources{
         text-align:center;
-    }
-}
-
-.empty-container{
-    border:5px dashed  rgba(177, 164, 148, 0.3);
-    text-align:center;
-    color: rgba(177, 164, 148, 0.8);
-
-    &__icon{
-        width:30%;
-        opacity:0.3;
     }
 }
 

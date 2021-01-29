@@ -21,55 +21,59 @@ class ClientLessons extends React.Component {
         currentClient:this.props.currentClient, 
         currentLesson: this.props.currentClient.lessons.find(lesson=>lesson.current === true), //might want to change this to last on the list -
         availablePrograms:this.props.programs,
-        displayResources:this.props.programs[0].resources, 
+        displayResources: this.props.programs ? [] : this.props.programs[0].resources, 
         showAddNote:false, showAddHomework:false, animateBar:true,
         mapLocation:null
     }
 
     componentDidMount(){
 
-        this.geoCode();
+        if(this.state.currentLesson){
+            this.geoCode();
 
-        //gets an array of all the resource ids that have been applied to all lessons
-        let allApplied = [];
-        const lessons = this.state.currentClient.lessons;
-        lessons.map(lesson=> lesson.resources.map(resource => allApplied.push(resource)));
+            //gets an array of all the resource ids that have been applied to all lessons
+            let allApplied = [];
+            const lessons = this.state.currentClient.lessons;
+            lessons.map(lesson=> lesson.resources.map(resource => allApplied.push(resource)));
+            
+            //adds a key name applied to each resource for all trainer programs
+            const programs = this.props.programs;
+            programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
+
         
-        //adds a key name applied to each resource for all trainer programs
-        const programs = this.props.programs;
-        programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
+            const copyClient = {...this.props.currentClient};
 
-       
-        const copyClient = {...this.props.currentClient};
-
-        //adds the resource information for each lesson resource and adds a value of true for applied to the programs- stored only as ids in the client document in db
-        this.props.programs.forEach(program=>
-            program.resources.forEach(programResource=>
-                copyClient.lessons.forEach(lesson => 
-                    lesson.resources.forEach((resource, i)=> {
-                        if(resource === programResource.id){
-                            //sets a value of true for applied resources
-                            programResource.applied=true;
-                            //remove the single id
-                            lesson.resources.splice(i,1);
-                            //replace the resource with the object
-                            lesson.resources.push(programResource);
-                        }  
-                    })
-                )          
+            //adds the resource information for each lesson resource and adds a value of true for applied to the programs- stored only as ids in the client document in db
+            this.props.programs.forEach(program=>
+                program.resources.forEach(programResource=>
+                    copyClient.lessons.forEach(lesson => 
+                        lesson.resources.forEach((resource, i)=> {
+                            if(resource === programResource.id){
+                                //sets a value of true for applied resources
+                                programResource.applied=true;
+                                //remove the single id
+                                lesson.resources.splice(i,1);
+                                //replace the resource with the object
+                                lesson.resources.push(programResource);
+                            }  
+                        })
+                    )          
+                )
             )
-        )
-        
-        // sets the state to reflect the modified objects
-        this.setState({currentClient:copyClient, availablePrograms:programs});
+            
+            // sets the state to reflect the modified objects
+            this.setState({currentClient:copyClient, availablePrograms:programs});
+        }
     }
 
     componentDidUpdate(prevProp, prevState){
         console.log("client-lessons - componentUpdated")
         // console.log(prevProp);
         // console.log(prevState);
-        if(prevState.currentLesson.location.address !==this.state.currentLesson.location.address){
-            this.geoCode();
+        if(this.state.currentLesson && prevState.currentLesson){
+            if(prevState.currentLesson.location.address !==this.state.currentLesson.location.address){
+                this.geoCode();
+            }
         }
     }
 
@@ -255,13 +259,14 @@ class ClientLessons extends React.Component {
         console.log(currentLesson.current);
 
         console.log(this.props);
+        console.log(lessons.length);
 
-        if(lessons.length === 0){
+        if(lessons.length===0){
             return(                                     
                 <div onClick={this.addNewLesson} className="empty-container">
                     <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
                     <p>Click to Add a Lesson</p>
-            </div>
+                </div>
             )
         }else{
             return (
@@ -353,16 +358,16 @@ class ClientLessons extends React.Component {
                                 <div className = "client__notes-body">
                                     <p className="client__notes-title">Lesson Notes ...</p>
                                     <div className="client__notes-text"> {this.state.currentLesson.notes}</div>
-                                    <div className="client__notes-submit">
-                                        <ModalContainer 
-                                            modalType = "note" 
-                                            modalName = "addNote" 
-                                            buttonText="Add" 
-                                            buttonType="accent"
-                                            information = {this.state.currentLesson.notes}
-                                            onSubmit={this.addListItem} 
-                                        />
-                                    </div>
+                                </div>
+                                <div className="client__notes-submit">
+                                    <ModalContainer 
+                                        modalType = "note" 
+                                        modalName = "addNote" 
+                                        buttonType="image"
+                                        url="/icons/edit-icon.svg" 
+                                        information = {this.state.currentLesson.notes}
+                                        onSubmit={this.addListItem} 
+                                    />
                                 </div>
                             </div>
 
@@ -370,16 +375,16 @@ class ClientLessons extends React.Component {
                                 <div className = "client__notes-body">
                                     <p className="client__notes-title">Homework ...</p>
                                     <div className="client__notes-text"> {this.state.currentLesson.homework}</div>
-                                    <div className="client__notes-submit">
-                                        <ModalContainer 
-                                            modalType = "note" 
-                                            modalName = "addHomework" 
-                                            buttonText="Add" 
-                                            buttonType="accent"
-                                            information = {this.state.currentLesson.homework}
-                                            onSubmit={this.addListItem} 
-                                        />
-                                    </div>
+                                </div>    
+                                <div className="client__notes-submit">
+                                    <ModalContainer 
+                                        modalType = "note" 
+                                        modalName = "addHomework" 
+                                        buttonType="image"
+                                        url="/icons/edit-icon.svg" 
+                                        information = {this.state.currentLesson.homework}
+                                        onSubmit={this.addListItem} 
+                                    />
                                 </div>
                             </div>
                         </div>

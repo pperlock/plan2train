@@ -16,13 +16,14 @@ import AppliedResources from '../../components/AppliedResources/AppliedResources
  */
 
 function LessonResources({programs, currentLesson, currentClient, match}) {
+    console.log(programs)
 
     const ItemTypes = {
         CARD:'card',
     };
 
     //resources that are currently being displayed - change based on program chosen
-    const[displayResources, setResourceList] = useState(programs[0].resources);
+    const[displayResources, setResourceList] = useState(programs.length!==0 ? programs[0].resources : []);
 
     //current lesson being rendered - changed based on drag and drop from available resources 
     const[currentLessonResources, updateCurrentLesson] = useState(currentLesson);
@@ -116,29 +117,42 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
         }),
     });
 
-    return (
-        <div className="current-lesson__resources">  
-            <div className="current-lesson__available">
-                {/* <p>Available Resources</p> */}
-                <div className="current-lesson__available-content">
-                    <ul className="current-lesson__available-programs"> 
-                        {programs.map((program,i) => 
-                            <Link key={program.id} to={`/trainer/${match.params.username}/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}>
-                                <li id={program.id} onClick={()=>updateDisplayed(program)} 
-                                    className={i===0 ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
-                                </li>
-                            </Link>)}
-                    </ul>
-                        <div ref={drop} className="list current-lesson__available-resources">
-                            {displayResources.filter(resource => resource.applied === false)
-                                .map(resource=> <DNDList key={resource.id} content={resource.name} link={resource.link} id={resource.id}/>)}
-                        </div>                
-                </div>
+    if(programs.length===0){
+        return(                                     
+            // <div onClick={this.addNewLesson} className="empty-container">
+            <div className="empty-container empty-lesson__resources">
+                {/* <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img> */}
+                <h2>You Don't have any Programs Yet!</h2>
+                <Link to={`/trainer/${match.params.username}/${match.params.trainerId}/programs`} className="empty-lesson__resources-link">Click Here to Add Some Programs and Resources</Link>
             </div>
-            {/* applied resources component set up as a drop component */}
-            <AppliedResources currentLesson={currentLessonResources} markAsDone={markAsDone}/>
-        </div>
-    )
+        )
+    
+    }else{
+
+        return (
+            <div className="current-lesson__resources">  
+                <div className="current-lesson__available">
+                    {/* <p>Available Resources</p> */}
+                    <div className="current-lesson__available-content">
+                        <ul className="current-lesson__available-programs"> 
+                            {programs.map((program,i) => 
+                                <Link key={program.id} to={`/trainer/${match.params.username}/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}>
+                                    <li id={program.id} onClick={()=>updateDisplayed(program)} 
+                                        className={i===0 ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
+                                    </li>
+                                </Link>)}
+                        </ul>
+                            <div ref={drop} className="list current-lesson__available-resources">
+                                {displayResources.filter(resource => resource.applied === false)
+                                    .map(resource=> <DNDList key={resource.id} content={resource.name} link={resource.link} id={resource.id}/>)}
+                            </div>                
+                    </div>
+                </div>
+                {/* applied resources component set up as a drop component */}
+                <AppliedResources currentLesson={currentLessonResources} markAsDone={markAsDone}/>
+            </div>
+        )
+    }
 }
 
 export default LessonResources

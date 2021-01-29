@@ -192,3 +192,14 @@ ul{
         border-bottom:1px solid grey;
     }
   }
+
+  .empty-container{
+    border:5px dashed  rgba(177, 164, 148, 0.3);
+    text-align:center;
+    color: rgba(177, 164, 148, 0.8);
+
+    &__icon{
+        width:30%;
+        opacity:0.3;
+    }
+}

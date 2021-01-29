@@ -28,7 +28,8 @@ class LoginModal extends React.Component {
             })
             .catch(err =>{
                 console.log(err);
-            })   
+            })  
+        this.props.toggleScrollLock(); 
     }
 
     toggleLoginForm = ()=>{
@@ -55,6 +56,7 @@ class LoginModal extends React.Component {
         .catch(err =>{
             console.log(err);
         })
+        this.props.toggleScrollLock(); 
     }
 
     render(){
@@ -89,8 +91,8 @@ class LoginModal extends React.Component {
                             </svg>
                         </button>
                         <div className="modal-body modal-login__body">
-                            {this.state.showSignIn &&<LoginForm onSubmit={this.checkCredentials} profile={modalType} signIn={this.state.showSignIn}/>}
-                            {this.state.showSignUp && <LoginForm onSubmit={this.createTrainer} profile={modalType} signIn={this.state.showSignIn}/>}
+                            {this.state.showSignIn &&<LoginForm onSubmit={this.checkCredentials} profile={modalType} signIn={this.state.showSignIn} closeModal={closeModal}/>}
+                            {this.state.showSignUp && <LoginForm onSubmit={this.createTrainer} profile={modalType} signIn={this.state.showSignIn} closeModal={closeModal}/>}
                             {error && <p className="modal-login__body-error">{error}</p>}  
                             {this.state.noUser && <p className="modal-login__body-error">"Username Not Found"</p>}
                             {(modalType === "logintrainer" && this.state.showSignIn) && <button className="modal-login__body-signup" onClick={this.toggleLoginForm}>New to the Community? Click Here to Join Us</button>}

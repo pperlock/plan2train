@@ -44,3 +44,14 @@
     background-color:grey;
     opacity:0.5;
 }
+
+.empty-lesson__resources{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    height:100px;
+    &-link{
+        margin-top:10px;
+        color:$accent-color;
+    }
+}

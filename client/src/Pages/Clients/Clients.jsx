@@ -25,7 +25,7 @@ class Clients extends React.Component {
     state={animateBar:true}
 
     componentDidMount(){
-        // console.log("client-mounted");
+        console.log("client-mounted");
         this.setState({animateBar:false});
     }
 
@@ -101,7 +101,8 @@ class Clients extends React.Component {
                                 modalType = "delete" 
                                 modalName = "delete" 
                                 buttonText="Delete"
-                                buttonType="x" 
+                                buttonType="image"
+                                url="/icons/delete-user.svg" 
                                 onSubmit={this.props.deleteClient}
                                 deleteString={`${fname} ${lname}`}
                                 deleteId={currentClient.userId}

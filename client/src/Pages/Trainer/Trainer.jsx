@@ -118,7 +118,12 @@ class Trainer extends React.Component{
                 if((this.state.programs.length - 1) === 0){
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs`)
                 }else{
+                    const programLoc = this.state.programs.findIndex(program => program.id === programId);
+                    console.log(programLoc)
+                    programLoc !== 0 ? 
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${this.state.programs[0].id}`)
+                    :
+                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${this.state.programs[1].id}`)
                 }
             });//trigger the component did update to pull updated data from db
         })
@@ -210,7 +215,9 @@ class Trainer extends React.Component{
     }
 
     /** ================================================ DELETE CLIENT ================================================*/
-        deleteClient=(clientId)=>{
+    deleteClient=(clientId)=>{
+
+        console.log(this.state.clients)
         
         axios.delete(`http://localhost:8080/client/${clientId}`)
         .then(res =>{
@@ -218,7 +225,11 @@ class Trainer extends React.Component{
                 if((this.state.clients.length - 1) === 0){
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients`)
                 }else{
+                    const programLoc = this.state.clients.findIndex(client => client.userId === clientId);
+                    programLoc !== 0 ? 
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.state.clients[0].userId}/profile`)
+                    :
+                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.state.clients[1].userId}/profile`)
                 }
             });
         })
