@@ -62,19 +62,19 @@ class ClientProfile extends React.Component {
 
     }
 
-    deleteNote=(noteId)=>{
-        axios.delete(`http://localhost:8080/client/${this.state.currentClient.userId}/${noteId}/deleteNote`)
-        .then(res =>{
-            console.log(noteId);
-            const copyClient = {...this.state.currentClient};
-            copyClient.notes = res.data;
-            this.setState({currentClient:copyClient});
-            this.props.updateTrainer();
-        })
-        .catch(err=>{
-            console.log(err);
-        })
-    }
+    // deleteNote=(noteId)=>{
+    //     axios.delete(`http://localhost:8080/client/${this.state.currentClient.userId}/${noteId}/deleteNote`)
+    //     .then(res =>{
+    //         console.log(noteId);
+    //         const copyClient = {...this.state.currentClient};
+    //         copyClient.notes = res.data;
+    //         this.setState({currentClient:copyClient});
+    //         this.props.updateTrainer();
+    //     })
+    //     .catch(err=>{
+    //         console.log(err);
+    //     })
+    // }
 
     render(){
         const {address, city, province, country, postal, email, phone} = this.props.currentClient.userProfile;

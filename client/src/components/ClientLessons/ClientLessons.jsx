@@ -97,15 +97,18 @@ class ClientLessons extends React.Component {
     }
 
     //adds an item to either the homework or the notes lists when the form is submitted
-    addListItem=(event)=>{
-        event.preventDefault();
+    addListItem=(note, list)=>{
+
+        const newItem={
+            note:note
+        }
 
         //determine which form to close based on the target name
-        !!event.target.newNote ? this.setState({showAddNote:false}) : this.setState({showAddHomework:false});
+        // !!event.target.newNote ? this.setState({showAddNote:false}) : this.setState({showAddHomework:false});
     
-        if (!!event.target.newNote){
+        if (list==="addNote"){
             //if the target is the notes section then save it to the appropriate spot in the db
-            const newItem={message:event.target.newNote.value}
+            // const newItem={message:event.target.newNote.value}
             axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addNote`, newItem)
             .then(res =>{
                 const lessonCopy = this.state.currentLesson;
@@ -117,8 +120,8 @@ class ClientLessons extends React.Component {
             })
         }else{
             //if the target is the homework section then save it to the appropriate spot in the db
-            console.log(event);
-            const newItem={message:event.target.newHomework.value}
+            // console.log(event);
+            // const newItem={message:event.target.newHomework.value}
             axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addHomework`, newItem)
             .then(res =>{
                 const lessonCopy = this.state.currentLesson;
@@ -131,30 +134,30 @@ class ClientLessons extends React.Component {
         }
     }
 
-    //deletes an item from either the homework or the notes lists when the form is submitted
-    deleteListItem=(event, list)=>{
-        const lessonCopy = {...this.state.currentLesson};
-        // list variable passed in is used to determine what list to delete the item from
-        if (list==="notes"){
-            axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteNote`)
-            .then(res =>{
-                lessonCopy.notes = res.data;
-                this.setState({currentLesson:lessonCopy});
-            })
-            .catch(err=>{
-                console.log(err);
-            })
-        }else{
-            axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteHomework`)
-            .then(res =>{
-                lessonCopy.homework = res.data;
-                this.setState({currentLesson:lessonCopy});
-            })
-            .catch(err=>{
-                console.log(err);
-            })
-        }
-    }
+    // //deletes an item from either the homework or the notes lists when the form is submitted
+    // deleteListItem=(event, list)=>{
+    //     const lessonCopy = {...this.state.currentLesson};
+    //     // list variable passed in is used to determine what list to delete the item from
+    //     if (list==="notes"){
+    //         axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteNote`)
+    //         .then(res =>{
+    //             lessonCopy.notes = res.data;
+    //             this.setState({currentLesson:lessonCopy});
+    //         })
+    //         .catch(err=>{
+    //             console.log(err);
+    //         })
+    //     }else{
+    //         axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteHomework`)
+    //         .then(res =>{
+    //             lessonCopy.homework = res.data;
+    //             this.setState({currentLesson:lessonCopy});
+    //         })
+    //         .catch(err=>{
+    //             console.log(err);
+    //         })
+    //     }
+    // }
   
     //changes the lesson being rendered when a lesson is clicked from top list
     updateCurrentLesson = (lessonId) =>{
@@ -346,54 +349,38 @@ class ClientLessons extends React.Component {
                 
                         {/* renders the notes and the homework section */}
                         <div className="current-lesson__bottom">
-                            
-                            {/* Notes section */}
-                            <div className="current-lesson__bottom-notes">
-                                    <h2 className="section-title" >Notes</h2>
-                                    {currentLesson.notes.length===0 && 
-                                    <div onClick={()=> {this.showForm("note")}} className="empty-container">
-                                        <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
-                                        <p>Click to Add Homework</p>
-                                    </div>}
-                                    {currentLesson.notes.map(note=><List key={note.id} content={note.message} id={note.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="notes"/>)}
-                                    <form className="client__notes-form" onSubmit={(event)=>this.addListItem(event)}>
-                                        {this.state.showAddNote && 
-                                            <div className="current-lesson__form-input">
-                                                {/* <input className="client__notes-new" type="text" name="newNote" placeholder="New Note"></input> */}
-                                                <textarea className="client__notes-new" form="client__notes-form" wrap="hard" name="newNote" id="newNote" placeholder="New Note" rows="2" cols="20"></textarea>
-                                                <button type="submit" className="current-lesson__submitBtn"> Add </button>
-                                            </div>
-                                        }    
-                                        {!this.state.showAddNote && <p className="current-lesson__addBtn" onClick={()=> {this.showForm("note")}}>+</p>}
-                                    </form>
+                            <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                                <div className = "client__notes-body">
+                                    <p className="client__notes-title">Lesson Notes ...</p>
+                                    <div className="client__notes-text"> {this.state.currentLesson.notes}</div>
+                                    <div className="client__notes-submit">
+                                        <ModalContainer 
+                                            modalType = "note" 
+                                            modalName = "addNote" 
+                                            buttonText="Add" 
+                                            buttonType="accent"
+                                            information = {this.state.currentLesson.notes}
+                                            onSubmit={this.addListItem} 
+                                        />
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="lesson-divider"></div>
-
-                            {/* Homework Section */}
-                            <div className="current-lesson__bottom-homework">
-                                <h2 className="section-title">Homework</h2>
-                                    
-                                {currentLesson.homework.length===0 && 
-                                    <div onClick={()=> {this.showForm("homework")}} className="empty-container">
-                                        <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
-                                        <p>Click to Add Homework</p>
-                                    </div>}
-
-                                {currentLesson.homework.map(item=><List key={item.id} content={item.message} id={item.id} deleteBtn={true} deleteFunction={this.deleteListItem} list="homework"/>)}
-
-                                <form className="client__homework-form" onSubmit={(event)=>this.addListItem(event)}>
-
-
-                                        {this.state.showAddHomework && 
-                                            <div className="current-lesson__form-input">
-                                                {/* <input className="client__notes-new" type="text" name="newHomework" placeholder="New Homework"></input> */}
-                                                <textarea className="client__notes-new" form="client__homework-form" wrap="hard" name="newHomework" id="newHomework" placeholder="New Homework" rows="2" cols="20"></textarea>
-                                                <button className="current-lesson__submitBtn" type="submit"> Add </button>
-                                            </div>
-                                        }
-                                        {!this.state.showAddHomework && <p className="current-lesson__addBtn" onClick={()=> {this.showForm("homework")}}>+</p>}
-                                </form>
+                            <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                                <div className = "client__notes-body">
+                                    <p className="client__notes-title">Homework ...</p>
+                                    <div className="client__notes-text"> {this.state.currentLesson.homework}</div>
+                                    <div className="client__notes-submit">
+                                        <ModalContainer 
+                                            modalType = "note" 
+                                            modalName = "addHomework" 
+                                            buttonText="Add" 
+                                            buttonType="accent"
+                                            information = {this.state.currentLesson.homework}
+                                            onSubmit={this.addListItem} 
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

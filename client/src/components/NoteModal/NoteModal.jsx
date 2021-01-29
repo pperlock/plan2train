@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import "./NoteModal.scss";
 
-function NoteModal({onKeyDown, modalRef, buttonRef, closeModal, onSubmit, information}) {
+function NoteModal({onKeyDown, modalRef, buttonRef, closeModal, onSubmit, information, modalName}) {
 
     const [note, setNote]=useState(information);
 
@@ -15,7 +15,7 @@ function NoteModal({onKeyDown, modalRef, buttonRef, closeModal, onSubmit, inform
 
     const handleSubmit=(event)=>{
         event.preventDefault();
-        onSubmit(note);
+        onSubmit(note,modalName);
         closeModal();
     }
 

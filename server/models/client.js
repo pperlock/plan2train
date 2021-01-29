@@ -36,9 +36,6 @@ const clientSchema = new Schema({
     lessons: {
         type: Array
     },
-    // notes:{
-    //     type:Array
-    // },
     notes:{
         type:String
     },
