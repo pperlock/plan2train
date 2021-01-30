@@ -40,7 +40,7 @@ function Modal({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal,onSub
                         {(modalName ==="updateClient" || modalName==="updateUser") && <PersonalDetailsForm  onSubmit={onSubmit} closeModal={closeModal} information={information} modalName={modalName}/> }
                         {modalName === "addClient" && <NewClientForm onSubmit={onSubmit} closeModal={closeModal} programs={information}/>}
                         {modalName === "addProgram" && <NewProgramForm onSubmit={onSubmit} closeModal={closeModal} />}
-                        {modalName === "modifyLesson" && <LessonDetailsForm onSubmit={onSubmit} closeModal={closeModal} lesson={information} />}
+                        {(modalName === "modifyLesson" || modalName==="addLesson") && <LessonDetailsForm onSubmit={onSubmit} closeModal={closeModal} lesson={information} />}
                     </div>
                 </div>
 

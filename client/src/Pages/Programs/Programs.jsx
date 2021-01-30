@@ -65,10 +65,30 @@ class Programs extends React.Component {
             let file = this.state.selectedFile;
             let storageRef = firebase.storage().ref(`/${bucketName}/${file.name}`);
             let uploadTask = storageRef.put(file);
-            // uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-            //     ()=>{
-            //         let downloadURL = uploadTask.snapshot.getDownloadURL;
-            //     })
+            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                ()=>{
+                    console.log("Uploading ...")
+                },
+                ()=>{
+                    console.log("Upload Unsuccessful");
+                },
+                ()=>{
+                    //let downloadURL = uploadTask.snapshot.getDownloadURL;
+                    let storageLoc = firebase.storage().ref();
+                    storageLoc.child(`/${bucketName}/${file.name}`).getDownloadURL()
+                    .then((url)=>{
+                        const newResource={
+                            name:event.target.uploadName.value,
+                            url:url,
+                            type: selectedType
+                        }
+                        this.props.addResource(newResource, this.props.match.params.programId);
+                    })
+                    .catch(err=>{
+                        console.log(err);
+                    })
+                }   
+            )
             
             let storageLoc = firebase.storage().ref();
             storageLoc.child(`/${bucketName}/${file.name}`).getDownloadURL()
@@ -101,9 +121,6 @@ class Programs extends React.Component {
     render(){
         const {programs, match, addProgram}=this.props;
         const program = programs.find(program=>program.id===match.params.programId)
-
-        console.log(program);
-        console.log(programs[0]);
 
         return (
             <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >
@@ -146,6 +163,7 @@ class Programs extends React.Component {
                                             id={resource.id} 
                                             link={resource.url} 
                                             description={resource.type} 
+                                            deleteString={resource.name}
                                             deleteBtn={true}
                                             deleteType="modal" 
                                             deleteFunction={this.props.deleteResource}
@@ -179,7 +197,7 @@ class Programs extends React.Component {
                         {(this.state.uploadType==="file" && !this.state.showRadio) &&
                             <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
                                 <input className="text-input resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
-                                <input className="text-input resource__upload-file" name="uploadURL" type="text" value={this.state.selectedFile.name} readOnly></input>
+                                <input className="text-input resource__upload-file" name="uploadURL" type="text" value={this.state.selectedFile.name && this.state.selectedFile.name} readOnly></input>
                                 <select className="resource__upload-type" name="uploadType">
                                     <option value="pdf">pdf</option>
                                     <option value="doc">doc</option>

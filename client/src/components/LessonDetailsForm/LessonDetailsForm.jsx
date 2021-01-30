@@ -2,8 +2,13 @@ import React from 'react'
 import './LessonDetailsForm.scss';
 
 function LessonDetailsForm({onSubmit, closeModal, lesson}) {
-    const {date, time, location} = lesson;
-    const {name,address, city, province, country} = location;
+    
+    if (!lesson){
+        var location = {name:"", address:"", city:"", province:"", country:""}
+        var lesson = {date:"", time:"", location}
+    }
+    var {date, time, location} = lesson;
+    var {name,address, city, province, country} = location;   
 
     const handleSubmit=(event)=>{
         onSubmit(event);
@@ -13,7 +18,7 @@ function LessonDetailsForm({onSubmit, closeModal, lesson}) {
     return (
         <form id="modal-form" className="modal-form" onSubmit={handleSubmit} >
             <div>
-                <input className="modal-form__input" id="lessonName" name="lessonName" type="text" placeholder="Lesson Name" defaultValue={lesson.name} ></input>
+                <input className="modal-form__input" id="lessonName" name="lessonName" type="text" placeholder="Lesson Name" defaultValue={lesson.name} required></input>
             </div>
             <div>
                 <input className="modal-form__input" id="date" name="date" type="date"  defaultValue={date}></input>
@@ -31,7 +36,6 @@ function LessonDetailsForm({onSubmit, closeModal, lesson}) {
                 <button className="modal-form__submit-cancel" type="button" onClick={closeModal}>Cancel</button>
                 <button className="modal-form__submit-button" id="submit" type="submit" form="modal-form">Submit</button>
             </div>
-            
         </form>
     )
 }

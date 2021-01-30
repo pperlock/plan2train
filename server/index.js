@@ -421,6 +421,8 @@ app.get('/trainer/:username/:trainerId', (req, res) => {
 
 app.post('/client/:clientId/addLesson', (req,res)=>{
 
+    const {name, date, time, location} = req.body
+
     Client.findOne({userId:req.params.clientId}) //asynchronous
     .then((response)=>{
 
@@ -428,14 +430,15 @@ app.post('/client/:clientId/addLesson', (req,res)=>{
         const newLesson = {
         id:uuidv4(),
         current: response.lessons.length===0 ? true : false,
-        name:"",
-        location:{name:"", address:"", city:"", province:"", country:"" },
-        date:"",
-        time:"",
+        name,
+        location,
+        date,
+        time,
         resources:[],
         homework:[],
         notes:[],
     }
+
         // get the lesson to update
         response.lessons.push(newLesson);
         

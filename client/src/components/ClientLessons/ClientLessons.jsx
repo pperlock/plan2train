@@ -136,31 +136,6 @@ class ClientLessons extends React.Component {
             })
         }
     }
-
-    // //deletes an item from either the homework or the notes lists when the form is submitted
-    // deleteListItem=(event, list)=>{
-    //     const lessonCopy = {...this.state.currentLesson};
-    //     // list variable passed in is used to determine what list to delete the item from
-    //     if (list==="notes"){
-    //         axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteNote`)
-    //         .then(res =>{
-    //             lessonCopy.notes = res.data;
-    //             this.setState({currentLesson:lessonCopy});
-    //         })
-    //         .catch(err=>{
-    //             console.log(err);
-    //         })
-    //     }else{
-    //         axios.delete(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/${event.target.id}/deleteHomework`)
-    //         .then(res =>{
-    //             lessonCopy.homework = res.data;
-    //             this.setState({currentLesson:lessonCopy});
-    //         })
-    //         .catch(err=>{
-    //             console.log(err);
-    //         })
-    //     }
-    // }
   
     //changes the lesson being rendered when a lesson is clicked from top list
     updateCurrentLesson = (lessonId) =>{
@@ -170,8 +145,26 @@ class ClientLessons extends React.Component {
     }
 
     //adds a new empty lesson when +New is clicked and saves it to the db
-    addNewLesson = () =>{
-        axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addLesson`)
+    addNewLesson = (event) =>{
+        
+        const {lessonName,date,time, locationName,address,city, province, country}=event.target
+
+        const newLesson = {
+            name:lessonName.value,
+            date:date.value,
+            time:time.value,
+            location:{
+                name:locationName.value,
+                address:address.value,
+                city:city.value,
+                province:province.value,
+                country:country.value
+            }
+        }
+
+        console.log(newLesson);
+
+         axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addLesson`,newLesson)
             .then(res =>{
                 const clientCopy = {...this.state.currentClient};
                 clientCopy.lessons.push(res.data)
@@ -255,11 +248,6 @@ class ClientLessons extends React.Component {
         const currentClient = {...this.state.currentClient};
         const currentLesson = {...this.state.currentLesson};
 
-        console.log(currentLesson.current);
-
-        console.log(this.props);
-        console.log(lessons.length);
-
         if(lessons.length===0){
             return(                                     
                 <div onClick={this.addNewLesson} className="empty-container empty-lessons">
@@ -286,7 +274,17 @@ class ClientLessons extends React.Component {
                             onClick={this.updateCurrentLesson}
                             updateStatus={this.updateStatus}
                         />)}
-                        <p className="lessons__list-new" onClick={this.addNewLesson}> + New </p>
+                        <div className="lessons__list-new">
+                            <ModalContainer 
+                                modalType = "update" 
+                                modalName = "addLesson" 
+                                buttonType="image"
+                                url="/icons/add-icon.svg"
+                                onSubmit={this.addNewLesson} 
+                            />
+                        </div>
+                        {/* <p className="lessons__list-new" onClick={this.addNewLesson}> + New </p> */}
+
                     </div>
 
                     {/* displays the chosen lesson set in state */}

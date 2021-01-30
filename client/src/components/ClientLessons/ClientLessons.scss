@@ -9,13 +9,27 @@
         justify-content: center;
 
         &-new{
+            position:relative;
             align-self:flex-end;
             padding-bottom:20px;
             font-weight:bold;
             cursor:pointer;
+            width:20px;
+            height:20px;
             &:hover{
                 color:$accent-color;
                 font-style:italic;
+            }
+            &:after{
+                content:"New";
+                position:absolute;
+                top:0;
+                left:20px;
+                
+                &:hover{
+                    color:$accent-color;
+                    font-style:italic;
+                }
             }
         }
     }
@@ -100,6 +114,9 @@
             }
         }
         
+    }
+    &__resources-applied{
+        min-height:180px;
     }
     &__bottom{
         display:flex;

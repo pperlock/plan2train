@@ -119,7 +119,6 @@ class Trainer extends React.Component{
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs`)
                 }else{
                     const programLoc = this.state.programs.findIndex(program => program.id === programId);
-                    console.log(programLoc)
                     programLoc !== 0 ? 
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${this.state.programs[0].id}`)
                     :
@@ -294,7 +293,7 @@ class Trainer extends React.Component{
  
         const {match} = this.props;
         // console.log(this.state.programs)
-        console.log(this.state.clients)
+        // console.log(this.state.clients)
         // console.log(this.state.userProfile)
         // console.log(this.state.username);
         // console.log(this.state.trainerId)
