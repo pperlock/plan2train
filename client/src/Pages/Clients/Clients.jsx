@@ -110,6 +110,7 @@ class Clients extends React.Component {
                         </div>
                     </div>
 
+
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
                     {page === "profile" && 
                         <ClientProfile 
@@ -119,6 +120,7 @@ class Clients extends React.Component {
                             match = {match}
                             updateClient={updateClient}
                             deleteClient={deleteClient}
+                            programs={programs}
                         />}
 
                     {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} match = {match}/>}

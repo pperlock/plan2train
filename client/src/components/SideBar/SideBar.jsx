@@ -46,16 +46,18 @@ class SideBar extends React.Component {
     }
 
     render(){
+        const profile = this.props.match.path.split("/")[1]
+        console.log(profile);
 
-        if (this.state.profile){
+        if (profile){
             var {trainerId, trainerName, programs, clients, match} = this.props;
             var defaultClientId = (clients && clients.length !==0) ? clients[0].userId : match.params.clientId
         }
-        console.log(this.props.client)
-        console.log(this.props.nextLesson)
-        console.log(!!this.props.pastLessons)
+        // console.log(this.props.client)
+        // console.log(this.props.nextLesson)
+        // console.log(!!this.props.pastLessons)
 
-        if (this.state.profile === "trainer"){
+        if (profile === "trainer"){
             return (
                 <>
                     <div className="sidebar" style={{backgroundImage: "url('/images/main-background.jfif')"}}>
@@ -92,7 +94,7 @@ class SideBar extends React.Component {
                                     <li id="clients-link" className="sidebar__menu-link"><img  id="clients-icon" className="sidebar__menu-icon" src="/icons/clients-icon.svg" alt="clients icon"/>Clients</li>
                                 </Link>
                             }
-                            <Link to="/schedule">
+                            <Link to={`/trainer/${trainerName}/${trainerId}/schedule`}>
                                 <li id="schedule-link" className="sidebar__menu-link"><img id="schedule-icon" className="sidebar__menu-icon" src="/icons/calendar-icon.svg" alt="calendar icon"/>Schedule</li>
                             </Link>
                         </ul>

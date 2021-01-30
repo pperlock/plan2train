@@ -8,9 +8,40 @@
         width:90%;
     }
 
+    &__programs{
+        
+        background-color: $lighter-green;
+        padding:5px 16px;
+        box-sizing:border-box;
+        border-radius:50px;
+        display:flex;
+        align-items:center;
+        align-self:flex-start;
+        margin-left:100px;
+        width:90%;
+    
+    &-list{
+        display:flex;
+        justify-content:center;
+        flex-wrap:wrap;
+    }
+    &-title{
+        color:white;
+        margin-right:20px;
+        font-size:18px;
+    }
+        &-item{
+            margin-right:10px;
+        }
+        &-label{
+            margin-left:5px;
+        }
+    }
+    
+
     &__contact{
         padding-top:70px;
-        margin-right:20px;
+        margin:7px 0 20px 0;
         height:540px;
         width:33%;
 
@@ -51,8 +82,8 @@
     }
    
     &__notes{
-        width:475px;
-        height:545px;
+        width:507px;
+        height:575x;
         background-size:contain;
         background-repeat:no-repeat;
 

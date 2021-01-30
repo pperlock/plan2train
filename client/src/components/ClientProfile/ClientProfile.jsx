@@ -14,6 +14,9 @@ class ClientProfile extends React.Component {
 
     componentDidMount(){
         this.geoCode();
+        this.props.currentClient.programs.forEach(program=>{
+            document.getElementById(program.id).checked = true;
+        })
     }
 
     componentDidUpdate(){
@@ -62,9 +65,57 @@ class ClientProfile extends React.Component {
 
     }
 
+    toggleProgram=(programId)=>{
+
+        console.log(programId)
+        
+        const program = this.state.currentClient.programs.find((program)=>program.id === programId);
+        const index = this.state.currentClient.programs.findIndex((program)=>program.id === programId);
+
+        const copyClient={...this.state.currentClient}
+
+        console.log(program);
+        console.log(index);
+
+        // let foundIndex;
+        // response.notes.find((note, index) => {foundIndex = index; return note.id === req.params.noteId; });
+
+        if(program){
+            document.getElementById(programId).checked=false;
+            copyClient.programs.splice(index,1);
+            
+        }else{
+            copyClient.programs.push(this.props.programs.find(program=> programId===program.id))
+        }
+        
+        this.setState({currentClient:copyClient},()=>{
+            axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/updatePrograms`, copyClient.programs)
+            .then(res =>{
+                this.props.updateTrainer();
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        }) 
+    }
+
     render(){
+        console.log(this.props.currentClient.programs);
         const {address, city, province, country, postal, email, phone} = this.props.currentClient.userProfile;
         return (
+            <>
+            <div className="client__programs">
+                <p className="client__programs-title">Programs</p>
+                <div className="client__programs-list">
+                    {this.props.programs.map(program => 
+                        <div className="client__programs-item">
+                            <input onClick={()=>{this.toggleProgram(program.id)}}type="checkbox" name={program.id} id={program.id} value={program.name}/> 
+                            <label className="client__programs-label" htmlFor={program.id}>{program.name}</label>
+                        </div>
+                    )}
+                </div>
+            </div>
+
             <div className = "client__profile">
                 <div className = "component client__contact">
                     <div className="client__contact-info">
@@ -104,7 +155,6 @@ class ClientProfile extends React.Component {
                         />
                     </div>
                 </div>
-
                 <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
                     <div className = "client__notes-body">
                         <p className="client__notes-title">Notes to Self ...</p>
@@ -121,8 +171,9 @@ class ClientProfile extends React.Component {
                             />
                         </div>
                     
-                 </div>
+                </div>
             </div>
+            </>
         )
     }
 }

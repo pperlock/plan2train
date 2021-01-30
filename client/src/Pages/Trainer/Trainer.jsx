@@ -197,7 +197,8 @@ class Trainer extends React.Component{
         let programs = [];
         for(var i=0; i<options.length; i++){
             opt = options[i];
-            opt.selected && programs.push(opt.value);
+            const program = this.state.programs.find(program=> program.id===opt.value);
+            opt.selected && programs.push(program);
         }
 
         const newClient = {

@@ -26,7 +26,7 @@ function App() {
                   <Route path="/trainer/:username/:trainerId/clients/:clientId/lessons" exact render={(props)=>(<Trainer {...props}/>)}/>
                   <Route path="/trainer/:username/:trainerId/clients" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - schedule */}
-                  <Route path="/schedule" render={(props)=>(<Trainer {...props}/>)}/>
+                  <Route path="/trainer/:username/:trainerId/schedule" render={(props)=>(<Trainer {...props}/>)}/>
                   
                   {/* Client */}
                   <Route path="/client/:username/:clientId" exact render={(props)=>(<Client {...props}/>)}/>

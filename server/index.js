@@ -329,6 +329,29 @@ app.post('/trainer/:trainerId/addProgram', (req,res)=>{
     })
 })
 
+/* =========================================== UPDATE CLIENT PROGRAMS ================================================ */
+app.put('/client/:clientId/updatePrograms', (req,res)=>{
+    //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
+
+    Client.findOne({userId:req.params.clientId}) 
+    .then((response)=>{
+    
+        response.programs = req.body;
+
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response.programs);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
 /* =========================================== UPDATE PROGRAM ================================================ */
 app.post('/trainer/:trainerId/:programId/updateProgram', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
