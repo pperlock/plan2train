@@ -46,10 +46,19 @@
             text-align:center;
             
         }
+        &-actions{
+            display:flex;
+            margin-left:auto;
+        }
         &-delete{
             width:20px;
             height:20px;
-            margin-left:auto;
+        }
+        &-update{
+            width:28px;
+            height:28px;
+            margin-right:20px;
+            
         }
     }
     &__resources{

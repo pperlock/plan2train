@@ -133,16 +133,29 @@ class Programs extends React.Component {
                                 <p className="program__header-description">{program.description}</p>
                             </div>
 
-                            <div className="program__header-delete">
-                                <ModalContainer 
-                                    modalType = "delete" 
-                                    modalName = "deleteProgram" 
-                                    buttonType="image"
-                                    url="/icons/trash.svg"
-                                    onSubmit={this.props.deleteProgram}
-                                    deleteString= {program.name}
-                                    deleteId={program.id}
-                                />
+                            <div className="program__header-actions">
+                                <div className="program__header-update">
+                                    <ModalContainer 
+                                        modalType = "update" 
+                                        modalName = "updateProgram" 
+                                        buttonType="image"
+                                        url="/icons/edit-icon.svg"
+                                        onSubmit={this.props.updateProgram}
+                                        information={program}
+                                    />
+                                </div>
+
+                                <div className="program__header-delete">
+                                    <ModalContainer 
+                                        modalType = "delete" 
+                                        modalName = "deleteProgram" 
+                                        buttonType="image"
+                                        url="/icons/trash.svg"
+                                        onSubmit={this.props.deleteProgram}
+                                        deleteString= {program.name}
+                                        deleteId={program.id}
+                                    />
+                                </div>
                             </div>
 
                         </div>   

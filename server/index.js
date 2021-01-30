@@ -315,6 +315,33 @@ app.post('/trainer/:trainerId/addProgram', (req,res)=>{
     })
 })
 
+/* =========================================== UPDATE PROGRAM ================================================ */
+app.post('/trainer/:trainerId/:programId/updateProgram', (req,res)=>{
+    //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
+
+    const {name, description} = req.body;
+    //"--id" is auto generated - not a string in mongoDB - mongoose handles the conversion from to a string and then back again
+
+    Program.findOne({id:req.params.programId}) //asynchronous
+    .then((response)=>{
+        response.name = name;
+        response.description=description;
+
+        response.save()
+        .then((response)=>{
+            //once the data is saved, the database sends us back a new object version of document that was saved
+            res.send(response);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+
+})
+
 /* =========================================== DELETE PROGRAM ================================================ */
 
 app.delete('/program/:programId', (req,res)=>{
@@ -518,38 +545,6 @@ app.post(`/client/:clientId/:lessonId/addNote`, (req, res)=>{
     });
 })
 
-// /* =========================================== DELETE LESSON NOTE ================================================ */
-
-// app.delete(`/client/:clientId/:lessonId/:noteId/deleteNote`, (req, res)=>{
-
-//     Client.findOne({userId:req.params.clientId}) //asynchronous
-//     .then((response)=>{
-
-//          // get the lesson to update
-//          const updateLesson = response.lessons.find(lesson=> lesson.id === req.params.lessonId);
-
-//         //find the index of the note to delete
-//         let foundIndex;
-//         updateLesson.notes.filter((item, index) => { foundIndex = index; return item.id == req.params.noteId; });
-        
-//         updateLesson.notes.splice(foundIndex, 1);
-
-//         response.markModified('lessons');
-//         response.save()
-//         .then((response)=>{
-//             //once the data is saved, the database sends us back a new object version of document that was saved
-//             res.send(updateLesson.notes);
-//         })
-//         .catch((err)=>{
-//             console.log(err);
-//         })        
-//     })
-//     .catch((err) =>{
-//         console.log(err)
-//     });
-// });
-
-
 /* =========================================== ADD LESSON HOMEWORK ================================================ */
 
 app.post(`/client/:clientId/:lessonId/addHomework`, (req, res)=>{
@@ -579,37 +574,6 @@ app.post(`/client/:clientId/:lessonId/addHomework`, (req, res)=>{
         console.log(err)
     });
 })
-
-// /* =========================================== DELETE LESSON HOMEWORK ================================================ */
-
-// app.delete(`/client/:clientId/:lessonId/:homeworkId/deleteHomework`, (req, res)=>{
-
-//     Client.findOne({userId:req.params.clientId}) //asynchronous
-//     .then((response)=>{
-
-//          // get the lesson to update
-//          const updateLesson = response.lessons.find(lesson=> lesson.id === req.params.lessonId);
-
-//         //find the index of the note to delete
-//         let foundIndex;
-//         updateLesson.homework.filter((item, index) => { foundIndex = index; return item.id == req.params.homeoworkId; });
-        
-//         updateLesson.homework.splice(foundIndex, 1);
-
-//         response.markModified('lessons');
-//         response.save()
-//         .then((response)=>{
-//             //once the data is saved, the database sends us back a new object version of document that was saved
-//             res.send(updateLesson.homework);
-//         })
-//         .catch((err)=>{
-//             console.log(err);
-//         })        
-//     })
-//     .catch((err) =>{
-//         console.log(err)
-//     });
-// });
 
 //Blog.find().sort();
 

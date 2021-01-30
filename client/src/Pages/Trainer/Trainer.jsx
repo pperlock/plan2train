@@ -106,6 +106,27 @@ class Trainer extends React.Component{
         
     }
 
+    /** ================================================ UPDATE PROGRAM ================================================*/
+    updateProgram=(event)=>{
+
+        event.preventDefault();
+
+        const newProgram = {
+            name:event.target.programName.value,
+            description:event.target.programDescription.value
+        }
+        console.log(this.props.match);
+        
+        axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/${this.props.match.params.programId}/updateProgram`, newProgram)
+        .then(res =>{
+            this.setState({updated:true})
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+        
+    }
+
     /** ================================================ DELETE PROGRAM ================================================*/
     deleteProgram = (programId) =>{
 
@@ -113,7 +134,6 @@ class Trainer extends React.Component{
 
         axios.delete(`http://localhost:8080/program/${this.props.match.params.programId}`)
         .then(res =>{
-            // const programsLength = this.state.programs.length-1;
             this.setState({updated:true},()=>{
                 if((this.state.programs.length - 1) === 0){
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs`)
@@ -332,7 +352,8 @@ class Trainer extends React.Component{
                         addProgram={this.addProgram}
                         deleteProgram={this.deleteProgram}
                         addResource={this.addResource} 
-                        deleteResource={this.deleteResource}   
+                        deleteResource={this.deleteResource}  
+                        updateProgram={this.updateProgram} 
                     />}
                 {(this.state.clients && this.state.clients.length !== 0 && match.path==="/trainer/:username/:trainerId/clients/:clientId/profile") && 
                     <Clients {...this.props} 
