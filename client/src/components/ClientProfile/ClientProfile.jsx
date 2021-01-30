@@ -13,14 +13,21 @@ class ClientProfile extends React.Component {
     state={currentClient:this.props.currentClient, mapLocation:null}
 
     componentDidMount(){
+        console.log("client profile - did mount")
         this.geoCode();
-        this.props.currentClient.programs.forEach(program=>{
+        this.state.currentClient.programs.forEach(program=>{
             document.getElementById(program.id).checked = true;
         })
     }
 
     componentDidUpdate(){
-        // console.log("client profile - did update")
+        console.log("client profile - did update")
+        this.props.programs.forEach(program => {
+            document.getElementById(program.id).checked = false;
+        })
+        this.state.currentClient.programs.forEach(program=>{
+            document.getElementById(program.id).checked = true;
+        });
         //if the userId currently in state doesn't match the userId in the path then update the currentClient in state to match the one in the path
         if(this.state.currentClient.userId !==this.props.match.params.clientId){
             this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)},()=>{
@@ -108,10 +115,10 @@ class ClientProfile extends React.Component {
                 <p className="client__programs-title">Programs</p>
                 <div className="client__programs-list">
                     {this.props.programs.map(program => 
-                        <div className="client__programs-item">
-                            <input onClick={()=>{this.toggleProgram(program.id)}}type="checkbox" name={program.id} id={program.id} value={program.name}/> 
-                            <label className="client__programs-label" htmlFor={program.id}>{program.name}</label>
-                        </div>
+                        <label className="client__programs-label">{program.name}
+                            <input onClick={()=>{this.toggleProgram(program.id)}} type="checkbox" name={program.id} id={program.id} value={program.name}/> 
+                            <span className="client__programs-check"></span>
+                        </label>
                     )}
                 </div>
             </div>

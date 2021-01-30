@@ -20,21 +20,68 @@
         margin-left:100px;
         width:90%;
     
-    &-list{
-        display:flex;
-        justify-content:center;
-        flex-wrap:wrap;
-    }
-    &-title{
-        color:white;
-        margin-right:20px;
-        font-size:18px;
-    }
-        &-item{
-            margin-right:10px;
+        &-list{
+            display:flex;
+            justify-content:center;
+            flex-wrap:wrap;
         }
-        &-label{
-            margin-left:5px;
+        &-title{
+            color:white;
+            margin-right:20px;
+            font-size:18px;
+        }
+        &-label{ 
+            position: relative; 
+            padding-left: 25px; 
+            cursor: pointer;             
+            
+            &:hover input ~ .client__programs-check { 
+                background-color:$accent-color; 
+            } 
+              
+            /* Specify the background color to be 
+            shown when checkbox is active */ 
+            & input:active ~ .client__programs-check { 
+                background-color:$accent-color; 
+            } 
+              
+            /* Specify the background color to be 
+            shown when checkbox is checked */ 
+            & input:checked ~ .client__programs-check { 
+                background-color:$accent-color; 
+            } 
+
+            & input:checked ~ .client__programs-check:after { 
+                display: block; 
+            } 
+              
+            /* Styling the checkmark using webkit */ 
+            /* Rotated the rectangle by 45 degree and  
+            showing only two border to make it look 
+            like a tickmark */ 
+            & .client__programs-check:after { 
+                left: 5px; 
+                bottom: 4px; 
+                width: 7px; 
+                height: 13px; 
+                border: solid white; 
+                border-width: 0 2px 2px 0; 
+                transform: rotate(45deg); 
+            } 
+        }
+        &-check{
+            position: absolute; 
+            top: 3px;; 
+            left: 0; 
+            height: 15px; 
+            width: 15px; 
+            background-color: $dark-background; 
+        
+            &:after { 
+                content: ""; 
+                position: absolute; 
+                display: none; 
+            } 
         }
     }
     
@@ -113,3 +160,8 @@
     }
 }
 
+  
+/* Hide the default checkbox */ 
+input[type=checkbox] { 
+    visibility: hidden; 
+} 
