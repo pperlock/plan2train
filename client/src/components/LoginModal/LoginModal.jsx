@@ -7,8 +7,6 @@ import FocusTrap from 'focus-trap-react';
 import "./LoginModal.scss";
 
 import LoginForm from '../LoginForm/LoginForm';
-import PersonalDetailsForm from '../PersonalDetailsForm/PersonalDetailsForm';
-
 
 // {onClickOutside, onKeyDown, modalRef, buttonRef, closeModal, onSubmit, modalType}
 

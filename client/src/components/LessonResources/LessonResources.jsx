@@ -16,7 +16,7 @@ import AppliedResources from '../../components/AppliedResources/AppliedResources
  */
 
 function LessonResources({programs, currentLesson, currentClient, match}) {
-    console.log(programs)
+    
 
     const ItemTypes = {
         CARD:'card',
@@ -32,7 +32,10 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
     //update the resources of the current lesson when state changes
     useEffect(() => {
         updateCurrentLesson(currentLesson);
+        console.log(displayResources)
     },[currentLesson]);
+
+    
 
     // update the resources being displayed when a program is chosen
     const updateDisplayed = (program)=>{
@@ -57,7 +60,11 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
         displays.find(resource=> resource.id === id).applied=true;
              
         const lessonObject = {...currentLessonResources};
+        
         // take the id from the resource that was moved, find the data associated with it and push it to the resources of the current lesson
+
+        console.log(displays.find(resource=> resource.id === id))
+
         lessonObject.resources.push(displays.find(resource=> resource.id === id));
 
         //update the displaye resources and the lesson resources that are rendered
@@ -65,7 +72,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
         updateCurrentLesson(lessonObject);
 
         //create an array of the ids associated with the updated resources to push to the db
-        const updatedResources = lessonObject.resources.map(resource => resource.id)
+        const updatedResources = lessonObject.resources.map(resource => resource)
         console.log(updatedResources);
 
         //update the db with the new lesson resources
@@ -95,7 +102,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
         updateCurrentLesson(lessonObject);
 
         //create an array of the ids associated with the updated resources to push to the db
-        const updatedResources = lessonObject.resources.map(resource => resource.id)
+        const updatedResources = lessonObject.resources.map(resource => resource)
         console.log(updatedResources);
 
         // update the db with the new lesson resources

@@ -1,0 +1,65 @@
+@import '../../styles/globalImports.scss';
+
+.contact{
+    &-link{
+        color:$dark-text;
+        &:hover{
+            font-style:italic;
+            color:black;
+        }
+    }
+}
+
+.welcome{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    color:$accent-color;
+    padding:20px;
+    height:100vh;
+    padding-left:320px;
+    background-size:cover;
+    background-position:right;
+
+    &__greeting{
+        display:flex;
+        margin:40px 0;
+        text-transform:uppercase;
+        &-client{
+            margin-left:10px;
+            
+        }
+    }
+    &__section{
+        margin-bottom:70px;
+        margin-left:40px;
+        width:80%;
+
+        &-body{
+            margin-top:60px;
+        }
+
+        &-company{
+            display:flex;
+            &-logo{
+                width:25%;
+            }
+            &-name{
+                font-size:22px;
+                font-weight:bold;
+            }
+        }
+    }
+
+    &__trainer{
+        &-address{
+            display:flex;
+            justify-content:space-between;
+            &-map{
+                width:50%;
+                border:1px solid black;
+            }
+        }
+    }
+
+}

@@ -133,6 +133,20 @@ app.get('/user/:profile/:username/:password', (req,res)=>{
     });
 })
 
+
+/* =========================================== GET A SINGLE CLIENT FOR CLIENT SIDE ================================================ */
+
+app.get('/client/:username/:userId', (req, res) => {
+
+    Client.findOne({userId:req.params.userId}) //asynchronous
+    .then((response)=>{
+         res.send(response);
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+});
+
 /* =========================================== UPDATE TRAINER DETAILS ================================================ */
 app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
 
@@ -423,7 +437,7 @@ app.get('/trainer/:trainerId/clients', (req, res) => {
 
 /* =========================================== GET TRAINER ================================================ */
 
-app.get('/trainer/:username/:trainerId', (req, res) => {
+app.get('/trainer/:trainerId', (req, res) => {
 
     let trainer = {userProfile:{}, programs:[] }
 

@@ -16,7 +16,7 @@ class Trainer extends React.Component{
 
 
     componentDidMount(){
-        axios.get(`http://localhost:8080/trainer/${this.state.username}/${this.state.trainerId}`)
+        axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
         .then(res =>{
             // console.log(res.data)
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{

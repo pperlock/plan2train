@@ -1,0 +1,16 @@
+@import '../../styles/globalImports.scss';
+
+.past-lessons{
+    &__list{
+        width:100%;
+        display:flex;
+        flex-wrap:wrap;
+        margin-bottom: 20px;
+        justify-content: center;
+    }
+
+    &__top{
+        padding:0;
+        margin-bottom:0;
+    }
+}
