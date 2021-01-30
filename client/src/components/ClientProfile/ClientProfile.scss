@@ -35,43 +35,31 @@
             padding-left: 25px; 
             cursor: pointer;             
             
+            /* Specify the background color to be shown when checkbox is hovered */ 
             &:hover input ~ .client__programs-check { 
                 background-color:$accent-color; 
             } 
               
-            /* Specify the background color to be 
-            shown when checkbox is active */ 
+            /* Specify the background color to be shown when checkbox is active */ 
             & input:active ~ .client__programs-check { 
                 background-color:$accent-color; 
             } 
               
-            /* Specify the background color to be 
-            shown when checkbox is checked */ 
+            /* Specify the background color to be shown when checkbox is checked */ 
             & input:checked ~ .client__programs-check { 
                 background-color:$accent-color; 
             } 
 
+            //show the checkmark when box checked
             & input:checked ~ .client__programs-check:after { 
                 display: block; 
             } 
               
-            /* Styling the checkmark using webkit */ 
-            /* Rotated the rectangle by 45 degree and  
-            showing only two border to make it look 
-            like a tickmark */ 
-            & .client__programs-check:after { 
-                left: 5px; 
-                bottom: 4px; 
-                width: 7px; 
-                height: 13px; 
-                border: solid white; 
-                border-width: 0 2px 2px 0; 
-                transform: rotate(45deg); 
-            } 
+            
         }
         &-check{
             position: absolute; 
-            top: 3px;; 
+            top: 3px; 
             left: 0; 
             height: 15px; 
             width: 15px; 
@@ -81,6 +69,14 @@
                 content: ""; 
                 position: absolute; 
                 display: none; 
+                /* Create a rectangle and show only two borders and rotate it to make it look like a checkmark */ 
+                left: 5px; 
+                bottom: 4px; 
+                width: 7px; 
+                height: 13px; 
+                border: solid white; 
+                border-width: 0 2px 2px 0; 
+                transform: rotate(45deg); 
             } 
         }
     }
@@ -130,7 +126,7 @@
    
     &__notes{
         width:507px;
-        height:575x;
+        height:575px;
         background-size:contain;
         background-repeat:no-repeat;
 

@@ -4,10 +4,9 @@ import './ClientWelcome.scss';
 
 function ClientWelcome({client, trainer}) {
 
-    const {lname,fname,username,password,email,phone,address,city,province,country,postal} = trainer.contact;
+    const {lname,fname,email,phone,address,city,province,country,postal} = trainer.contact;
     const {facebook, twitter, instagram, linkedIn} = trainer.social;
     const {name, description, logo} = trainer.company;
-    const hiddenPassword = password.split("").map(character => "*");
 
     return (
         <div className="welcome" style={{backgroundImage: "url('/images/main2.jfif')"}}>
@@ -32,8 +31,13 @@ function ClientWelcome({client, trainer}) {
                     <div className="component-title welcome__section-title">
                         <p>Programs</p>
                     </div>
-                    <div className="welcome__section-body">
-                        Programs
+                    <div className="welcome__section-body welcome__programs">
+                        {client.programs.map(program=>
+                            <div>
+                                <p className="welcome__programs-title">{program.name}</p>
+                                <p className="welcome__programs-text">{program.description}</p>
+                            </div>
+                        )}
                     </div>
             </div>  
 
