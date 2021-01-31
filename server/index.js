@@ -193,9 +193,10 @@ app.post('/trainer/:trainerId/addClient', (req,res)=>{
     const {username,password,profile,status,userProfile, programs} = req.body;
     //"--id" is auto generated - not a string in mongoDB - mongoose handles the conversion from to a string and then back again
     const date = new Date().getFullYear();
+    const userId = uuidv4();
     const client = new Client({
         //pass an object with the different properties in the schema
-        userId:uuidv4(),
+        userId:userId,
         trainerId: req.params.trainerId,
         yearAdded: date,
         username,
@@ -209,10 +210,23 @@ app.post('/trainer/:trainerId/addClient', (req,res)=>{
         photos:[]
     });
 
+    const user = new User({
+        //pass an object with the different properties in the schema
+        userId:userId,
+        username,
+        password,
+        profile:"client",
+    });
+
     client.save() ///asynchronous - returns a promise
     .then((response)=>{
-        //once the data is saved, the database sends us back a new object version of document that was saved
-        res.send(response);
+        user.save()
+        .then(userRes=>{
+            res.send(response);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     })
     .catch((err)=>{
         console.log(err);
@@ -223,8 +237,16 @@ app.post('/trainer/:trainerId/addClient', (req,res)=>{
 
 app.delete('/client/:clientId', (req,res)=>{
     Client.deleteOne({userId:req.params.clientId})
-    .then(response=>{
+    .catch(err=>{
+        console.log(err);
+    })
+
+    User.deleteOne({userId:req.params.clientId})
+    .then(userRes=>{
         res.send("Client successfully deleted");
+    })
+    .catch(err=>{
+        console.log(err);
     })
 })
 

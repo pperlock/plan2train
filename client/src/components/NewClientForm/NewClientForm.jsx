@@ -12,8 +12,8 @@ function NewClientForm({onSubmit, closeModal, programs}) {
             <div>
                 <input className="modal-form__input" id="fname" name="fname" type="text" placeholder="First Name" ></input>
                 <input className="modal-form__input" id="lname" name="lname" type="text" placeholder="Last Name" ></input>
-                <input className="modal-form__input" id="username" name="username" type="text" placeholder="User Name" ></input>
-                <input className="modal-form__input" id="password" name="password" type="text" placeholder="Password" ></input>
+                <input className="modal-form__input" id="username" name="username" type="text" placeholder="User Name" required></input>
+                <input className="modal-form__input" id="password" name="password" type="text" placeholder="Password" required></input>
             </div>
             <div>
                 <input className="modal-form__input" id="email" name="email" type="email" placeholder="Email" ></input>

@@ -282,12 +282,10 @@ class ClientLessons extends React.Component {
                                 modalType = "update" 
                                 modalName = "addLesson" 
                                 buttonType="image"
-                                url="/icons/add-icon.svg"
+                                url="/icons/plus-square.svg"
                                 onSubmit={this.addNewLesson} 
                             />
                         </div>
-                        {/* <p className="lessons__list-new" onClick={this.addNewLesson}> + New </p> */}
-
                     </div>
 
                     {/* displays the chosen lesson set in state */}
