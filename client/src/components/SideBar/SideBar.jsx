@@ -29,6 +29,8 @@ class SideBar extends React.Component {
         const splitProps = this.props.match.path.split("/")
         const activeLink = splitProps.length === 4 ? splitProps[1] : splitProps[4]
 
+        console.log(activeLink)
+
         if(document.getElementById(`${activeLink}-link`)){
             const previouslyActiveLink = document.querySelector(".sidebar__menu-link--active");
             previouslyActiveLink.classList.remove("sidebar__menu-link--active");
@@ -125,15 +127,16 @@ class SideBar extends React.Component {
                         
                         <ul className="sidebar__menu">
                             <Link to={`/client/${this.props.match.params.username}/${this.props.match.params.clientId}`}>
-                                <li id="trainer-link" className="sidebar__menu-link sidebar__menu-link--active">
-                                    <img id="trainer-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/user-profile-icon.svg" alt="user profile"/>
+                                <li id="client-link" className="sidebar__menu-link sidebar__menu-link--active">
+                                    <img id="client-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/welcome.svg" alt="user profile"/>
                                     Welcome
                                 </li>
                             </Link>
+
                             {(!!this.props.client && !!this.props.nextLesson) &&
-                                <Link to={`/client/${this.props.match.params.username}/${this.props.match.params.clientId}/lessons/${this.props.nextLesson.id}/nextLesson`}>
-                                    <li id="trainer-link" className="sidebar__menu-link sidebar__menu-link--active">
-                                        <img id="trainer-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/user-profile-icon.svg" alt="user profile"/>
+                                <Link to={`/client/${this.props.match.params.username}/${this.props.match.params.clientId}/nextlesson/${this.props.nextLesson.id}`}>
+                                    <li id="nextlesson-link" className="sidebar__menu-link">
+                                        <img id="nextlesson-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/swoopy-arrow.svg" alt="next-lesson"/>
                                        Next Lesson
                                     </li>
                                 </Link>
@@ -141,8 +144,8 @@ class SideBar extends React.Component {
 
                             {(!!this.props.client && !!this.props.pastLessons) &&
                                 <Link to={`/client/${this.props.match.params.username}/${this.props.match.params.clientId}/lessons/${this.props.pastLessons[0].id}`}>
-                                    <li id="trainer-link" className="sidebar__menu-link sidebar__menu-link--active">
-                                        <img id="trainer-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/user-profile-icon.svg" alt="user profile"/>
+                                    <li id="lessons-link" className="sidebar__menu-link">
+                                        <img id="lessons-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/programs-icon.svg" alt="user profile"/>
                                        Past Lessons
                                     </li>
                                 </Link>

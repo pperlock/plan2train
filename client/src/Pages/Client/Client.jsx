@@ -52,7 +52,7 @@ function Client ({match}) {
                 />
             }
 
-            {(client && nextLesson && match.path==="/client/:username/:clientId/lessons/:lessonId/nextLesson") && 
+            {(client && nextLesson && match.path==="/client/:username/:clientId/nextlesson/:lessonId") && 
                 <NextLesson
                     nextLesson={nextLesson}
                 />
