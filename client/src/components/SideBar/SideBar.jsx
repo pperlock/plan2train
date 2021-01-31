@@ -29,8 +29,6 @@ class SideBar extends React.Component {
         const splitProps = this.props.match.path.split("/")
         const activeLink = splitProps.length === 4 ? splitProps[1] : splitProps[4]
 
-        console.log(activeLink)
-
         if(document.getElementById(`${activeLink}-link`)){
             const previouslyActiveLink = document.querySelector(".sidebar__menu-link--active");
             previouslyActiveLink.classList.remove("sidebar__menu-link--active");
@@ -38,18 +36,17 @@ class SideBar extends React.Component {
             const activeLinkElement = document.getElementById(`${activeLink}-link`);
             activeLinkElement.classList.add("sidebar__menu-link--active");
 
-            const previouslyActiveIcon = document.querySelector(".sidebar__menu-icon--active");
-            previouslyActiveIcon.classList.remove("sidebar__menu-icon--active");
+            // const previouslyActiveIcon = document.querySelector(".sidebar__menu-icon--active");
+            // previouslyActiveIcon.classList.remove("sidebar__menu-icon--active");
 
-            const activeIconElement = document.getElementById(`${activeLink}-icon`);
-            activeIconElement.classList.add("sidebar__menu-icon--active");
+            // const activeIconElement = document.getElementById(`${activeLink}-icon`);
+            // activeIconElement.classList.add("sidebar__menu-icon--active");
         }
 
     }
 
     render(){
         const profile = this.props.match.path.split("/")[1]
-        console.log(profile);
 
         if (profile){
             var {trainerId, trainerName, programs, clients, match} = this.props;
@@ -88,16 +85,16 @@ class SideBar extends React.Component {
                             </Link>
                             {programs &&
                                 <Link to= {programs.length === 0 ? `/trainer/${trainerName}/${trainerId}/programs` : `/trainer/${trainerName}/${trainerId}/programs/${programs[0].id}`}>
-                                    <li id="programs-link" className="sidebar__menu-link"><img id="programs-icon" className="sidebar__menu-icon"src="/icons/programs-icon.svg" alt="list icon"/>Programs</li>
+                                    <li id="programs-link" className="sidebar__menu-link"><img id="programs-icon" className="sidebar__menu-icon sidebar__menu-icon--active"src="/icons/programs-icon.svg" alt="list icon"/>Programs</li>
                                 </Link>
                             }
                             {clients &&
                                 <Link to= {clients.length === 0 ? `/trainer/${trainerName}/${trainerId}/clients` : `/trainer/${trainerName}/${trainerId}/clients/${defaultClientId}/profile`}>
-                                    <li id="clients-link" className="sidebar__menu-link"><img  id="clients-icon" className="sidebar__menu-icon" src="/icons/clients-icon.svg" alt="clients icon"/>Clients</li>
+                                    <li id="clients-link" className="sidebar__menu-link"><img  id="clients-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/clients-icon.svg" alt="clients icon"/>Clients</li>
                                 </Link>
                             }
                             <Link to={`/trainer/${trainerName}/${trainerId}/schedule`}>
-                                <li id="schedule-link" className="sidebar__menu-link"><img id="schedule-icon" className="sidebar__menu-icon" src="/icons/calendar-icon.svg" alt="calendar icon"/>Schedule</li>
+                                <li id="schedule-link" className="sidebar__menu-link"><img id="schedule-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/calendar-icon.svg" alt="calendar icon"/>Schedule</li>
                             </Link>
                         </ul>
 

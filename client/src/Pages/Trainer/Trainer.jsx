@@ -241,7 +241,6 @@ class Trainer extends React.Component{
 
         axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
         .then(res =>{
-            console.log(res.data)
             this.setState({clients:[...this.state.clients, res.data]},()=>{
                 this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
             })

@@ -30,20 +30,22 @@ class ClientLessons extends React.Component {
         if(this.state.currentLesson){
             this.geoCode();
 
+            console.log(this.state.availablePrograms[0].resources);
+
             //gets an array of all the resource ids that have been applied to all lessons
             let allApplied = [];
             const lessons = this.state.currentClient.lessons;
             lessons.map(lesson=> lesson.resources.map(resource => allApplied.push(resource)));
             
-            //adds a key name applied to each resource for all trainer programs
-            const programs = this.props.programs;
+            // adds a key name applied to each resource for all trainer programs
+            const programs = [...this.state.availablePrograms];
             programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
 
         
             const copyClient = {...this.props.currentClient};
 
             //adds the resource information for each lesson resource and adds a value of true for applied to the programs
-            this.props.programs.forEach(program=>
+            programs.forEach(program=>
                 program.resources.forEach(programResource=>
                     copyClient.lessons.forEach(lesson => 
                         lesson.resources.forEach((resource, i)=> {
@@ -59,16 +61,43 @@ class ClientLessons extends React.Component {
                     )          
                 )
             )
-            
+
             // sets the state to reflect the modified objects
-            this.setState({currentClient:copyClient, availablePrograms:programs});
+            this.setState({currentClient:copyClient, availablePrograms:programs})
         }
     }
 
-    componentDidUpdate(prevProp, prevState){
+    componentDidUpdate(prevState){
+
+        if(!("applied" in this.state.availablePrograms[0].resources[0])){
+           // adds a key name applied to each resource for all trainer programs
+           const programs = [...this.state.availablePrograms];
+           programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
+
+       
+           const copyClient = {...this.state.currentClient};
+
+           //adds the resource information for each lesson resource and adds a value of true for applied to the programs
+           programs.forEach(program=>
+               program.resources.forEach(programResource=>
+                   copyClient.lessons.forEach(lesson => 
+                       lesson.resources.forEach((resource, i)=> {
+                           if(resource.id === programResource.id){
+                               //sets a value of true for applied resources
+                               programResource.applied=true;
+                               //remove the single id
+                               lesson.resources.splice(i,1);
+                               //replace the resource with the object
+                               lesson.resources.push(programResource);
+                           }  
+                       })
+                   )          
+               )
+           )
+           this.setState({currentClient:copyClient, availablePrograms:programs, displayResources:programs[0].resources})
+        } 
+
         console.log("client-lessons - componentUpdated")
-        // console.log(prevProp);
-        // console.log(prevState);
         if(this.state.currentLesson && prevState.currentLesson){
             if(prevState.currentLesson.location.address !==this.state.currentLesson.location.address){
                 this.geoCode();
@@ -145,7 +174,7 @@ class ClientLessons extends React.Component {
 
     //adds a new empty lesson when +New is clicked and saves it to the db
     addNewLesson = (event) =>{
-        
+        event.preventDefault();
         const {lessonName,date,time, locationName,address,city, province, country}=event.target
 
         const newLesson = {
@@ -161,17 +190,15 @@ class ClientLessons extends React.Component {
             }
         }
 
-        console.log(newLesson);
-
-         axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addLesson`,newLesson)
-            .then(res =>{
-                const clientCopy = {...this.state.currentClient};
-                clientCopy.lessons.push(res.data)
-                this.setState({currentClient:clientCopy, currentLesson: res.data});
-            })
-            .catch(err=>{
-                console.log(err);
-            })
+        axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addLesson`,newLesson)
+        .then(res =>{
+            const clientCopy = {...this.state.currentClient};
+            clientCopy.lessons.push(res.data)
+            this.setState({currentClient:clientCopy, currentLesson: res.data});
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
 
     deleteLesson = (lessonId)=>{
@@ -252,8 +279,17 @@ class ClientLessons extends React.Component {
 
         if(lessons.length===0){
             return(                                     
-                <div onClick={this.addNewLesson} className="empty-container empty-lessons">
-                    <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img>
+                <div className="empty-container empty-lessons">
+                    {/* <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img> */}
+                    <div className="empty-lessons__modal">
+                        <ModalContainer 
+                            modalType = "update" 
+                            modalName = "addLesson" 
+                            buttonType="image"
+                            url="/icons/add-icon.svg"
+                            onSubmit={this.addNewLesson} 
+                        />
+                    </div>
                     <p>Click to Add a Lesson</p>
                 </div>
             )

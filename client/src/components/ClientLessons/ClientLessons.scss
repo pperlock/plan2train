@@ -184,4 +184,11 @@ input:checked + .slidinggroove{
 .empty-lessons{
     width:55%;
     font-size:22px;
+    &__modal{
+        display:flex;
+        align-items:center;
+        margin:auto;
+        width:200px;
+        height:200px;
+    }
 }

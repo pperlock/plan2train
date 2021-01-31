@@ -22,8 +22,6 @@ class ClientProfile extends React.Component {
 
     componentDidUpdate(prevState,prevProps){
         const {address, city, province} = this.state.currentClient.userProfile;
-        console.log(prevProps);
-
         console.log("client profile - did update")
         this.props.programs.forEach(program => {
             document.getElementById(program.id).checked = false;
@@ -35,7 +33,6 @@ class ClientProfile extends React.Component {
         if(this.state.currentClient.userId !==this.props.match.params.clientId){
             this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)},()=>{
                 this.geoCode();
-                console.log('reached');
             });
         }
         
@@ -48,7 +45,6 @@ class ClientProfile extends React.Component {
 
     geoCode = () =>{
         const {address, city, province} = this.state.currentClient.userProfile;
-        console.log(address);
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
             // console.log(res.data.results[0].locations[0].displayLatLng);

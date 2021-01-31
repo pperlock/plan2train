@@ -142,6 +142,8 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
         // }),
     });
 
+    console.log(displayResources);
+
      if(programs.length===0){
         return(                                     
             // <div onClick={this.addNewLesson} className="empty-container">
