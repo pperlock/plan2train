@@ -26,7 +26,16 @@ ul{
   height:25px;
   width:25px;
   margin-right:16px;
-  filter: invert(83%) sepia(11%) saturate(291%) hue-rotate(353deg) brightness(92%) contrast(85%);
+  filter: invert(83%) sepia(11%) saturate(291%) hue-rotate(353deg) brightness(92%) contrast(85%); //lighter-green
+}
+.contact-icon--social{
+  height:25px;
+  width:25px;
+  margin-right:16px;
+  filter: invert(69%) sepia(13%) saturate(526%) hue-rotate(158deg) brightness(82%) contrast(86%); //accent-color
+  &:hover{
+    opacity:0.7;
+  }
 }
 
 .component-title{

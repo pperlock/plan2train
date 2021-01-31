@@ -112,7 +112,31 @@
                 border-radius:100px;
                 background-color:white;
                 box-shadow: 2px 11px 32px  black;
+
+                &:hover{
+                    filter:grayscale(100%)
+                }
+
+                &::before{
+                    content: "Change Logo";
+                    display:none;
+                    right:51px;
+                    bottom:20px;
+                    font-size: 12px;
+                    padding: 1px 5px;
+                    color: white;
+                    border-radius:4px;
+                    background: rgba(0, 0, 0, 0.5);
+                }
+                // only show the tool tip when you hover over the delete button
+                &:hover::before {
+                    position:absolute;
+                    display: block;
+                }
             }
+        }
+        &-input{
+            display:none;
         }
         &-content{
             display:flex;

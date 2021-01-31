@@ -186,6 +186,30 @@ app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
     });
 })
 
+/* =========================================== UPDATE LOGO ================================================ */
+app.put('/trainer/:trainerId/updateLogo', (req,res)=>{
+
+    Trainer.findOne({userId:req.params.trainerId}) 
+    .then((response)=>{
+       
+        //find the trainer and set the new values
+        response.company.logo = req.body.logo;
+    
+        //save the updated trainer
+        response.markModified('company');
+        response.save()
+        .then((response)=>{
+            res.send(response.company.logo);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })        
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+})
+
 /* =========================================== ADD CLIENT ================================================ */
 app.post('/trainer/:trainerId/addClient', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?

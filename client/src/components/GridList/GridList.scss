@@ -20,6 +20,13 @@
         width:15%;
         box-shadow: 2px 11px 32px  black;
         border-radius:6px; 
+
+        transition:transform 0.2s;
+
+        &:hover{
+            transform:scale(1.04);
+            z-index:2;
+        }
          
         &-name{
             text-align:center;

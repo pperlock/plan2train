@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import firebase from '../../firebase';
 
 import "./Trainer.scss"
 
@@ -12,7 +13,15 @@ import EmptyPage from '../EmptyPage/EmptyPage';
 
 class Trainer extends React.Component{
     
-    state={files:null, username:this.props.match.params.username, trainerId: this.props.match.params.trainerId, userProfile:null, programs:[], clients:[], updated:false, empty:false}
+    state={files:null, 
+            username:this.props.match.params.username, 
+            trainerId: this.props.match.params.trainerId, 
+            userProfile:null, 
+            programs:[], 
+            clients:[], 
+            updated:false, 
+            empty:false, 
+            selectedFile:null}
 
 
     componentDidMount(){
@@ -384,7 +393,13 @@ class Trainer extends React.Component{
                         deleteClient={this.deleteClient}
                         />}
                 {(this.state.userProfile && match.path==="/schedule") && <Schedule />}
-                {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && <User user={this.state.userProfile} updateUserProfile={this.updateUserProfile}/>}
+                {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && 
+                    <User 
+                        user={this.state.userProfile} 
+                        updateUserProfile={this.updateUserProfile} 
+                        match={match} 
+                        updateTrainer={this.updateTrainer} 
+                    />}
                 {/* {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && <h1>hello</h1>} */}
                 
             </>

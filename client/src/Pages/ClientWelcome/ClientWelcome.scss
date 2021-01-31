@@ -2,10 +2,12 @@
 
 .contact{
     &-link{
-        color:$dark-text;
+        color:$accent-color;
+        font-weight:bold;
         &:hover{
+            font-weight:normal;
             font-style:italic;
-            color:black;
+            // color:black;
         }
     }
 }
