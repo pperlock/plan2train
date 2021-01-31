@@ -16,7 +16,8 @@ class Trainer extends React.Component{
 
 
     componentDidMount(){
-        axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
+        console.log(this.state.trainerId)
+        axios.get(`http://localhost:8080/trainer/${this.state.username}/${this.state.trainerId}`)
         .then(res =>{
             // console.log(res.data)
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
@@ -31,17 +32,22 @@ class Trainer extends React.Component{
 
     componentDidUpdate(){
         console.log("trainer-didupdate");
+        // console.log(this.props.match.params.username)
+        // console.log(this.props.match.params.trainerId)
         if(this.state.updated){
             axios.get(`http://localhost:8080/trainer/${this.state.username}/${this.state.trainerId}`)
             .then(res =>{
-                // console.log(res.data)
+                console.log(res.data)
                 this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
-                    axios.get(`http://localhost:8080/trainer/${this.state.trainerId}/clients`)
+                    axios.get(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/clients`)
                     .then(clientRes=>{
                         this.setState({clients:clientRes.data})
                     })
                 })
                 this.setState({updated:false})
+            })
+            .catch(err=>{
+                console.log("this is where I am breaking")        
             })
         }
     }
@@ -155,6 +161,7 @@ class Trainer extends React.Component{
     addResource=(newResource, programId)=>{
         axios.post(`http://localhost:8080/program/${this.props.match.params.programId}/addResource`, newResource)
         .then(res =>{
+            console.log(res.data);
             //make a copy of the programs in state
             const programsCopy = this.state.programs;
             // find the location of the program to update?
@@ -175,6 +182,9 @@ class Trainer extends React.Component{
 
     /** ================================================ DELETE RESOURCE ================================================*/
     deleteResource = (resourceId) =>{
+
+        console.log(this.props.match.params.programId)
+        console.log(resourceId)
 
         axios.delete(`http://localhost:8080/program/${this.props.match.params.programId}/${resourceId}`)
         .then(res =>{

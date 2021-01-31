@@ -460,7 +460,7 @@ app.get('/trainer/:trainerId/clients', (req, res) => {
 
 /* =========================================== GET TRAINER ================================================ */
 
-app.get('/trainer/:trainerId', (req, res) => {
+app.get('/trainer/:username/:trainerId', (req, res) => {
 
     let trainer = {userProfile:{}, programs:[] }
 

@@ -42,12 +42,12 @@ class ClientLessons extends React.Component {
         
             const copyClient = {...this.props.currentClient};
 
-            //adds the resource information for each lesson resource and adds a value of true for applied to the programs- stored only as ids in the client document in db
+            //adds the resource information for each lesson resource and adds a value of true for applied to the programs
             this.props.programs.forEach(program=>
                 program.resources.forEach(programResource=>
                     copyClient.lessons.forEach(lesson => 
                         lesson.resources.forEach((resource, i)=> {
-                            if(resource === programResource.id){
+                            if(resource.id === programResource.id){
                                 //sets a value of true for applied resources
                                 programResource.applied=true;
                                 //remove the single id
