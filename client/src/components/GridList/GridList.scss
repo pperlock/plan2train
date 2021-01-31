@@ -35,6 +35,9 @@
         &-multi{
             text-align:center;
             margin-bottom:5px;
+            &-container{
+                margin-bottom:10px;
+            }
         }
         &-link{
             color:$accent-color;

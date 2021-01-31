@@ -5,7 +5,6 @@ import mapStyles from '../../mapStyles';
 
 const Map = ({mapLocation, containerSize}) => {
  
-    console.log(mapLocation);
     const [showInfo, setShowInfo]=useState(false);
     const [map, setMap] = useState(null);
 

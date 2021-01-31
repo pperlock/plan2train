@@ -80,7 +80,7 @@ class ClientLessons extends React.Component {
         const {address, city, province} = this.state.currentLesson.location;
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
-            console.log(res.data.results[0].locations[0].displayLatLng);
+            // console.log(res.data.results[0].locations[0].displayLatLng);
             this.setState({mapLocation:res.data.results[0].locations[0].displayLatLng});     
         })
         .catch(err=>{
@@ -223,14 +223,17 @@ class ClientLessons extends React.Component {
         })
     }
 
-    updateStatus = ()=>{
-           
-        axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateStatus`)
+    updateStatus = (event)=>{
+
+        const id = event.target.id;
+        console.log(id);
+        console.log(this.state.currentLesson.current);
+        axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/${id}/updateStatus`)
         .then(res =>{
             
             const clientCopy = {...this.state.currentClient};
             const lessonCopy = {...this.state.currentLesson};
-            clientCopy.lessons.map(lesson => lesson.current = (lesson.id === this.state.currentLesson.id) ? true : false);
+            clientCopy.lessons.forEach(lesson => lesson.current = (lesson.id === id) ? true : false);
             lessonCopy.current = true;
             console.log(clientCopy);
             this.setState({currentClient:clientCopy, currentLesson:lessonCopy});
@@ -272,6 +275,7 @@ class ClientLessons extends React.Component {
                             deleteFunction={this.deleteLesson}
                             onClick={this.updateCurrentLesson}
                             updateStatus={this.updateStatus}
+                            slider={true}
                         />)}
                         <div className="lessons__list-new">
                             <ModalContainer 
@@ -291,17 +295,6 @@ class ClientLessons extends React.Component {
                     <div className="component current-lesson">
                     <h2 className="component-title">{currentLesson.name}</h2>
                         <div className = "current-lesson__top">
-                            {/* {currentLesson.current ? 
-                            <p className="current-lesson__top-status current-lesson__top-status--current">Current</p> 
-                            : 
-                            <p className="current-lesson__top-status" onClick={this.updateStatus}>Mark as Current</p>} */}
-
-                            {/* <div className="current-lesson__top-status">
-                                <input onClick={this.updateStatus} className="current-lesson__top-status-check" type="checkbox" id="current"/>
-                                <div className={currentLesson.current ? "slidinggroove slidinggroove-on" : "slidinggroove"}></div>
-                                <label className="current-lesson__top-status" htmlFor="current" name="current"><p className="current-lesson__top-status-label"> Current</p></label>
-                            </div> */}
-
                             {/* shows the details for the lesson */}
                             <div className="current-lesson__top-details">
                                 <div className="current-lesson__top-details-text">
@@ -315,7 +308,6 @@ class ClientLessons extends React.Component {
                                         <p className="current-lesson__top-details-item">{`Date: ${currentLesson.date}`}</p>
                                         <p className="current-lesson__top-details-item">{`Time: ${currentLesson.time}`}</p>
                                     </div>
-                                    {/* <p>{currentLesson.current ? "current" : "Not"}</p> */}
                                 </div>
                                 {/* modal to update the lesson details */}
                                 <div className="current-lesson__top-details-edit">

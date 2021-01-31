@@ -7,6 +7,9 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 function GridList({id, content, modalName, link, deleteBtn, deleteFunction, deleteString, list, deleteType, resourceType, onClick, updateStatus, slider}) {
 
+    console.log("gridList rendered")
+    console.log(content.current)
+
     let resourceURL=""
     if (resourceType === "pdf"){
         resourceURL = "/icons/pdf.png"
@@ -27,7 +30,7 @@ function GridList({id, content, modalName, link, deleteBtn, deleteFunction, dele
                         <p className="gridlist__item-name">{content}</p>
                     </a>
                     :
-                    <div>
+                    <div className="gridlist__item-multi-container">
                         <p onClick={()=>onClick(id)} className="gridlist__item-multi gridlist__item-title">{content.name ==="" ? "Add Title" : content.name}</p>
                         <p className="gridlist__item-multi">{content.date}</p>
                         <p className="gridlist__item-multi">{content.time}</p>
@@ -42,9 +45,9 @@ function GridList({id, content, modalName, link, deleteBtn, deleteFunction, dele
                         resourceType && <img className="gridlist__item-image" src={resourceURL} alt="icon"/>
                         :
                         <div className="current-lesson__top-status">
-                            <input onClick={updateStatus} className="current-lesson__top-status-check" type="checkbox" id="current"/>
-                            <div className={content.current ? "slidinggroove slidinggroove-on" : "slidinggroove"}></div>
-                            <label className="current-lesson__top-status" htmlFor="current" name="current"><p className="current-lesson__top-status-label"> {content.current && "Current"}</p></label>
+                            <input onClick={(event)=>updateStatus(event)} className="current-lesson__top-status-check" type="checkbox" id={id}/>
+                            <div className={content.current ? "slidinggroove-on" : "slidinggroove"}></div>
+                            <label className="current-lesson__top-status" htmlFor={id} name="current"><p className="current-lesson__top-status-label"> {content.current && "Current"}</p></label>
                         </div>
                     }
                     {deleteType==="modal" &&

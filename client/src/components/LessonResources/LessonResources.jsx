@@ -17,7 +17,7 @@ import AppliedResources from '../../components/AppliedResources/AppliedResources
 
 function LessonResources({programs, currentLesson, currentClient, match}) {
 
-    console.log(programs);
+    // console.log(programs);
     const ItemTypes = {
         CARD:'card',
     };
@@ -33,7 +33,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
      //update the resources of the current lesson when state changes
     useEffect(() => {
         updateCurrentLesson(currentLesson);
-        console.log(displayResources)
+        // console.log(displayResources)
     },[currentLesson]);
 
     
