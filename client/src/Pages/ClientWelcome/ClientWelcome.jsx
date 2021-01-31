@@ -58,7 +58,7 @@ function ClientWelcome({client, trainer}) {
                     </div>
             </div>  
 
-            <div className="component welcome__section">
+            <div className="component welcome__section welcome__section--last">
                 <div className="component-title welcome__section-title">
                     <p>Trainer</p>
                 </div>  

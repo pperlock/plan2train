@@ -16,8 +16,6 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:20px;
-    height:100vh;
     padding-left:320px;
     background-size:cover;
     background-position:right;
@@ -36,6 +34,9 @@
         margin-bottom:70px;
         margin-left:40px;
         width:80%;
+        &--last{
+            margin-bottom:50px;
+        }
 
         &-body{
             margin-top:60px;

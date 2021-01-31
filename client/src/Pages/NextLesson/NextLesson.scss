@@ -6,10 +6,10 @@
     align-items:center;
     color:$accent-color;
     padding:20px;
-    height:100vh;
     padding-left:320px;
     background-size:cover;
     background-position:right;
+    box-sizing:border-box;
 
     &__title{
         margin:40px 0;
