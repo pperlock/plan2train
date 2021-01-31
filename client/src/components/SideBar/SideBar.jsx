@@ -140,7 +140,7 @@ class SideBar extends React.Component {
                             }
 
                             {(!!this.props.client && !!this.props.pastLessons) &&
-                                <Link to={`/client/${this.props.match.params.username}/${this.props.match.params.clientId}/lessons/${this.props.pastLessons[0].id}`}>
+                                <Link to={this.props.pastLessons.length === 0 ? `/client/${this.props.match.params.username}/${this.props.match.params.clientId}/lessons` : `/client/${this.props.match.params.username}/${this.props.match.params.clientId}/lessons/${this.props.pastLessons[0].id}`}>
                                     <li id="lessons-link" className="sidebar__menu-link">
                                         <img id="lessons-icon" className="sidebar__menu-icon sidebar__menu-icon--active" src="/icons/programs-icon.svg" alt="user profile"/>
                                        Past Lessons

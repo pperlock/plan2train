@@ -44,7 +44,7 @@ function GridList({id, content, modalName, link, deleteBtn, deleteFunction, dele
                         <div className="current-lesson__top-status">
                             <input onClick={(event)=>updateStatus(event)} className="current-lesson__top-status-check" type="checkbox" id={id}/>
                             <div className={content.current ? "slidinggroove-on" : "slidinggroove"}></div>
-                            <label className="current-lesson__top-status" htmlFor={id} name="current"><p className="current-lesson__top-status-label"> {content.current && "Current"}</p></label>
+                            <label className="current-lesson__top-status" htmlFor={id} name="current"><p className="current-lesson__top-status-label"> {content.current && "NEXT"}</p></label>
                         </div>
                     }
                     {deleteType==="modal" &&

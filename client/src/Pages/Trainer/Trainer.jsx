@@ -170,18 +170,7 @@ class Trainer extends React.Component{
     addResource=(newResource, programId)=>{
         axios.post(`http://localhost:8080/program/${this.props.match.params.programId}/addResource`, newResource)
         .then(res =>{
-            console.log(res.data);
-            //make a copy of the programs in state
-            const programsCopy = this.state.programs;
-            // find the location of the program to update?
-            const programLoc = programsCopy.findIndex(program =>program.id ===programId);
-            //remove that program from the array
-            programsCopy.splice(programLoc,1);
-            //add the new program returned by the axios call
-            programsCopy.push(res.data);
-            console.log(programsCopy);
-            //update the state to the modified program array
-            this.setState({programs:programsCopy});
+            this.setState({updated:true});
         })
         .catch(err=>{
             console.log(err);

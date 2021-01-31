@@ -5,6 +5,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import ClientWelcome from '../ClientWelcome/ClientWelcome';
 import Lessons from '../Lessons/Lessons';
 import NextLesson from '../NextLesson/NextLesson';
+import EmptyPage from '../EmptyPage/EmptyPage';
 
 
 import "./Client.scss";
@@ -38,6 +39,7 @@ function Client ({match}) {
     trainer && console.log(trainer);
     return (
         <div>
+
             <SideBar
                 nextLesson={nextLesson}
                 pastLessons={pastLessons}
@@ -57,11 +59,14 @@ function Client ({match}) {
                     nextLesson={nextLesson}
                 />
             }
+
             {(client && pastLessons && match.path==="/client/:username/:clientId/lessons/:lessonId") && 
                 <Lessons
                     pastLessons={pastLessons}
                 />
             }
+
+            {(client && match.path==="/client/:username/:clientId/lessons") && <EmptyPage match={match}/>}
         </div>
     )
 }

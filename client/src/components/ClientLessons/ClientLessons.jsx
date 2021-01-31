@@ -68,34 +68,37 @@ class ClientLessons extends React.Component {
     }
 
     componentDidUpdate(prevState){
+        console.log(this.state.availablePrograms);
+        
+        if(this.state.availablePrograms.length !==0){
+            if(!("applied" in this.state.availablePrograms[0].resources[0])){
+            // adds a key name applied to each resource for all trainer programs
+            const programs = [...this.state.availablePrograms];
+            programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
 
-        if(!("applied" in this.state.availablePrograms[0].resources[0])){
-           // adds a key name applied to each resource for all trainer programs
-           const programs = [...this.state.availablePrograms];
-           programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
+        
+            const copyClient = {...this.state.currentClient};
 
-       
-           const copyClient = {...this.state.currentClient};
-
-           //adds the resource information for each lesson resource and adds a value of true for applied to the programs
-           programs.forEach(program=>
-               program.resources.forEach(programResource=>
-                   copyClient.lessons.forEach(lesson => 
-                       lesson.resources.forEach((resource, i)=> {
-                           if(resource.id === programResource.id){
-                               //sets a value of true for applied resources
-                               programResource.applied=true;
-                               //remove the single id
-                               lesson.resources.splice(i,1);
-                               //replace the resource with the object
-                               lesson.resources.push(programResource);
-                           }  
-                       })
-                   )          
-               )
-           )
-           this.setState({currentClient:copyClient, availablePrograms:programs, displayResources:programs[0].resources})
-        } 
+            //adds the resource information for each lesson resource and adds a value of true for applied to the programs
+            programs.forEach(program=>
+                program.resources.forEach(programResource=>
+                    copyClient.lessons.forEach(lesson => 
+                        lesson.resources.forEach((resource, i)=> {
+                            if(resource.id === programResource.id){
+                                //sets a value of true for applied resources
+                                programResource.applied=true;
+                                //remove the single id
+                                lesson.resources.splice(i,1);
+                                //replace the resource with the object
+                                lesson.resources.push(programResource);
+                            }  
+                        })
+                    )          
+                )
+            )
+            this.setState({currentClient:copyClient, availablePrograms:programs, displayResources:programs[0].resources})
+            } 
+        }
 
         console.log("client-lessons - componentUpdated")
         if(this.state.currentLesson && prevState.currentLesson){
@@ -103,7 +106,8 @@ class ClientLessons extends React.Component {
                 this.geoCode();
             }
         }
-    }
+    
+}
 
     geoCode = () =>{
         const {address, city, province} = this.state.currentLesson.location;
@@ -307,7 +311,7 @@ class ClientLessons extends React.Component {
                             modalName={!lesson.current ? "delete" : "noDelete"}
                             deleteBtn={true}
                             deleteType="modal" 
-                            deleteString = {!lesson.current ? lesson.name : "Cannot Delete Current Lesson"}
+                            deleteString = {!lesson.current ? lesson.name : "Cannot Delete Next Lesson"}
                             deleteFunction={this.deleteLesson}
                             onClick={this.updateCurrentLesson}
                             updateStatus={this.updateStatus}

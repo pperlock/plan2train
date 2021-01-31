@@ -32,6 +32,8 @@ function App() {
                   <Route path="/client/:username/:clientId" exact render={(props)=>(<Client {...props}/>)}/>
                   <Route path="/client/:username/:clientId/nextlesson/:lessonId" exact render={(props)=>(<Client {...props}/>)}/>
                   <Route path="/client/:username/:clientId/lessons/:lessonId" exact render={(props)=>(<Client {...props}/>)}/>
+                  <Route path="/client/:username/:clientId/lessons" exact render={(props)=>(<Client {...props}/>)}/>
+                  
               </Switch>
           </BrowserRouter>
       </div>
