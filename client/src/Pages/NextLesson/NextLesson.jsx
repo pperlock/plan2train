@@ -1,12 +1,29 @@
-import React from 'react'
+import React, {useState,useEffect}from 'react';
+import axios from 'axios';
 
 import "./NextLesson.scss";
+
 import Map from '../../components/Map/Map';
 import GridList from '../../components/GridList/GridList';
 
 function NextLesson({nextLesson}) {
 
-    console.log(nextLesson);
+    const {address, city, province} = nextLesson.location
+
+    const [mapLocation, setMapLocation]=useState(null);
+
+    useEffect(()=>{
+        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
+        .then(res=>{
+            // console.log(res.data.results[0].locations[0].displayLatLng);
+            setMapLocation(res.data.results[0].locations[0].displayLatLng);
+
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },[])
+
     return (
     <div className="next-lesson" style={{backgroundImage: "url('/images/main2.jfif')"}}>
         <h1 className="next-lesson__title">NEXT LESSON</h1>
@@ -31,14 +48,11 @@ function NextLesson({nextLesson}) {
                             </div>
                         </div>
                     
-                        <div className = "client__contact-map" style={{width:"346px", height:"268px"}}>
-                            {/* <Map
-                                googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`}
-                                loadingElement={<div style={{height: "100%"}} />}
-                                containerElement={<div style={{height: "100%"}} />}
-                                mapElement={<div style={{height: "100%"}} />}
-                                mapLocation={this.state.mapLocation}
-                            /> */}
+                        <div className = "client__contact-map">
+                            <Map
+                                mapLocation={mapLocation}
+                                containerSize={{width:"346px", height:"282px"}}
+                            />
                         </div>
                     </div>
                     <div className="next-lesson__resources">

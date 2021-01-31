@@ -16,8 +16,6 @@ function Client ({match}) {
     const [nextLesson, setNextLesson] = useState(null);
     const [pastLessons, setPastLessons] = useState(null);
     
-    // state={client:null,trainer:null}
-
     useEffect(()=>{
         axios.get(`http://localhost:8080/client/${match.params.username}/${match.params.clientId}`)
         .then(res =>{

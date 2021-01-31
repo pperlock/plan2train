@@ -20,7 +20,10 @@ class ClientProfile extends React.Component {
         })
     }
 
-    componentDidUpdate(){
+    componentDidUpdate(prevState,prevProps){
+        const {address, city, province} = this.state.currentClient.userProfile;
+        console.log(prevProps);
+
         console.log("client profile - did update")
         this.props.programs.forEach(program => {
             document.getElementById(program.id).checked = false;
@@ -32,13 +35,20 @@ class ClientProfile extends React.Component {
         if(this.state.currentClient.userId !==this.props.match.params.clientId){
             this.setState({currentClient: this.props.clients.find(client=>client.userId === this.props.match.params.clientId)},()=>{
                 this.geoCode();
+                console.log('reached');
             });
-        } 
+        }
+        
+        if(city !== prevState.currentClient.userProfile.city || address !== prevProps.currentClient.userProfile.address || province !== prevProps.currentClient.userProfile.province){
+            console.log("*************************************address changed");
+            // this.geoCode();
+        }
 
     }
 
     geoCode = () =>{
         const {address, city, province} = this.state.currentClient.userProfile;
+        console.log(address);
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
             // console.log(res.data.results[0].locations[0].displayLatLng);
@@ -107,7 +117,7 @@ class ClientProfile extends React.Component {
     }
 
     render(){
-        console.log(this.props.currentClient.programs);
+        // console.log(this.props.currentClient.programs);
         const {address, city, province, country, postal, email, phone} = this.props.currentClient.userProfile;
         return (
             <>
@@ -115,7 +125,7 @@ class ClientProfile extends React.Component {
                 <p className="client__programs-title">Programs</p>
                 <div className="client__programs-list">
                     {this.props.programs.map(program => 
-                        <label className="client__programs-label">{program.name}
+                        <label className="client__programs-label" key={program.id} >{program.name} 
                             <input onClick={()=>{this.toggleProgram(program.id)}} type="checkbox" name={program.id} id={program.id} value={program.name}/> 
                             <span className="client__programs-check"></span>
                         </label>
@@ -154,11 +164,8 @@ class ClientProfile extends React.Component {
                     </div>
                     <div className = "client__contact-map">
                         <Map
-                            googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`}
-                            loadingElement={<div style={{height: "100%"}} />}
-                            containerElement={<div style={{height: "100%"}} />}
-                            mapElement={<div style={{height: "100%"}} />}
                             mapLocation={this.state.mapLocation}
+                            containerSize={{width:"386px", height:"200px"}}
                         />
                     </div>
                 </div>

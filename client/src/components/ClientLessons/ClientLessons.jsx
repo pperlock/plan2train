@@ -86,7 +86,6 @@ class ClientLessons extends React.Component {
         .catch(err=>{
             console.log(err);
         })
-       
     }
 
     //updates the resources that are displayed based on which program is chosen in the available resources section
@@ -331,13 +330,10 @@ class ClientLessons extends React.Component {
                                 </div>
                             </div>
                             
-                            <div className = "client__contact-map" style={{width:"346px", height:"268px"}}>
+                            <div className = "client__contact-map">
                                 <Map
-                                    googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${process.env.REACT_APP_GOOGLE_KEY}`}
-                                    loadingElement={<div style={{height: "100%"}} />}
-                                    containerElement={<div style={{height: "100%"}} />}
-                                    mapElement={<div style={{height: "100%"}} />}
                                     mapLocation={this.state.mapLocation}
+                                    containerSize={{width:"346px", height:"268px"}}
                                 />
                             </div>
                         </div>

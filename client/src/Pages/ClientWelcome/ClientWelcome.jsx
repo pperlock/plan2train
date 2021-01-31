@@ -1,12 +1,29 @@
-import React from 'react'
+import React, {useState,useEffect}from 'react';
+import axios from 'axios';
 
 import './ClientWelcome.scss';
+
+import Map from '../../components/Map/Map';
 
 function ClientWelcome({client, trainer}) {
 
     const {lname,fname,email,phone,address,city,province,country,postal} = trainer.contact;
     const {facebook, twitter, instagram, linkedIn} = trainer.social;
     const {name, description, logo} = trainer.company;
+
+    const [mapLocation, setMapLocation]=useState(null);
+
+    useEffect(()=>{
+        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
+        .then(res=>{
+            // console.log(res.data.results[0].locations[0].displayLatLng);
+            setMapLocation(res.data.results[0].locations[0].displayLatLng);
+
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },[])
 
     return (
         <div className="welcome" style={{backgroundImage: "url('/images/main2.jfif')"}}>
@@ -33,7 +50,7 @@ function ClientWelcome({client, trainer}) {
                     </div>
                     <div className="welcome__section-body welcome__programs">
                         {client.programs.map(program=>
-                            <div>
+                            <div key={program.id}>
                                 <p className="welcome__programs-title">{program.name}</p>
                                 <p className="welcome__programs-text">{program.description}</p>
                             </div>
@@ -73,7 +90,12 @@ function ClientWelcome({client, trainer}) {
                                     <p className="user-profile__address-item">{`${city}, ${province}, ${country}`}</p>
                                     <p className="user-profile__address-item">{postal}</p>
                                 </div>
-                                <div className="welcome__trainer-address-map">Map</div>
+                                <div className = "client__contact-map">
+                                    <Map
+                                        mapLocation={mapLocation}
+                                        containerSize={{width:"346px", height:"211px"}}
+                                    />
+                                </div>
                         </div>
                     </div>
                 </div>

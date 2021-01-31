@@ -35,7 +35,7 @@ class Clients extends React.Component {
 
         const splitProps = this.props.match.path.split("/")
         const activeLink = splitProps[6]
-        console.log(activeLink)
+        // console.log(activeLink)
 
         if (document.querySelector(".active-link")){
             const previouslyActiveLink = document.querySelector(".active-link");

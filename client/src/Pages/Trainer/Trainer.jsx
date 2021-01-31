@@ -17,7 +17,7 @@ class Trainer extends React.Component{
 
     componentDidMount(){
         console.log(this.state.trainerId)
-        axios.get(`http://localhost:8080/trainer/${this.state.username}/${this.state.trainerId}`)
+        axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
         .then(res =>{
             // console.log(res.data)
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
@@ -35,7 +35,7 @@ class Trainer extends React.Component{
         // console.log(this.props.match.params.username)
         // console.log(this.props.match.params.trainerId)
         if(this.state.updated){
-            axios.get(`http://localhost:8080/trainer/${this.state.username}/${this.state.trainerId}`)
+            axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
             .then(res =>{
                 console.log(res.data)
                 this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
