@@ -16,7 +16,8 @@ class ClientProfile extends React.Component {
         console.log("client profile - did mount")
         this.geoCode();
         this.state.currentClient.programs.forEach(program=>{
-            document.getElementById(program.id).checked = true;
+            const inputBox = document.getElementById(program.id);
+            if(!!inputBox){inputBox.checked = true};
         })
     }
 
@@ -24,10 +25,12 @@ class ClientProfile extends React.Component {
         const {address, city, province} = this.state.currentClient.userProfile;
         console.log("client profile - did update")
         this.props.programs.forEach(program => {
-            document.getElementById(program.id).checked = false;
+            const inputBox = document.getElementById(program.id);
+            if(!!inputBox){inputBox.checked = false};
         })
         this.state.currentClient.programs.forEach(program=>{
-            document.getElementById(program.id).checked = true;
+            const inputBox = document.getElementById(program.id);
+            if(!!inputBox){inputBox.checked = true};
         });
         //if the userId currently in state doesn't match the userId in the path then update the currentClient in state to match the one in the path
         if(this.state.currentClient.userId !==this.props.match.params.clientId){
@@ -37,7 +40,6 @@ class ClientProfile extends React.Component {
         }
         
         if(city !== prevState.currentClient.userProfile.city || address !== prevProps.currentClient.userProfile.address || province !== prevProps.currentClient.userProfile.province){
-            console.log("*************************************address changed");
             // this.geoCode();
         }
 
