@@ -168,20 +168,22 @@ class ClientProfile extends React.Component {
                     </div>
                 </div>
                 <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                    <div className="client__notes-submit">
+                        <ModalContainer 
+                            modalType = "note" 
+                            modalName = "addNote" 
+                            url="/icons/add-note.svg" 
+                            buttonType="image"
+                            information = {this.state.currentClient.notes}
+                            onSubmit={this.addNote} 
+                        />
+                    </div>
+
                     <div className = "client__notes-body">
                         <p className="client__notes-title">Notes to Self ...</p>
                         <div className="client__notes-text"> {this.state.currentClient.notes}</div>
                     </div>
-                        <div className="client__notes-submit">
-                            <ModalContainer 
-                                modalType = "note" 
-                                modalName = "addNote" 
-                                url="/icons/add-note.svg" 
-                                buttonType="image"
-                                information = {this.state.currentClient.notes}
-                                onSubmit={this.addNote} 
-                            />
-                        </div>
+
                     
                 </div>
             </div>

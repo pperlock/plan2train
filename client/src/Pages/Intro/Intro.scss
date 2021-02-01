@@ -6,7 +6,6 @@
     width:100vw;
     height:100vh;
     overflow:hidden;
-    background: url('intro-background.png');
     background-size:contain;
     
     display:flex;
@@ -43,10 +42,9 @@
         margin-bottom:32px;
     }
 
-    // &__button{
-    //     @include buildButton(200px,50px, $accent-color, white);
-    //     font-size:24px;
-    // }
+    &__button-left{
+        margin-left:0;
+    }
 
     &__login{
         display:flex;

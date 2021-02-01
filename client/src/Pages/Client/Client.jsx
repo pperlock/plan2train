@@ -33,10 +33,6 @@ function Client ({match}) {
         })
     },[]);
 
-    trainer && console.log(client);
-    trainer && console.log(nextLesson);
-    trainer && console.log(pastLessons);
-    trainer && console.log(trainer);
     return (
         <div>
 

@@ -6,16 +6,13 @@ import axios from 'axios';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 function User({user, updateUserProfile, match, updateTrainer}) {
-    // console.log(updateUserProfile);
-    // console.log(user.userProfile);
-        // console.log(userProfile);
+
     const {lname,fname,username,password,email,phone,address,city,province,country,postal} = user.contact;
     const {facebook, twitter, instagram, linkedIn} = user.social;
     const {name, description, logo} = user.company;
     const hiddenPassword = password.split("").map(character => "*");
 
     const [selectedFile, setSelectedFile] = useState(null)
-    const [showFileInput, setShowFileInput] = useState(false)
 
    /** ================================================ ADD LOGO ================================================*/
 
@@ -65,7 +62,7 @@ function User({user, updateUserProfile, match, updateTrainer}) {
     useEffect(()=>{
         fileUpload()
     },[selectedFile])
-
+    
     return (
         <div className="user-profile" style={{backgroundImage: "url('/images/main2.jfif')"}}>
             <p className="user-profile__type">Profile: Trainer</p>
@@ -74,7 +71,7 @@ function User({user, updateUserProfile, match, updateTrainer}) {
                    
                     <div className="user-profile__description-logo-container">
 
-                        <img src={logo !=="" ? logo : "/icons/add-icon.svg"} alt ="company logo" className="user-profile__description-logo" onClick={activateFileSelector}/>
+                        <img src={logo !=="" ? logo : "/icons/image.svg"} alt ="company logo" className="user-profile__description-logo" onClick={activateFileSelector}/>
                         
                         <input id="inputFile" type="file" className="user-profile__description-input" onChange={fileSelectedHandler}></input>
 

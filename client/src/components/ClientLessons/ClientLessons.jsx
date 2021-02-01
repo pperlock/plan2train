@@ -284,7 +284,6 @@ class ClientLessons extends React.Component {
         if(lessons.length===0){
             return(                                     
                 <div className="empty-container empty-lessons">
-                    {/* <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img> */}
                     <div className="empty-lessons__modal">
                         <ModalContainer 
                             modalType = "update" 
@@ -377,11 +376,8 @@ class ClientLessons extends React.Component {
                 
                         {/* renders the notes and the homework section */}
                         <div className="current-lesson__bottom">
+
                             <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
-                                <div className = "client__notes-body">
-                                    <p className="client__notes-title">Lesson Notes ...</p>
-                                    <div className="client__notes-text"> {this.state.currentLesson.notes}</div>
-                                </div>
                                 <div className="client__notes-submit">
                                     <ModalContainer 
                                         modalType = "note" 
@@ -392,13 +388,13 @@ class ClientLessons extends React.Component {
                                         onSubmit={this.addListItem} 
                                     />
                                 </div>
+                                <div className = "client__notes-body">
+                                    <p className="client__notes-title">Lesson Notes ...</p>
+                                    <div className="client__notes-text"> {this.state.currentLesson.notes}</div>
+                                </div>
                             </div>
 
                             <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
-                                <div className = "client__notes-body">
-                                    <p className="client__notes-title">Homework ...</p>
-                                    <div className="client__notes-text"> {this.state.currentLesson.homework}</div>
-                                </div>    
                                 <div className="client__notes-submit">
                                     <ModalContainer 
                                         modalType = "note" 
@@ -409,6 +405,11 @@ class ClientLessons extends React.Component {
                                         onSubmit={this.addListItem} 
                                     />
                                 </div>
+                                <div className = "client__notes-body">
+                                    <p className="client__notes-title">Homework ...</p>
+                                    <div className="client__notes-text"> {this.state.currentLesson.homework}</div>
+                                </div>    
+
                             </div>
                         </div>
                     </div>

@@ -4,7 +4,6 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    color:$accent-color;
     padding:20px;
     padding-left:320px;
     background-size:cover;
@@ -13,10 +12,12 @@
 
     &__title{
         margin:40px 0;
+        color:$accent-color;
     }
 
     &__location{
         font-size:22px;
+        color:$accent-color;
     }
 
     &__top{
@@ -26,10 +27,11 @@
     }
     &__subtitle{
         margin-bottom:20px;
+        color:$accent-color;
     }
 
     &__resources{
-        margin:40px;
+        margin:0 40px;
         &-list{
             display:flex;
             flex-direction:column;
@@ -37,4 +39,22 @@
         }
     }
 
+}
+
+.client-side{
+    &__notes{
+        padding-top:40px;
+        &-title{
+            color:$accent-color;
+        }
+    }
+    &__notepaper{
+        margin-top:20px;
+        height:535px;
+
+        &-next{
+            margin-top:40px;
+            height:535px;
+        }
+    }
 }

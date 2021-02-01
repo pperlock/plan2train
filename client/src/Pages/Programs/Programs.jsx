@@ -27,7 +27,7 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
  
 class Programs extends React.Component {
 
-    state={selectedFile:null, showRadio:true, uploaded:false, uploadType:""}
+    state={selectedFile:null, showRadio:true, uploaded:false, uploadType:"", showloading:false}
 
     componentDidUpdate(){
         console.log("programs - did update")
@@ -66,12 +66,16 @@ class Programs extends React.Component {
             let storageRef = firebase.storage().ref(`/${bucketName}/${file.name}`);
             let uploadTask = storageRef.put(file);
             uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                //next
                 ()=>{
                     console.log("Uploading ...")
+                    this.setState({showloading:true})
                 },
+                //error
                 ()=>{
                     console.log("Upload Unsuccessful");
                 },
+                //complete
                 ()=>{
                     //let downloadURL = uploadTask.snapshot.getDownloadURL;
                     let storageLoc = firebase.storage().ref();
@@ -83,26 +87,14 @@ class Programs extends React.Component {
                             type: selectedType
                         }
                         this.props.addResource(newResource, this.props.match.params.programId);
+                        this.setState({showloading:false})
                     })
                     .catch(err=>{
                         console.log(err);
                     })
                 }   
             )
-            
-            let storageLoc = firebase.storage().ref();
-            storageLoc.child(`/${bucketName}/${file.name}`).getDownloadURL()
-            .then((url)=>{
-                const newResource={
-                    name:event.target.uploadName.value,
-                    url:url,
-                    type: selectedType
-                }
-                this.props.addResource(newResource, this.props.match.params.programId);
-            })
-            .catch(err=>{
-                console.log(err);
-            })
+
         //if the resource is a url then capture the url and send it to db
         }else{
             const newResource={
@@ -114,7 +106,7 @@ class Programs extends React.Component {
         }
 
         // return the add button to the screen and hide the resource input elements
-        this.setState({uploadType:"",  showRadio:true});
+        this.setState({uploadType:"",  showRadio:true, showloading:false});
     }
 
 
@@ -161,28 +153,30 @@ class Programs extends React.Component {
                         </div>   
                     {/* </div> */}
                         
-                            {program.resources.length === 0 ? 
-                                    <div onClick={()=>this.setState({showRadio:true})} className="empty-container empty-resources">
-                                        {/* <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img> */}
-                                        <p>Choose a Resource Type Below to Add Resources</p>
-                                    </div>
-                                    :  
-                                <div className="gridlist">
-                                    {program.resources.map(resource=> 
-                                        <GridList 
-                                            key={resource.id} 
-                                            content={resource.name}
-                                            resourceType={resource.type} 
-                                            id={resource.id} 
-                                            link={resource.url} 
-                                            description={resource.type} 
-                                            deleteString={resource.name}
-                                            deleteBtn={true}
-                                            deleteType="modal" 
-                                            deleteFunction={this.props.deleteResource}
-                                        />)}
+                        {program.resources.length === 0 ? 
+                                <div onClick={()=>this.setState({showRadio:true})} className="empty-container empty-resources">
+                                    {/* <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img> */}
+                                    <p>Choose a Resource Type Below to Add Resources</p>
                                 </div>
-                            }
+                                :  
+                            <div className="gridlist">
+                                {program.resources.map(resource=> 
+                                    <GridList 
+                                        key={resource.id} 
+                                        content={resource.name}
+                                        resourceType={resource.type} 
+                                        id={resource.id} 
+                                        link={resource.url} 
+                                        description={resource.type} 
+                                        deleteString={resource.name}
+                                        deleteBtn={true}
+                                        deleteType="modal" 
+                                        deleteFunction={this.props.deleteResource}
+                                        modalName="deleteResource"
+                                    />)}
+                                    {this.state.showloading && <div className="component grid__list-item loading"><img src="/icons/loading-icon.gif" alt="loading"/></div>}
+                            </div>
+                        }
   
                     <div className="resource__add">
                         {/* a reference is a way to reference another element in the dom */}

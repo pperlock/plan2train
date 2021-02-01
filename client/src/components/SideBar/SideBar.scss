@@ -38,11 +38,10 @@
     &__divider{
         width:140px;
         border: 2px solid $contrast-text;
-        margin-bottom:32px;
+        margin-bottom:20px;
         
     }
     &__menu{
-        margin-top:24px;
         width:100%;
         height:50%;
 
@@ -74,17 +73,42 @@
         }
     }
     &__logout{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
+        position:relative;
         &-icon{
             width:40px;
             height:40px;
             transform:rotate(180deg);
-            margin-left:10px;
+            margin-top:40px;
+            margin-left:200px;
+            align-self:flex-end;
             // filter: invert(69%) sepia(13%) saturate(526%) hue-rotate(158deg) brightness(82%) contrast(86%);
             filter: invert(52%) sepia(0%) saturate(0%) hue-rotate(250deg) brightness(96%) contrast(80%);
+            &:hover{
+                filter: invert(69%) sepia(13%) saturate(526%) hue-rotate(158deg) brightness(82%) contrast(86%); //accent-color
+            }
         }
+        &::before{
+            content: 'Log Out';
+            display:none;
+            opacity:0;
+            right:0px;
+            bottom:5px;
+            font-size: 22px;
+            color: $accent-color;
+            width:0;
+            font-style:italic;
+          }
+          // only show the tool tip when you hover over the delete button
+          &:hover::before {
+            position:absolute;
+            display:block;
+            visibility:visible;
+            opacity:1;
+            right:40px;
+            width:81px;
+            @include animateTooltip(40px);
+          }
+        
         &-text{
             padding-bottom:4px;
         }

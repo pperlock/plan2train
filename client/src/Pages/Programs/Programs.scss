@@ -54,7 +54,7 @@
             width:20px;
             height:20px;
             position:relative;
-            @include addToolTip("Delete Program", -2px, 22px, 91px);
+            @include addToolTip("Delete Program",0px, 22px, 91px);
         }
         &-update{
             width:28px;
@@ -147,4 +147,10 @@
     background-color:white;
     width:50%;
     height:100px;
+}
+
+.loading{
+    width:162px;
+    height:116px;
+    background-color:$light-background;
 }

@@ -3,18 +3,109 @@
 .modal-form{
     display:flex;
     flex-direction:column;
+    &__upper{
+        display:flex;
+        flex-direction:row;
+    }
+    &__left{
+        border-right: 1px solid $dark-background;
+        padding-right:20px;
+        margin-right:40px;
+    }
+    &__section{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+    }
     &__input{
-        padding:10px 5px;
+        padding:10px 5px 5px 10px;
         border:none;
         border-bottom:1px solid grey;
-        margin-bottom:10px;
-        margin-right:10px;
+        // margin-bottom:10px;
+        margin-right:20px;
         background-color:$form-input-background;
 
         &:focus{
             outline:none;
-            border-bottom:1px solid grey;
+            border:1px solid $dark-background;
         }
+
+        &--email{
+            width:375px;
+        }
+        &--address{
+            width:308px;
+        }
+        &--province{
+            width:75px;
+        }
+        &--country{
+            width:100px;
+        }
+        &--postal{
+            width:100px;
+        }
+        &--social{
+            width:430px;
+            // margin-bottom:0px;
+        }
+        &-select{
+            width:70%;
+            overflow:hidden;
+            height:100px;
+            border:1px solid $dark-background;
+            padding: 10px;
+            &:focus{
+                outline:none;
+                border:1px solid $dark-background;
+            }
+        }
+    }
+    &__textarea{
+        font-family: "SourceSansPro"; 
+        font-size:14px;
+        resize:none;
+        border:none;
+        border-top:1px solid grey;
+        margin:0;
+        border:1px solid $dark-background;
+
+        &-label{
+            margin-bottom:5px;
+        }
+    }
+    &__label{
+        font-size:12px;
+        color:$accent-color;
+        margin-bottom:10px;
+        &--programs{
+            font-size:16px;
+        }
+    }
+
+    &__user{
+        display:flex;
+        flex-wrap:wrap;
+        margin-bottom: 10px;
+    }
+    &__contact{
+        display:flex;
+        flex-wrap:wrap;
+        margin-bottom: 30px;
+    }
+    &__address{
+        display:flex;
+        flex-wrap:wrap; 
+        margin-bottom: 30px;
+    }
+    &__social{
+        display:flex;
+        flex-wrap:wrap;
+        margin-bottom:30px;
+    }
+
+    &__company{
+       width:90%;
     }
 
     &__submit{
@@ -45,4 +136,9 @@
         flex-direction:column;
         width:50%;
     }
+}
+
+.modal-addClient-bottom{
+    display:flex;
+    justify-content: space-between;
 }

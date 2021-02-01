@@ -23,7 +23,7 @@ function ClientWelcome({client, trainer}) {
         .catch(err=>{
             console.log(err);
         })
-    },[])
+    })
 
     return (
         <div className="welcome" style={{backgroundImage: "url('/images/main2.jfif')"}}>
@@ -36,7 +36,7 @@ function ClientWelcome({client, trainer}) {
                     <p>Company</p>
                 </div> 
                 <div className="welcome__section-body welcome__section-company ">
-                        <div className="welcome__section-company-logo"><img src={logo} alt ="company logo" className="user-profile__description-logo"/></div>
+                        {logo !=="" && <div className="welcome__section-company-logo"><img src={logo} alt ="company logo" className="user-profile__description-logo"/></div>}
                         <div className="welcome__section-company-text">
                             <p className="welcome__section-company-name">{name}</p>
                             <p className="welcome__section-company-description">{description}</p>

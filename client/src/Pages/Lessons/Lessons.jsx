@@ -38,6 +38,7 @@ function Lessons({pastLessons}) {
             <h2 className="component-title">{selectedLesson.name}</h2>
                 <div className = "current-lesson__top past-lessons__top">
                     <div className="next-lesson__resources">
+                        <h2 className="section-title-resources next-lesson__subtitle">Resources</h2>
                         <div className="next-lesson__resources-list">
                             {selectedLesson.resources.length !== 0 && selectedLesson.resources.map(resource=> 
                                 <GridList 
@@ -55,17 +56,17 @@ function Lessons({pastLessons}) {
                     </div>
 
                     <div className="">
-                        <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
-                            <div className = "client__notes-body">
-                                <p className="client__notes-title">Lesson Notes ...</p>
+                        <div className = "client__notes client-side__notepaper" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                            <div className = "client__notes-body client-side__notes">
+                                <p className="client__notes-title client-side__notes-title" >Lesson Notes ...</p>
                                 <div className="client__notes-text"> {selectedLesson.notes}</div>
                             </div>
                         </div>
                     </div>
                     <div className="">
-                            <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
-                            <div className = "client__notes-body">
-                                <p className="client__notes-title">Homework ...</p>
+                            <div className = "client__notes client-side__notepaper" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                            <div className = "client__notes-body client-side__notes">
+                                <p className="client__notes-title client-side__notes-title">Homework ...</p>
                                 <div className="client__notes-text"> {selectedLesson.homework}</div>
                             </div>
                         </div>

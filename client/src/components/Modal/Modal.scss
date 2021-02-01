@@ -1,1 +1,28 @@
 @import '../../styles/globalImports.scss';
+
+.modal-area{
+    &__personal{
+        height:60%;
+        width: 67%;
+        top:14%;
+        left:19%;
+        background-size:cover;
+    }
+    &__client{
+        width:50%;
+    }
+    &__program{
+        width:40%;
+        height:38%;
+        top:23%;
+        left:31%;
+        background-size:cover;
+    }
+    &__addClient{
+        width:52%;
+        height:52%;
+        top:16%;
+        left:24%;
+        background-size:cover;  
+    }
+}

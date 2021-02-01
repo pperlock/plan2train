@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import firebase from '../../firebase';
 
 import "./Trainer.scss"
 
@@ -41,8 +40,7 @@ class Trainer extends React.Component{
 
     componentDidUpdate(){
         console.log("trainer-didupdate");
-        // console.log(this.props.match.params.username)
-        // console.log(this.props.match.params.trainerId)
+
         if(this.state.updated){
             axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
             .then(res =>{

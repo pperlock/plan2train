@@ -6,32 +6,30 @@ import LoginModal from '../LoginModal/LoginModal';
 import NoteModal from '../NoteModal/NoteModal';
 import TriggerModalButton from '../TriggerModalButton/TriggerModalButton';
 
+/**
+ * @param {String} buttonText - text to put on button that triggers modal 
+ * @param {Function} onSubmit - function activated by button on modal - generally updates state in some way 
+ * @param {Object} information - information used to fill in default values of a form - generally updating 
+ * @param {String} modalName - used to conditionally pass onSubmit 
+ * @param {String} modalType - used to conditionally render the correct modal 
+ * @param {String} deleteString - used to render a dynamic message based on what is being deleted
+ * @param {String} deleteId - attached to the delete modal to identify the item being deleted
+ * @param {String} url - image to be used if the trigger button is of type "image" 
+ */
+
 class ModalContainer extends React.Component {
 
-    //props 
-    //buttonText 
-    //onSubmit= function that updates trainer state 
-    //information - information needed in form; 
-    //modalName - used to conditionally pass onsubmit
-    //modalType - used to determine which modal to render
     state = {isShown:false}
 
-    showModal = () =>{
-        this.setState({isShown:true}, 
-            ()=>{
-                this.closeButton.focus();
-                this.toggleScrollLock();
-            })
-    }
+    //toggles the ability to scroll on and off when the modal is opened and closed
+    toggleScrollLock = () =>{document.querySelector('html').classList.toggle('scroll-lock')}
 
-    toggleScrollLock = () =>{
-        document.querySelector('html').classList.toggle('scroll-lock');
-    }
+    //triggered by clicking the trigger button
+    showModal = () =>{
+        this.setState({isShown:true}, ()=>{this.toggleScrollLock()})}
 
     closeModal = () => {
-        this.setState({isShown:false});
-        this.TriggerButton.focus();
-        this.toggleScrollLock();
+        this.setState({isShown:false}, ()=>{this.toggleScrollLock()});
     };
 
     //Modal closes if the escape key is pressed
@@ -49,12 +47,12 @@ class ModalContainer extends React.Component {
 
 
     render(){
-        const {modalType, modalName, deleteString, deleteId, information, buttonText, buttonType, onSubmit,url} = this.props;
+        const {modalType, modalName, deleteString, deleteId, information, buttonText, buttonType, onSubmit,url, slider} = this.props;
 
         return (
             <>
                 <TriggerModalButton 
-                    modalType={modalType}
+                    slider={slider}
                     showModal={this.showModal}
                     buttonRef={n=>this.TriggerButton=n}
                     buttonText={buttonText}
@@ -68,7 +66,6 @@ class ModalContainer extends React.Component {
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
-                        onClickOutside={this.onClickOutside}
                         toggleScrollLock={this.toggleScrollLock}
                     />}
 
@@ -80,7 +77,6 @@ class ModalContainer extends React.Component {
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
-                        onClickOutside={this.onClickOutside}
                         deleteString={deleteString}
                         deleteId = {deleteId}
                     />}
@@ -93,7 +89,6 @@ class ModalContainer extends React.Component {
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
-                        onClickOutside={this.onClickOutside}
                         information={information}
                     />}
 
@@ -105,7 +100,6 @@ class ModalContainer extends React.Component {
                         buttonRef={n=> this.closeButton=n}
                         closeModal={this.closeModal}
                         onKeyDown={this.onKeyDown}
-                        onClickOutside={this.onClickOutside}
                         information={information}
                 />}
             </>

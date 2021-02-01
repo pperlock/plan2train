@@ -75,8 +75,8 @@ function NextLesson({nextLesson}) {
 
                     <div className="">
                         <h2 className="section-title-resources next-lesson__subtitle">Notes</h2>
-                        <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
-                            <div className = "client__notes-body">
+                        <div className = "client__notes client-side__notepaper-next" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                            <div className = "client__notes-body client-side__notes">
                                 {/* <p className="client__notes-title">Lesson Notes ...</p> */}
                                 <div className="client__notes-text"> {nextLesson.notes}</div>
                             </div>

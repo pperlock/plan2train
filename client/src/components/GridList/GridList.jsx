@@ -56,6 +56,7 @@ function GridList({id, content, modalName, link, deleteBtn, deleteFunction, dele
                             onSubmit={deleteFunction}
                             deleteString= {deleteString}
                             deleteId={id}
+                            slider={slider}
                         />
                     }
                  </div>

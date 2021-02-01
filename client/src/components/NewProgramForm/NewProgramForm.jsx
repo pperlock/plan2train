@@ -17,7 +17,7 @@ function NewProgramForm({onSubmit, closeModal, information}) {
         <form id="modal-form" className="modal-form" onSubmit={handleSubmit} >
             <div className="new-program__input">
                 <input className="modal-form__input new-program__text" id="programName" name="programName" type="text" defaultValue={name} placeholder="Enter Program Name" required></input>
-                <textarea className="modal-form__input new-program__textarea" form="modal-form" wrap="hard" name="programDescription" id="programDescription" defaultValue={description} placeholder="Enter Program Description" rows="10" cols="150"></textarea>
+                <textarea className="modal-form__input new-program__textarea" form="modal-form" wrap="hard" name="programDescription" id="programDescription" defaultValue={description} placeholder="Enter Program Description" rows="10" cols="120"></textarea>
             </div>
             
             <div className="modal-form__submit">

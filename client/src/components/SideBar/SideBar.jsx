@@ -61,6 +61,11 @@ class SideBar extends React.Component {
                 <>
                     <div className="sidebar" style={{backgroundImage: "url('/images/main-background.jfif')"}}>
 
+                        <div className="sidebar__logout">
+                            {/* <div className="sidebar__logout-text">Log Out</div> */}
+                            <Link to="/"><img className="sidebar__logout-icon" src="/icons/log-out.svg" alt="sign out"/></Link>
+                        </div>
+
                         <Link  to="/">
                                 <div className="sidebar__logo">
                                     <h1 className="sidebar__logo-title" >P</h1>
@@ -71,10 +76,7 @@ class SideBar extends React.Component {
 
                         <div className = "sidebar__divider"></div>
                         
-                        <div className="sidebar__logout">
-                            <div className="sidebar__logout-text">Log Out</div>
-                            <Link to="/"><img className="sidebar__logout-icon" src="/icons/log-out.svg" alt="sign out"/></Link>
-                        </div>
+
                         
                         <ul className="sidebar__menu">
                             <Link to={`/trainer/${trainerName}/${trainerId}`}>
@@ -106,6 +108,10 @@ class SideBar extends React.Component {
             return (
                 <>
                     <div className="sidebar" style={{backgroundImage: "url('/images/main-background.jfif')"}}>
+                        <div className="sidebar__logout">
+                            {/* <div className="sidebar__logout-text">Log Out</div> */}
+                            <Link to="/"><img className="sidebar__logout-icon" src="/icons/log-out.svg" alt="sign out"/></Link>
+                        </div>
 
                         <Link  to="/">
                                 <div className="sidebar__logo">
@@ -116,11 +122,6 @@ class SideBar extends React.Component {
                         </Link>
 
                         <div className = "sidebar__divider"></div>
-                        
-                        <div className="sidebar__logout">
-                            <div className="sidebar__logout-text">Log Out</div>
-                            <Link to="/"><img className="sidebar__logout-icon" src="/icons/log-out.svg" alt="sign out"/></Link>
-                        </div>
                         
                         <ul className="sidebar__menu">
                             <Link to={`/client/${this.props.match.params.username}/${this.props.match.params.clientId}`}>
