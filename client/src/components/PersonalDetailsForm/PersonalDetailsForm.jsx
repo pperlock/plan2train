@@ -38,7 +38,7 @@ function PersonalDetailsForm({onSubmit, closeModal, information, modalName}) {
         
         <form id="modal-form" className={modalName==="updateUser" ? "modal-form modal-form__personal" : "modal-form modal-form__client"} onSubmit={handleSubmit} >
             <div className="modal-form__upper">
-                <div className={modalName==="updateUser" && "modal-form__left"}>
+                <div className={modalName==="updateUser" ? "modal-form__left" : ""}>
                     
                     <div className="lesson-divider"></div>
 

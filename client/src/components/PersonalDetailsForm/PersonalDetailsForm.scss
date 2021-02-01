@@ -47,7 +47,14 @@
         }
         &--social{
             width:430px;
-            // margin-bottom:0px;
+        }
+        &--date{
+            font-family: "SourceSansPro"; 
+            font-size:14px;
+        }
+        &--time{
+            font-family: "SourceSansPro"; 
+            font-size:14px;
         }
         &-select{
             width:70%;

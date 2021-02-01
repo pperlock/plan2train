@@ -29,6 +29,8 @@ function Modal({onKeyDown, modalRef, buttonRef, closeModal,onSubmit, information
         modalSize="modal-area__program"
     }else if(modalName === "addClient"){
         modalSize="modal-area__addClient"
+    }else if(modalName === "modifyLesson" || modalName==="addLesson"){
+        modalSize="modal-area__lesson"
     }
 
     return ReactDOM.createPortal(
@@ -39,6 +41,7 @@ function Modal({onKeyDown, modalRef, buttonRef, closeModal,onSubmit, information
                     {modalName==="updateUser" && <h1 className="modal-title">Trainer Details</h1>}
                     {(modalName==="updateClient" || modalName==="addClient") && <h1 className="modal-title">Client Details</h1>}
                     {(modalName==="addProgram" || modalName==="updateProgram") && <h1 className="modal-title">Program Details</h1>}
+                    {(modalName === "modifyLesson" || modalName==="addLesson") && <h1 className="modal-title">Lesson Details</h1>}
                     
                     <button
                         ref={buttonRef}

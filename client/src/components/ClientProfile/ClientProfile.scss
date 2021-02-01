@@ -110,6 +110,13 @@
             display:flex;
             align-items:center;
             margin-bottom:8px;
+
+            &--email{
+                &:hover{
+                    font-style:italic;
+                    color:$accent-color;
+                }
+            }
         }
          &-map{
             border:1px solid grey;

@@ -35,12 +35,6 @@ class SideBar extends React.Component {
             
             const activeLinkElement = document.getElementById(`${activeLink}-link`);
             activeLinkElement.classList.add("sidebar__menu-link--active");
-
-            // const previouslyActiveIcon = document.querySelector(".sidebar__menu-icon--active");
-            // previouslyActiveIcon.classList.remove("sidebar__menu-icon--active");
-
-            // const activeIconElement = document.getElementById(`${activeLink}-icon`);
-            // activeIconElement.classList.add("sidebar__menu-icon--active");
         }
 
     }
@@ -52,9 +46,6 @@ class SideBar extends React.Component {
             var {trainerId, trainerName, programs, clients, match} = this.props;
             var defaultClientId = (clients && clients.length !==0) ? clients[0].userId : match.params.clientId
         }
-        // console.log(this.props.client)
-        // console.log(this.props.nextLesson)
-        // console.log(!!this.props.pastLessons)
 
         if (profile === "trainer"){
             return (

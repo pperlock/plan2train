@@ -145,7 +145,7 @@ class ClientProfile extends React.Component {
                                 </div>
                             </div>
                             <div className="client__contact-contact">
-                                <p className="client__contact-item"><img className="contact-icon" src="/icons/email-icon.svg" alt="email"/> <a href={`mailto:${email}`}> {email}</a></p>
+                                <p className="client__contact-item client__contact-item--email"><img className="contact-icon" src="/icons/email-icon.svg" alt="email"/> <a href={`mailto:${email}`}> {email}</a></p>
                                 <p className="client__contact-item"><img className="contact-icon" src="/icons/phone-icon.svg" alt="phone"/> {phone}</p>
                             </div>
                         </div>
@@ -183,9 +183,7 @@ class ClientProfile extends React.Component {
                         <p className="client__notes-title">Notes to Self ...</p>
                         <div className="client__notes-text"> {this.state.currentClient.notes}</div>
                     </div>
-
-                    
-                </div>
+              </div>
             </div>
             </>
         )

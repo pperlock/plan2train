@@ -24,7 +24,6 @@ class Trainer extends React.Component{
 
 
     componentDidMount(){
-        console.log(this.state.trainerId)
         axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
         .then(res =>{
             // console.log(res.data)
@@ -35,16 +34,13 @@ class Trainer extends React.Component{
                 })
             })
         })
-        console.log("trainer-componentDidMount")
     }
 
     componentDidUpdate(){
-        console.log("trainer-didupdate");
 
         if(this.state.updated){
             axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
             .then(res =>{
-                console.log(res.data)
                 this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
                     axios.get(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/clients`)
                     .then(clientRes=>{
@@ -81,7 +77,8 @@ class Trainer extends React.Component{
             social:{facebook:event.target.facebook.value, twitter:event.target.twitter.value, instagram: event.target.instagram.value, linkedIn:event.target.linkedIn.value},
             company:{
                 name:event.target.companyName.value,
-                description: event.target.companyDescription.value
+                description: event.target.companyDescription.value,
+                logo:this.state.userProfile.company.logo
             }
         }
 
@@ -318,12 +315,6 @@ class Trainer extends React.Component{
     render(){
  
         const {match} = this.props;
-        // console.log(this.state.programs)
-        // console.log(this.state.clients)
-        // console.log(this.state.userProfile)
-        // console.log(this.state.username);
-        // console.log(this.state.trainerId)
-
         return (
             <>
                 {this.state.userProfile &&  
@@ -386,8 +377,6 @@ class Trainer extends React.Component{
                         match={match} 
                         updateTrainer={this.updateTrainer} 
                     />}
-                {/* {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && <h1>hello</h1>} */}
-                
             </>
         )
     }

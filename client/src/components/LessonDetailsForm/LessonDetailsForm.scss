@@ -1,0 +1,10 @@
+@import '../../styles/globalImports.scss';
+
+.modal-form{
+    &__when{
+        display:flex;
+    }
+    &__lesson-name{
+        align-self:flex-start;
+    }
+}

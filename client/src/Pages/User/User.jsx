@@ -103,10 +103,10 @@ function User({user, updateUserProfile, match, updateTrainer}) {
                             </div>
 
                             <div className="user-profile__social">
-                                <a href={facebook}><img className="contact-icon--social" src="/icons/facebook-icon.svg" alt="facebook"/></a>
-                                <a href={twitter}><img className="contact-icon--social" src="/icons/twitter-icon.svg" alt="twitter"/></a>
-                                <a href={instagram}><img className="contact-icon--social" src="/icons/instagram-icon.svg" alt="instagram"/></a>
-                                <a href={linkedIn}><img className="contact-icon--social" src="/icons/linkedin-icon.svg" alt="linked-in"/></a>
+                                <a href={facebook} target="_blank" rel="noopener noreferrer"><img className="contact-icon--social" src="/icons/facebook-icon.svg" alt="facebook"/></a>
+                                <a href={twitter} target="_blank" rel="noopener noreferrer"><img className="contact-icon--social" src="/icons/twitter-icon.svg" alt="twitter"/></a>
+                                <a href={instagram} target="_blank" rel="noopener noreferrer"><img className="contact-icon--social" src="/icons/instagram-icon.svg" alt="instagram"/></a>
+                                <a href={linkedIn} target="_blank" rel="noopener noreferrer"><img className="contact-icon--social" src="/icons/linkedin-icon.svg" alt="linked-in"/></a>
                             </div>
                         </div>
                         <div className="user-profile__address">

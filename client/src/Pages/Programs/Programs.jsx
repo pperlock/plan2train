@@ -118,64 +118,61 @@ class Programs extends React.Component {
             <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >
                 <ClientList list={programs} match={match} onSubmit={addProgram}/>
                 <div className="programs__container-right">
-                    {/* <div className="program"> */}
-                        <div className="component program__resources">
-                            <div className="program__header">
-                                <p className="program__header-title">{program.name}</p>
-                                <p className="program__header-description">{program.description}</p>
+                    <div className="component program__resources">
+                        <div className="program__header">
+                            <p className="program__header-title">{program.name}</p>
+                            <p className="program__header-description">{program.description}</p>
+                        </div>
+
+                        <div className="program__header-actions">
+                            <div className="program__header-update">
+                                <ModalContainer 
+                                    modalType = "update" 
+                                    modalName = "updateProgram" 
+                                    buttonType="image"
+                                    url="/icons/edit-icon.svg"
+                                    onSubmit={this.props.updateProgram}
+                                    information={program}
+                                />
                             </div>
 
-                            <div className="program__header-actions">
-                                <div className="program__header-update">
-                                    <ModalContainer 
-                                        modalType = "update" 
-                                        modalName = "updateProgram" 
-                                        buttonType="image"
-                                        url="/icons/edit-icon.svg"
-                                        onSubmit={this.props.updateProgram}
-                                        information={program}
-                                    />
-                                </div>
-
-                                <div className="program__header-delete">
-                                    <ModalContainer 
-                                        modalType = "delete" 
-                                        modalName = "deleteProgram" 
-                                        buttonType="image"
-                                        url="/icons/trash.svg"
-                                        onSubmit={this.props.deleteProgram}
-                                        deleteString= {program.name}
-                                        deleteId={program.id}
-                                    />
-                                </div>
+                            <div className="program__header-delete">
+                                <ModalContainer 
+                                    modalType = "delete" 
+                                    modalName = "deleteProgram" 
+                                    buttonType="image"
+                                    url="/icons/trash.svg"
+                                    onSubmit={this.props.deleteProgram}
+                                    deleteString= {program.name}
+                                    deleteId={program.id}
+                                />
                             </div>
+                        </div>
 
-                        </div>   
-                    {/* </div> */}
+                    </div>   
                         
-                        {program.resources.length === 0 ? 
-                                <div onClick={()=>this.setState({showRadio:true})} className="empty-container empty-resources">
-                                    {/* <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img> */}
-                                    <p>Choose a Resource Type Below to Add Resources</p>
-                                </div>
-                                :  
-                            <div className="gridlist">
-                                {program.resources.map(resource=> 
-                                    <GridList 
-                                        key={resource.id} 
-                                        content={resource.name}
-                                        resourceType={resource.type} 
-                                        id={resource.id} 
-                                        link={resource.url} 
-                                        description={resource.type} 
-                                        deleteString={resource.name}
-                                        deleteBtn={true}
-                                        deleteType="modal" 
-                                        deleteFunction={this.props.deleteResource}
-                                        modalName="deleteResource"
-                                    />)}
-                                    {this.state.showloading && <div className="component grid__list-item loading"><img src="/icons/loading-icon.gif" alt="loading"/></div>}
+                    {program.resources.length === 0 ? 
+                            <div onClick={()=>this.setState({showRadio:true})} className="empty-container empty-resources">
+                                <p>Choose a Resource Type Below to Add Resources</p>
                             </div>
+                            :  
+                        <div className="gridlist">
+                            {program.resources.map(resource=> 
+                                <GridList 
+                                    key={resource.id} 
+                                    content={resource.name}
+                                    resourceType={resource.type} 
+                                    id={resource.id} 
+                                    link={resource.url} 
+                                    description={resource.type} 
+                                    deleteString={resource.name}
+                                    deleteBtn={true}
+                                    deleteType="modal" 
+                                    deleteFunction={this.props.deleteResource}
+                                    modalName="deleteResource"
+                                />)}
+                                {this.state.showloading && <div className="component grid__list-item loading"><img src="/icons/loading-icon.gif" alt="loading"/></div>}
+                        </div>
                         }
   
                     <div className="resource__add">

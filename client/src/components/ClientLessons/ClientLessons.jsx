@@ -30,8 +30,6 @@ class ClientLessons extends React.Component {
         if(this.state.currentLesson){
             this.geoCode();
 
-            console.log(this.state.availablePrograms[0].resources);
-
             //gets an array of all the resource ids that have been applied to all lessons
             let allApplied = [];
             const lessons = this.state.currentClient.lessons;
@@ -67,8 +65,7 @@ class ClientLessons extends React.Component {
         }
     }
 
-    componentDidUpdate(prevState){
-        console.log(this.state.availablePrograms);
+    componentDidUpdate(prevState, prevProps){
         
         if(this.state.availablePrograms.length !==0){
             if(!("applied" in this.state.availablePrograms[0].resources[0])){
@@ -101,12 +98,9 @@ class ClientLessons extends React.Component {
         }
 
         console.log("client-lessons - componentUpdated")
-        if(this.state.currentLesson && prevState.currentLesson){
-            if(prevState.currentLesson.location.address !==this.state.currentLesson.location.address){
-                this.geoCode();
-            }
+        if(prevProps.currentLesson.location.address !==this.state.currentLesson.location.address || prevProps.currentLesson.location.city !==this.state.currentLesson.location.city ){
+            this.geoCode();
         }
-    
 }
 
     geoCode = () =>{
@@ -206,8 +200,7 @@ class ClientLessons extends React.Component {
     }
 
     deleteLesson = (lessonId)=>{
-        console.log(lessonId);
-        
+       
         axios.delete(`http://localhost:8080/client/${this.state.currentClient.userId}/${lessonId}/deleteLesson`)
             .then(res =>{
                 // console.log(res.data);
@@ -239,7 +232,6 @@ class ClientLessons extends React.Component {
             }
         }
 
-        console.log(this.state.currentLesson.name);
         axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateLessonDetails`, updatedClient)
         .then(res =>{
             console.log(res);
