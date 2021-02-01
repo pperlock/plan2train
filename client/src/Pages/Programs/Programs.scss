@@ -53,11 +53,15 @@
         &-delete{
             width:20px;
             height:20px;
+            position:relative;
+            @include addToolTip("Delete Program", -2px, 22px, 91px);
         }
         &-update{
             width:28px;
             height:28px;
             margin-right:20px;
+            position:relative;
+            @include addToolTip("Edit Program", 35px, 3px, 81px);
             
         }
     }

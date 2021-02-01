@@ -15,3 +15,26 @@
     }
 }
 
+
+@mixin addToolTip($content, $right, $bottom, $width){
+        &::before{
+          content: $content;
+          display:none;
+          right:$right;
+          bottom:$bottom;
+          font-size: 14px;
+        //   padding: 1px 5px;
+          color: $accent-color;
+          width:$width;
+          font-style:italic;
+        //   border-radius:4px;
+        //   background: rgba(0, 0, 0, 0.5);
+        }
+        // only show the tool tip when you hover over the delete button
+        &:hover::before {
+          position:absolute;
+          display: block;
+        }
+}
+
+

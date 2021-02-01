@@ -66,9 +66,8 @@
         width:40px;
         height:40px;
         align-self:flex-end;
-        &:hover{
-            opacity:0.7;
-        }
+        position:relative;
+        @include addToolTip("Edit Trainer", 38px, 7px, 81px);
     }
 
     &__social{

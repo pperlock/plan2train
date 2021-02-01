@@ -120,6 +120,8 @@
             width:40px;
             height:40px;
             margin-left:auto;
+            position:relative;
+            @include addToolTip("Delete Client", 40px, 3px, 81px);
         }
 
     }
@@ -151,6 +153,8 @@
             margin-left:84%;
             width:40px;
             height:40px;
+            position:relative;
+                @include addToolTip("Add Note", 30px, 3px, 81px);
         }
 
     }

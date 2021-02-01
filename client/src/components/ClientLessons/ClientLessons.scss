@@ -14,6 +14,8 @@
             height:30px;
             margin-bottom:25px;
             filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(30%);
+            position:relative;
+            @include addToolTip("Add Lesson", -85px, 3px, 81px);
         }
     }
 }
@@ -95,6 +97,8 @@
                 align-self:flex-end;
                 width:30px;
                 height:25px;
+                position:relative;
+                @include addToolTip("Edit Details", 32px, 3px, 81px);
             }
         }
         

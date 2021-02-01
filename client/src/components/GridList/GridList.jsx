@@ -27,8 +27,8 @@ function GridList({id, content, modalName, link, deleteBtn, deleteFunction, dele
                         <p className="gridlist__item-name">{content}</p>
                     </a>
                     :
-                    <div className="gridlist__item-multi-container">
-                        <p onClick={()=>onClick(id)} className="gridlist__item-multi gridlist__item-title">{content.name ==="" ? "Add Title" : content.name}</p>
+                    <div onClick={()=>onClick(id)} className="gridlist__item-multi-container">
+                        <p className="gridlist__item-multi gridlist__item-title">{content.name ==="" ? "Add Title" : content.name}</p>
                         <p className="gridlist__item-multi">{content.date}</p>
                         <p className="gridlist__item-multi">{content.time}</p>
                     </div>
