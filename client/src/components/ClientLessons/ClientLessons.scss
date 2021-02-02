@@ -13,9 +13,22 @@
             width:30px;
             height:30px;
             margin-bottom:25px;
-            filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(30%);
             position:relative;
-            @include addToolTip("Add Lesson", -85px, 3px, 81px);
+            &::before{
+                content: "Add Lesson";
+                display:none;
+                right:-90px;
+                bottom:0;
+                font-size: 14px;
+                color: $accent-color;
+                width:81px;
+                font-style:italic;
+              }
+              // only show the tool tip when you hover over button
+              &:hover::before {
+                position:absolute;
+                display: block;
+              }
         }
     }
 }

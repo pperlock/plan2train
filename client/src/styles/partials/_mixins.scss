@@ -1,5 +1,7 @@
 @import '../../styles/partials/variables.scss';
 
+
+//build a button of specifc width, height, background color and text color
 @mixin buildButton($width, $height, $fillcolor, $textcolor){
     background-color: $fillcolor;
     border-radius:10px;
@@ -15,6 +17,7 @@
     }
 }
 
+//sliding animation for tool tips on action icons
 @mixin animateTooltip($end){
   @keyframes tipSlide{
     0% {right:0}
@@ -23,6 +26,7 @@
 animation: tipSlide 0.2s linear;
 }
 
+//build a tool tip with specific content, right, bottom and width attributes - apply animation according to right attribute
 @mixin addToolTip($content, $right, $bottom, $width){
         &::before{
           content: $content;

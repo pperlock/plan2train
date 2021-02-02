@@ -10,6 +10,18 @@ import Schedule from '../Schedule/Schedule';
 import User from '../User/User';
 import EmptyPage from '../EmptyPage/EmptyPage';
 
+/**
+ * @param {Object} props - used to access the username and trainer id from the url
+ * 
+ * STATE
+ * @param {String} username
+ * @param {String} trainerId
+ * @param {Object} userProfile - contains all the contact/compnay information for the trainer
+ * @param {Array} clients - contains an array of client objects associated with the trainer
+ * @param {String} updated - used to update the trainer app where necessary
+ * @param {String} selectedFile - file selected to update trainer logo
+ */
+
 class Trainer extends React.Component{
     
     state={files:null, 
@@ -24,9 +36,9 @@ class Trainer extends React.Component{
 
 
     componentDidMount(){
+       //get the trainer's information and their associated clients from the db when the component is mounted
         axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
         .then(res =>{
-            // console.log(res.data)
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
                 axios.get(`http://localhost:8080/trainer/${this.state.trainerId}/clients`)
                 .then(clientRes=>{
@@ -37,7 +49,7 @@ class Trainer extends React.Component{
     }
 
     componentDidUpdate(){
-
+        //get the trainer's information and their associated clients from the db when the component is updated
         if(this.state.updated){
             axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
             .then(res =>{
@@ -47,10 +59,11 @@ class Trainer extends React.Component{
                         this.setState({clients:clientRes.data})
                     })
                 })
+                // if the update is fired by another component then set updated back to false
                 this.setState({updated:false})
             })
             .catch(err=>{
-                console.log("this is where I am breaking")        
+                console.log(err)        
             })
         }
     }
@@ -60,6 +73,7 @@ class Trainer extends React.Component{
         
         event.preventDefault();
 
+        //create a new user profile based on the information entered into the modal form
         const updatedProfile = {
             contact:{
                 username:event.target.username.value,
@@ -78,11 +92,12 @@ class Trainer extends React.Component{
             company:{
                 name:event.target.companyName.value,
                 description: event.target.companyDescription.value,
+                //logo is not entered in this form - just use whatever has been stored in state
                 logo:this.state.userProfile.company.logo
             }
         }
 
-        console.log(this.state.userProfile.userId);
+        //send a request to the db to save the new information and set it in state
         axios.put(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/updateDetails`, updatedProfile)
         .then(res =>{
             this.setState({userProfile:updatedProfile});
@@ -97,16 +112,17 @@ class Trainer extends React.Component{
 
         event.preventDefault();
 
+        //create a new program based on the information entered into the modal form - id is created on backend
         const newProgram = {
             name:event.target.programName.value,
             description:event.target.programDescription.value
         }
 
-        console.log(newProgram);
-        
+        //send a request to the db to save the new information and set it in state using the returned information
         axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addProgram`, newProgram)
         .then(res =>{
             this.setState({programs:[...this.state.programs, res.data]},()=>{
+                // direct the user to the new program page
                 this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${res.data.id}`)
             })
         })
@@ -120,13 +136,14 @@ class Trainer extends React.Component{
     updateProgram=(event)=>{
 
         event.preventDefault();
-
+        
+        //create a new program based on the information entered into the modal form
         const newProgram = {
             name:event.target.programName.value,
             description:event.target.programDescription.value
         }
-        console.log(this.props.match);
-        
+
+        //send a request to the db to save the new information - trigger an update of the component to fetch the new data       
         axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/${this.props.match.params.programId}/updateProgram`, newProgram)
         .then(res =>{
             this.setState({updated:true})
@@ -140,21 +157,23 @@ class Trainer extends React.Component{
     /** ================================================ DELETE PROGRAM ================================================*/
     deleteProgram = (programId) =>{
 
-        console.log(programId)
-
+        // send a request to the db to delete a program with the specified programId
         axios.delete(`http://localhost:8080/program/${this.props.match.params.programId}`)
         .then(res =>{
+            //trigger the state to update the component and the redirect the user to the first program on the list
             this.setState({updated:true},()=>{
+                //if the program removed is the only program then send the user to the empty page
                 if((this.state.programs.length - 1) === 0){
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs`)
                 }else{
+                    //if the program on the list was the first on on the list send it to the program at index 1 otherwise index 0
                     const programLoc = this.state.programs.findIndex(program => program.id === programId);
                     programLoc !== 0 ? 
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${this.state.programs[0].id}`)
                     :
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${this.state.programs[1].id}`)
                 }
-            });//trigger the component did update to pull updated data from db
+            });
         })
         .catch(err=>{
             console.log(err);
@@ -162,23 +181,20 @@ class Trainer extends React.Component{
     }
 
     /** ================================================ ADD RESOURCE ================================================*/
-    addResource=(newResource, programId)=>{
+    addResource=(newResource)=>{
+        //a new resources is made in the programs component and passed back to trainer to save in the db
         axios.post(`http://localhost:8080/program/${this.props.match.params.programId}/addResource`, newResource)
         .then(res =>{
-            this.setState({updated:true});
+            this.setState({updated:true});//trigger the component did update to pull updated data from db
         })
         .catch(err=>{
             console.log(err);
         })
-        
     }
 
     /** ================================================ DELETE RESOURCE ================================================*/
     deleteResource = (resourceId) =>{
-
-        console.log(this.props.match.params.programId)
-        console.log(resourceId)
-
+        //a resourceId is sent back from the programs component and removed from the db
         axios.delete(`http://localhost:8080/program/${this.props.match.params.programId}/${resourceId}`)
         .then(res =>{
             this.setState({updated:true});//trigger the component did update to pull updated data from db
@@ -189,14 +205,13 @@ class Trainer extends React.Component{
     }
 
     /** ================================================ ADD CLIENT ================================================*/
-
     addClient=(event)=>{
 
         event.preventDefault();
 
+        // get the list of selected programs from the selection element
         const options = event.target.programs.options;
         let opt="";
-
         let programs = [];
         for(var i=0; i<options.length; i++){
             opt = options[i];
@@ -204,6 +219,7 @@ class Trainer extends React.Component{
             opt.selected && programs.push(program);
         }
 
+        // create a new client to send to the db using form input values- trainerId is applied and userid is created on the backend
         const newClient = {
             trainerId:"",
             username:event.target.username.value,
@@ -220,9 +236,11 @@ class Trainer extends React.Component{
                 province: event.target.province.value,
                 country: event.target.country.value
             },
+            //use the selected programs from above
             programs:programs
         }
 
+        // save the new client in the db and return send the user to the new clients profile page
         axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
         .then(res =>{
             this.setState({clients:[...this.state.clients, res.data]},()=>{
@@ -239,15 +257,17 @@ class Trainer extends React.Component{
     /** ================================================ DELETE CLIENT ================================================*/
     deleteClient=(clientId)=>{
 
-        console.log(this.state.clients)
-        
+       // send a request to the db to delete a client with the specified programId
         axios.delete(`http://localhost:8080/client/${clientId}`)
         .then(res =>{
+            //trigger the state to update the component and the redirect the user to the appropriate client
             this.setState({updated:true},()=>{
+                //if the client removed was the only one on the list send the user to the empty clients page
                 if((this.state.clients.length - 1) === 0){
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients`)
                 }else{
                     const programLoc = this.state.clients.findIndex(client => client.userId === clientId);
+                    //send the user to the first client on the list unless the one removed was at 0 index, the route to client at index 1
                     programLoc !== 0 ? 
                     this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.state.clients[0].userId}/profile`)
                     :
@@ -263,7 +283,8 @@ class Trainer extends React.Component{
     /** ================================================ UPDATE CLIENT ================================================*/
     updateClient=(event)=>{
         event.preventDefault();
-
+        
+        //create a new client object using the input information from the form
         const updatedClient = {
             fname:event.target.fname.value,
             lname:event.target.lname.value,
@@ -276,47 +297,28 @@ class Trainer extends React.Component{
             postal:event.target.postal.value
         }
 
+        // send the new client information to the db and update the state to pull from the db
         axios.put(`http://localhost:8080/client/${this.props.match.params.clientId}/updateDetails`, updatedClient)
         .then(res =>{
-            console.log(res);
             //pulls new data from db on component did update
             this.setState({updated:true})
-            // this.setState()
-        })
+           })
         .catch(err=>{
             console.log(err);
         })
     }
 
-    
-    /** ================================================ ADD NOTE ================================================*/
-    addNote=(event,currentClient)=>{
-        event.preventDefault();
-        const newNote = {
-            id:'5',
-            note:event.target.newNote.value
-        }
-
-        let clientsCopy = [...this.state.clients];
-        const clientIndex = clientsCopy.findIndex(client => client.id===currentClient.id);
-        clientsCopy[clientIndex].notes.push(newNote);
-            
-        // console.log(...this.state.clients[clientIndex].notes);
-        this.setState({clients:clientsCopy})
-
-        event.target.newNote.value="";
-    }
-
+    //used to update the state and trigger a pull from the db when data is created,updated, or deleted
     updateTrainer=()=>{
         this.setState({updated:true})
     }
   
    
     render(){
- 
         const {match} = this.props;
         return (
             <>
+                {/* render the sidebar for all instances */}
                 {this.state.userProfile &&  
                     <SideBar
                         clients={this.state.clients} 
@@ -325,6 +327,7 @@ class Trainer extends React.Component{
                         trainerId={this.state.trainerId}
                         trainerName={this.state.username}
                     />}
+                {/* render an empty page alerting the user to add programs based on the path */}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/programs") && 
                     <EmptyPage 
                         match={match}
@@ -333,6 +336,7 @@ class Trainer extends React.Component{
                         programs={this.state.programs}
                     />}
 
+                {/* render an empty page alerting the user to add clients based on the path */}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/clients") && 
                     <EmptyPage 
                         match={match}
@@ -341,6 +345,8 @@ class Trainer extends React.Component{
                         programs={this.state.programs}
                     />}
                 
+                {/* render the program, clients or user components based on the path */}
+
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/programs/:programId") && 
                     <Programs 
                         programs={this.state.programs} 
@@ -352,6 +358,7 @@ class Trainer extends React.Component{
                         deleteResource={this.deleteResource}  
                         updateProgram={this.updateProgram} 
                     />}
+
                 {(this.state.clients && this.state.clients.length !== 0 && match.path==="/trainer/:username/:trainerId/clients/:clientId/profile") && 
                     <Clients {...this.props} 
                         programs={this.state.programs} 
@@ -362,6 +369,7 @@ class Trainer extends React.Component{
                         deleteClient={this.deleteClient}
                         updateTrainer={this.updateTrainer}
                     />}
+
                 {(this.state.clients  && this.state.clients.length !== 0 && match.path==="/trainer/:username/:trainerId/clients/:clientId/lessons") && 
                     <Clients {...this.props} 
                         programs={this.state.programs} 
@@ -369,7 +377,7 @@ class Trainer extends React.Component{
                         addClient={this.addClient}
                         deleteClient={this.deleteClient}
                         />}
-                {(this.state.userProfile && match.path==="/schedule") && <Schedule />}
+                
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && 
                     <User 
                         user={this.state.userProfile} 
@@ -377,6 +385,8 @@ class Trainer extends React.Component{
                         match={match} 
                         updateTrainer={this.updateTrainer} 
                     />}
+                
+                {(this.state.userProfile && match.path==="/schedule") && <Schedule />}
             </>
         )
     }

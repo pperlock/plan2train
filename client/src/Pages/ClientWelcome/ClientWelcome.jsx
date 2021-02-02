@@ -5,20 +5,25 @@ import './ClientWelcome.scss';
 
 import Map from '../../components/Map/Map';
 
+/**
+ * @param {Object} client - information for the client that logged in
+ * @param {Object} trainer - information for the trainer associated with that client
+*/
+
 function ClientWelcome({client, trainer}) {
 
     const {lname,fname,email,phone,address,city,province,country,postal} = trainer.contact;
     const {facebook, twitter, instagram, linkedIn} = trainer.social;
     const {name, description, logo} = trainer.company;
 
+    //store the geocoded maplocation in state
     const [mapLocation, setMapLocation]=useState(null);
 
+    //when the component loads geocode the trainers location and set it in state
     useEffect(()=>{
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
-            // console.log(res.data.results[0].locations[0].displayLatLng);
             setMapLocation(res.data.results[0].locations[0].displayLatLng);
-
         })
         .catch(err=>{
             console.log(err);
@@ -31,6 +36,8 @@ function ClientWelcome({client, trainer}) {
                 <h1 className="welcome__greeting-welcome">WELCOME</h1>
                 <h1 className="welcome__greeting-client">{`${client.userProfile.fname}!`} </h1>
             </div>
+            
+            {/* renders trainer's company information */}
             <div className="component welcome__section">
                 <div className="component-title welcome__section-title">
                     <p>Company</p>
@@ -44,6 +51,7 @@ function ClientWelcome({client, trainer}) {
                 </div>
             </div>    
 
+            {/* renders client's programs */}
             <div className="component welcome__section ">    
                     <div className="component-title welcome__section-title">
                         <p>Programs</p>
@@ -58,6 +66,7 @@ function ClientWelcome({client, trainer}) {
                     </div>
             </div>  
 
+            {/* renders the trainer's contact information */}
             <div className="component welcome__section welcome__section--last">
                 <div className="component-title welcome__section-title">
                     <p>Trainer</p>
@@ -84,18 +93,19 @@ function ClientWelcome({client, trainer}) {
                             </div>
                         </div>
                         <div className="user-profile__address welcome__trainer-address">
-                                <div>
-                                    <p className="user-label user-profile__address-title">FIND YOUR TRAINER</p>
-                                    <p className="user-profile__address-item">{address}</p>
-                                    <p className="user-profile__address-item">{`${city}, ${province}, ${country}`}</p>
-                                    <p className="user-profile__address-item">{postal}</p>
-                                </div>
-                                <div className = "client__contact-map">
-                                    <Map
-                                        mapLocation={mapLocation}
-                                        containerSize={{width:"346px", height:"211px"}}
-                                    />
-                                </div>
+                            <div>
+                                <p className="user-label user-profile__address-title">FIND YOUR TRAINER</p>
+                                <p className="user-profile__address-item">{address}</p>
+                                <p className="user-profile__address-item">{`${city}, ${province}, ${country}`}</p>
+                                <p className="user-profile__address-item">{postal}</p>
+                            </div>
+                            {/* renders a map of the trainer's geocoded location */}
+                            <div className = "client__contact-map">
+                                <Map
+                                    mapLocation={mapLocation}
+                                    containerSize={{width:"346px", height:"211px"}}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

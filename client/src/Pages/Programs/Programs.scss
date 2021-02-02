@@ -54,7 +54,21 @@
             width:20px;
             height:20px;
             position:relative;
-            @include addToolTip("Delete Program",0px, 22px, 91px);
+            &::before{
+                content: "Delete Program";
+                display:none;
+                right:0;
+                bottom:22px;
+                font-size: 14px;
+                color: $accent-color;
+                width:91px;
+                font-style:italic;
+              }
+              // only show the tool tip when you hover over button
+              &:hover::before {
+                position:absolute;
+                display: block;
+              }
         }
         &-update{
             width:28px;

@@ -1,3 +1,4 @@
+//Import global font used for titles
 @font-face{
     font-family: "Montserrat";
     src:url("../../assets/fonts/Montserrat-Bold.ttf");
@@ -18,6 +19,8 @@
     font-weight: 600;
     font-style: normal;
 }
+
+//Import global font used for global text
 
 @font-face{
     font-family: "SourceSansPro";

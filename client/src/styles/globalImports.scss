@@ -1,4 +1,9 @@
+// Import the typography
 @import './partials/typography.scss';
+
+//Import any css variables
 @import './partials/variables.scss';
+
+// import any mixins used for styling
 @import './partials/mixins.scss';
-@import './partials/animations.scss';
+

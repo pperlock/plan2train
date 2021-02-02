@@ -20,22 +20,18 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 class Clients extends React.Component {
 
-    // This might change from a class to functional - have to check into sliding menu
+    // This may change from a class to functional but I would like to add a sliding menu- still in progress - will look into it
 
     state={animateBar:true}
 
     componentDidMount(){
-        console.log("client-mounted");
         this.setState({animateBar:false});
     }
 
     componentDidUpdate(){
-
-        console.log("client did update");
-
+        // changes the highlighting of the lessons and profile sub navigation when a link is clicked
         const splitProps = this.props.match.path.split("/")
         const activeLink = splitProps[6]
-        // console.log(activeLink)
 
         if (document.querySelector(".active-link")){
             const previouslyActiveLink = document.querySelector(".active-link");
@@ -47,18 +43,16 @@ class Clients extends React.Component {
    
     }
 
+    //may be removed - in progress
     removeAnimation = ()=>{
         this.setState({animateBar:false});
     }
 
    
     render(){
-
         const {clients, programs, addClient, updateTrainer, updateClient, deleteClient, match} = this.props;
 
-        // console.log(clients);
-        
-        //used to determine if we are on the lessons page or the profile page
+        //path used to determine if we are on the lessons page or the profile page
         const page = this.props.match.path.split("/")[6]; 
 
         //set the rendered client to be the one that matches the path name
@@ -66,9 +60,7 @@ class Clients extends React.Component {
 
         const {fname, lname} = currentClient.userProfile;
 
-        // console.log(currentClient);
-        
-        //status is a boolean to indicate if a client is current or past - used for filter on client bar
+        //status is a boolean to indicate if a client is current or past - will be used for filter on client bar in future
         const active = currentClient.status ? "Active" : "Archived";
 
         return (
@@ -96,6 +88,8 @@ class Clients extends React.Component {
                                 className="client__header-nav-link">Lessons
                             </Link>
                         </div>
+
+                        {/* delete client */}
                         <div className="client__header-title-delete">
                             <ModalContainer 
                                 modalType = "delete" 
@@ -110,7 +104,6 @@ class Clients extends React.Component {
                         </div>
                     </div>
 
-
                     {/* *============== conditionally render the appropriate profile or lessons component ===============* */}
                     {page === "profile" && 
                         <ClientProfile 
@@ -124,7 +117,6 @@ class Clients extends React.Component {
                         />}
 
                     {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} match = {match}/>}
-                   
                 </div>
             </div>
         )

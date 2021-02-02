@@ -1,27 +1,33 @@
 @import '../styles/globalImports.scss';
 
+//remove all default margin and padding from the entire site
 *{
     margin:0;
     padding:0;
 }
 
+//set the background color of the app to match the background image for overflow
 html{
     background-color:#f5f5f5;
 }
 
+//apply a default font to the body of the site
 body{
    font-family: "SourceSansPro"; 
 }
 
+//remove text decoration and set a default color for all links
 a{
     text-decoration:none;
     color:black;
 }
 
+// remove the bullet points from all lists
 ul{
     list-style-type:none;
 }
 
+// give all inputs fields a common background and focus background
 input{
 	background-color:$form-input-background;
 	&:focus{
@@ -68,7 +74,6 @@ input{
 		top:-16px;
 		right:1%;
 		box-sizing:border-box;
-		// background-color:$accent-color;
 		border-radius:4px;
 		box-shadow: -4px 10px 8px  $dark-background; 
 		color: $light-text;
@@ -97,6 +102,7 @@ input{
 
 //general global styling for all modals - styling is tweaked different modals in their specific css
 .modal{
+	//div that covers and filters entire screen
     &-cover {
 		position: fixed;
 		top: 0;
@@ -107,7 +113,8 @@ input{
 		transform: translateZ(0);
 		background-color: rgba(0, 0, 0, 0.8);
 	}
-  
+	
+	//the modal area itself
 	&-area {
 		position: fixed;
 		top: 25%;
@@ -121,16 +128,19 @@ input{
 		box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.1);
 	}
 
+	//modal titles
 	&-title{
 		color:$accent-color;
 		padding-left:0.8em;
 		font-weight:normal;
 	}
-
+	
+	//body inside the modal area
 	&-body{
 		padding:16px;
 	}
 
+	//div surrounding the close icon
 	&-close {
 		position: absolute;
 		top: 17px;
@@ -145,6 +155,8 @@ input{
 		&:focus{
 			outline:none;
 		}
+		
+		//close icon itself
 		&-icon{
 			width: 25px;
 			height: 25px;
@@ -155,7 +167,8 @@ input{
 		}
 	}
 }
-  
+
+//styling for all input fields on the forms
 .text-input{
 	padding:10px 5px;
 	border:none;
@@ -167,9 +180,11 @@ input{
 	&:focus{
 		outline:none;
 		border-bottom:1px solid grey;
+		background-color:$form-input-background;
 	}
 }
 
+//styling for any containers that are used to indicate that an element has not been added yet (eg, resources, programs clients)
 .empty-container{
     border:5px dashed  rgba(177, 164, 148, 0.3);
     text-align:center;

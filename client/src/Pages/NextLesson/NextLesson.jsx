@@ -6,18 +6,22 @@ import "./NextLesson.scss";
 import Map from '../../components/Map/Map';
 import GridList from '../../components/GridList/GridList';
 
+/**
+ * @param {Object} nextLesson - contains all the information for the next lesson
+ */
 function NextLesson({nextLesson}) {
 
     const {address, city, province} = nextLesson.location
 
+    // store the geocoded (lat,long) location of the map in state
     const [mapLocation, setMapLocation]=useState(null);
 
     useEffect(()=>{
+        //send the location of the next lesson to the api to geocode the location for google maps
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
-            // console.log(res.data.results[0].locations[0].displayLatLng);
+            //once the location is geocoded set it in state
             setMapLocation(res.data.results[0].locations[0].displayLatLng);
-
         })
         .catch(err=>{
             console.log(err);
@@ -48,6 +52,7 @@ function NextLesson({nextLesson}) {
                             </div>
                         </div>
                     
+                        {/* render the google map for the lesson location */}
                         <div className = "client__contact-map">
                             <Map
                                 mapLocation={mapLocation}
@@ -55,6 +60,8 @@ function NextLesson({nextLesson}) {
                             />
                         </div>
                     </div>
+                    
+                    {/* render the resources for the next lesson */}
                     <div className="next-lesson__resources">
                         <h2 className="section-title-resources next-lesson__subtitle">Resources</h2>
                         <div className="next-lesson__resources-list">
@@ -73,11 +80,11 @@ function NextLesson({nextLesson}) {
                         </div>
                     </div>
 
+                    {/* render notes for the next lesson */}
                     <div className="">
                         <h2 className="section-title-resources next-lesson__subtitle">Notes</h2>
                         <div className = "client__notes client-side__notepaper-next" style={{backgroundImage: "url('/images/notePaper.png')"}}>
                             <div className = "client__notes-body client-side__notes">
-                                {/* <p className="client__notes-title">Lesson Notes ...</p> */}
                                 <div className="client__notes-text"> {nextLesson.notes}</div>
                             </div>
                         </div>

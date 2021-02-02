@@ -1,3 +1,4 @@
+//googe map styling - downloaded from snazzy maps
 export default [
     {
         "featureType": "all",

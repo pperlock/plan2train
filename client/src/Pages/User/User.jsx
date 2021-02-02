@@ -1,31 +1,44 @@
 import React, {useState, useEffect} from 'react'
-import "./User.scss"
 import firebase from '../../firebase';
 import axios from 'axios';
 
+import "./User.scss"
+
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
+
+/**
+ * @param {Object} user - trainer information
+ * @param {Function} updateUserProfile - sent from trainer component to update the trainer's user profile
+ * @param {Object} match - used to access the page's path
+ * @param {Function} updateTrainer - used to update the state on the trainer component
+ */
 
 function User({user, updateUserProfile, match, updateTrainer}) {
 
     const {lname,fname,username,password,email,phone,address,city,province,country,postal} = user.contact;
     const {facebook, twitter, instagram, linkedIn} = user.social;
     const {name, description, logo} = user.company;
+    //show the password as *****
     const hiddenPassword = password.split("").map(character => "*");
 
+    //store the selected file in state
     const [selectedFile, setSelectedFile] = useState(null)
 
    /** ================================================ ADD LOGO ================================================*/
 
-    const activateFileSelector=()=>{
+   //activate the click method on the invisible input box when the logo is clicked 
+   const activateFileSelector=()=>{
         const inputBox = document.getElementById('inputFile');
         inputBox.click();
     }
+    
+    //get the file selected from the file picker and store it in state
     const fileSelectedHandler = event =>{
         setSelectedFile(event.target.files[0]); 
     }
 
+    //upload the logo file to firebase storage in the trainer's
     const fileUpload=()=>{
-        // event.preventDefault();
         if(!!selectedFile){
             let bucketName = match.params.trainerId;
             let storageRef = firebase.storage().ref(`/${bucketName}/${selectedFile.name}`);
@@ -38,13 +51,13 @@ function User({user, updateUserProfile, match, updateTrainer}) {
                     console.log("Upload Unsuccessful");
                 },
                 ()=>{
+                    //once the file is uploaded get the url and save it to the db and update the trainer component
                     let storageLoc = firebase.storage().ref();
                     storageLoc.child(`/${bucketName}/${selectedFile.name}`).getDownloadURL()
                     .then((url)=>{
                         const logo={logo:url}
                         axios.put(`http://localhost:8080/trainer/${match.params.trainerId}/updateLogo`, logo)
                         .then(res =>{
-                            console.log(res);
                             updateTrainer();
                         })
                         .catch(err=>{
@@ -59,6 +72,7 @@ function User({user, updateUserProfile, match, updateTrainer}) {
         }
     }
 
+    //fire the fileupload function any time the selectedFile is changed in state
     useEffect(()=>{
         fileUpload()
     },[selectedFile])
@@ -71,6 +85,7 @@ function User({user, updateUserProfile, match, updateTrainer}) {
                    
                     <div className="user-profile__description-logo-container">
 
+                        {/* render the logo from the db - if there isn't one use the image icon stored on the front end */}
                         <img src={logo !=="" ? logo : "/icons/image.svg"} alt ="company logo" className="user-profile__description-logo" onClick={activateFileSelector}/>
                         
                         <input id="inputFile" type="file" className="user-profile__description-input" onChange={fileSelectedHandler}></input>
@@ -117,12 +132,18 @@ function User({user, updateUserProfile, match, updateTrainer}) {
                         </div>
                     </div>
 
+                    {/* render the modalcontainer along with the button used to trigger it for updating the user profile */}
                     <div className="user-profile__update">
-                        <ModalContainer modalName = "updateUser" modalType = "update" buttonText="Update" buttonType="image" url="/icons/user-edit.svg" information={user} onSubmit={updateUserProfile}/>
+                        <ModalContainer 
+                            modalName = "updateUser" 
+                            modalType = "update" 
+                            buttonText="Update" 
+                            buttonType="image" 
+                            url="/icons/user-edit.svg" 
+                            information={user} onSubmit={updateUserProfile}
+                        />
                     </div>
-
                 </div>
-                
             </div>
         </div>
     )

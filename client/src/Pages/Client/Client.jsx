@@ -1,22 +1,34 @@
 import React, {useState,useEffect} from 'react';
 import axios from 'axios';
 
+import "./Client.scss";
+
 import SideBar from '../../components/SideBar/SideBar';
 import ClientWelcome from '../ClientWelcome/ClientWelcome';
 import Lessons from '../Lessons/Lessons';
 import NextLesson from '../NextLesson/NextLesson';
 import EmptyPage from '../EmptyPage/EmptyPage';
 
-
-import "./Client.scss";
+/**
+* Renders the Client side 
+* @param {Object} match - used to make axios calls and conditionally render based on the path
+*/
 
 function Client ({match}) {
     
+    //object containing information associated with specified client
     const [client, setClient] = useState(null)
+    
+    //object containing information for trainer associated with specified client
     const [trainer, setTrainer] = useState(null)
+    
+    //object containing information for the client's next lesson
     const [nextLesson, setNextLesson] = useState(null);
+    
+    //array of all the past lessons objects
     const [pastLessons, setPastLessons] = useState(null);
     
+    // pull the data from the db and set the results in state
     useEffect(()=>{
         axios.get(`http://localhost:8080/client/${match.params.username}/${match.params.clientId}`)
         .then(res =>{
@@ -35,7 +47,7 @@ function Client ({match}) {
 
     return (
         <div>
-
+            {/* render the sidebar unconditionally */}
             <SideBar
                 nextLesson={nextLesson}
                 pastLessons={pastLessons}
@@ -43,6 +55,8 @@ function Client ({match}) {
                 match={match}
             />
 
+            {/* render the appropriate component based on the specified path */}
+            
             {(trainer && match.path==="/client/:username/:clientId") && 
                 <ClientWelcome
                     client={client}

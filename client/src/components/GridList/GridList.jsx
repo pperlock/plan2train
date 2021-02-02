@@ -23,7 +23,7 @@ function GridList({id, content, modalName, link, deleteBtn, deleteFunction, dele
     return (
             <div className={(deleteBtn || !slider) ? "gridlist__item" : "gridlist__item next-lesson__resource"}>
                 {resourceType ?
-                    <a className="gridlist__item-link" href={link} target="_blank">
+                    <a className="gridlist__item-link" href={link} target="_blank" rel="noopener noreferrer">
                         <p className="gridlist__item-name">{content}</p>
                     </a>
                     :
@@ -34,7 +34,6 @@ function GridList({id, content, modalName, link, deleteBtn, deleteFunction, dele
                     </div>
                 }
 
-                
                 <div className="gridlist__bottom">
                     {(deleteType !== "modal" && deleteBtn) && <button id={id} onClick={(event)=>deleteFunction(event, list)} className="gridlist__right-delete"> x </button>}
 

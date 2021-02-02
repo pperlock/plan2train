@@ -1,24 +1,19 @@
 import React from 'react';
-import "./Programs.scss";
 import firebase from '../../firebase';
+
+import "./Programs.scss";
 
 import ClientList from '../../components/ClientList/ClientList';
 import GridList from '../../components/GridList/GridList';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
-/**
- *  programs={this.state.programs} 
-    currentProgramId={match.params.programId} 
-    match={match}
-    addProgram={this.addProgram}
-    addResource={this.addResource} 
- */
 
 /**
  * Props Passed in by Trainer
  * @param {Object} currentClient 
  * @param {string} currentProgramId 
- * @param {Object} match 
+ * @param {Object} programs 
+ * @param {Object} match
  * @param {function} addProgram
  * @param {function} deleteProgram
  * @param {function} addResource
@@ -29,24 +24,22 @@ class Programs extends React.Component {
 
     state={selectedFile:null, showRadio:true, uploaded:false, uploadType:"", showloading:false}
 
-    componentDidUpdate(){
-        console.log("programs - did update")
-    }
-
-    // fired by clicking on a radio button
+    // triggered by clicking on a download type radio button
     uploadType = (event) => {
+        
         const type = event.target.value;
+        // if the type value of the radio button is of type file the activate the file input box
         if (type ==="file"){
-                console.log(this.fileInput)
                 this.fileInput.click()
         }else{
+            //otherwise update the state with an input type of url and hide the radio buttons
             this.setState({uploadType:type, showRadio:false})
         }
     }
 
     // fired through reference in uploadType - event to handle choosing a file type from file picker
     fileSelectedHandler = event =>{
-        //files is an array - if they choose more than one
+        //files is an array - if they choose more than one - set the upload type in state to file and hide the radio buttons
         this.setState({selectedFile:event.target.files[0], uploadType:"file", showRadio:false});
     }
 
@@ -69,6 +62,7 @@ class Programs extends React.Component {
                 //next
                 ()=>{
                     console.log("Uploading ...")
+                    //show the loading icon while resource is uploading
                     this.setState({showloading:true})
                 },
                 //error
@@ -77,16 +71,18 @@ class Programs extends React.Component {
                 },
                 //complete
                 ()=>{
-                    //let downloadURL = uploadTask.snapshot.getDownloadURL;
                     let storageLoc = firebase.storage().ref();
                     storageLoc.child(`/${bucketName}/${file.name}`).getDownloadURL()
                     .then((url)=>{
+                        //create a new resource based using the url retrieved from storage - id is created on backend
                         const newResource={
                             name:event.target.uploadName.value,
                             url:url,
                             type: selectedType
                         }
+                        //save the new resource to the database using the function passed down by the trainer component
                         this.props.addResource(newResource, this.props.match.params.programId);
+                        //stop showing the loading icon
                         this.setState({showloading:false})
                     })
                     .catch(err=>{
@@ -105,25 +101,29 @@ class Programs extends React.Component {
             this.props.addResource(newResource, this.props.match.params.programId);
         }
 
-        // return the add button to the screen and hide the resource input elements
+        // return the radio buttons to the screen and hide the resource input elements
         this.setState({uploadType:"",  showRadio:true, showloading:false});
     }
 
 
     render(){
         const {programs, match, addProgram}=this.props;
+        //find information for the program specified in the url
         const program = programs.find(program=>program.id===match.params.programId)
 
         return (
             <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >
+                {/* render a list of clients on the page */}
                 <ClientList list={programs} match={match} onSubmit={addProgram}/>
+                
                 <div className="programs__container-right">
                     <div className="component program__resources">
                         <div className="program__header">
-                            <p className="program__header-title">{program.name}</p>
+                            <p className="component-title">{program.name}</p>
                             <p className="program__header-description">{program.description}</p>
                         </div>
 
+                        {/* update program details */}
                         <div className="program__header-actions">
                             <div className="program__header-update">
                                 <ModalContainer 
@@ -136,6 +136,7 @@ class Programs extends React.Component {
                                 />
                             </div>
 
+                            {/* delete program */}
                             <div className="program__header-delete">
                                 <ModalContainer 
                                     modalType = "delete" 
@@ -148,15 +149,16 @@ class Programs extends React.Component {
                                 />
                             </div>
                         </div>
-
                     </div>   
-                        
+
+                    {/* if there are no programs added yet then show then empty container with instructions for the user */}
                     {program.resources.length === 0 ? 
-                            <div onClick={()=>this.setState({showRadio:true})} className="empty-container empty-resources">
-                                <p>Choose a Resource Type Below to Add Resources</p>
-                            </div>
-                            :  
+                        <div onClick={()=>this.setState({showRadio:true})} className="empty-container empty-resources">
+                            <p>Choose a Resource Type Below to Add Resources</p>
+                        </div>
+                        :  
                         <div className="gridlist">
+                            {/* otherwise render a list of resources available for the program */}
                             {program.resources.map(resource=> 
                                 <GridList 
                                     key={resource.id} 
@@ -171,13 +173,13 @@ class Programs extends React.Component {
                                     deleteFunction={this.props.deleteResource}
                                     modalName="deleteResource"
                                 />)}
+                                {/* if the resource is loading show the loading icon */}
                                 {this.state.showloading && <div className="component grid__list-item loading"><img src="/icons/loading-icon.gif" alt="loading"/></div>}
                         </div>
                         }
   
                     <div className="resource__add">
-                        {/* a reference is a way to reference another element in the dom */}
-                        {/* ref takes a function that binds a property of our class to a reference of this input */}        
+       
                         {/* input box used to access the file picker */}
                         <input 
                             style={{display:'none'}} 
@@ -188,6 +190,7 @@ class Programs extends React.Component {
                             ref={fileInput => this.fileInput=fileInput}>
                         </input>
 
+                        {/* conditionally render the radio buttons based on the state value */}
                         {this.state.showRadio && 
                             <div className="resource__add-radios">
                                 {/* clicking an input box sets which resource type options to show */}
@@ -198,6 +201,7 @@ class Programs extends React.Component {
                             </div>
                         }
                         
+                        {/* renders the appropriate text boxes and select element if the upload type is a file */}
                         {(this.state.uploadType==="file" && !this.state.showRadio) &&
                             <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
                                 <input className="text-input resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
@@ -213,6 +217,7 @@ class Programs extends React.Component {
                             </form>
                         }
 
+                        {/* renders the appropriate text boxes and select element if the upload type is a url */}
                         {(this.state.uploadType==="url" && !this.state.showRadio) &&
                             <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
                                 <input className="text-input resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>

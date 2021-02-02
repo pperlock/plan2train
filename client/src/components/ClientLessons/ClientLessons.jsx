@@ -98,8 +98,10 @@ class ClientLessons extends React.Component {
         }
 
         console.log("client-lessons - componentUpdated")
-        if(prevProps.currentLesson.location.address !==this.state.currentLesson.location.address || prevProps.currentLesson.location.city !==this.state.currentLesson.location.city ){
-            this.geoCode();
+        if(prevProps.currentLesson){
+            if(prevProps.currentLesson.location.address !==this.state.currentLesson.location.address || prevProps.currentLesson.location.city !==this.state.currentLesson.location.city ){
+                this.geoCode();
+            }
         }
 }
 
@@ -272,6 +274,9 @@ class ClientLessons extends React.Component {
         const lessons = [...this.state.currentClient.lessons];
         const currentClient = {...this.state.currentClient};
         const currentLesson = {...this.state.currentLesson};
+
+        console.log(this.state.currentClient);
+        console.log(this.state.currentLesson);
 
         if(lessons.length===0){
             return(                                     
