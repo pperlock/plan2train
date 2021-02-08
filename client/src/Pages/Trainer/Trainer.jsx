@@ -246,7 +246,6 @@ class Trainer extends React.Component{
             this.setState({clients:[...this.state.clients, res.data]},()=>{
                 this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
             })
-            
         })
         .catch(err=>{
             console.log(err);

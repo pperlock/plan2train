@@ -23,8 +23,8 @@ function LoginForm({onSubmit, profile, signIn}) {
                     <input className="modal-form__input login__form-inputbox" id="username" name="username" type="text" placeholder="Username" required></input>
                     <input className="modal-form__input login__form-inputbox" id="password" name="password" type="password" placeholder="Password" required></input>
                     <input className="modal-form__input login__form-inputbox" id="email" name="email" type="email" placeholder="Email" required></input>
-                    <input className="modal-form__input login__form-inputbox" id="fname" name="fname" type="text" placeholder="First Name" required></input>
-                    <input className="modal-form__input login__form-inputbox" id="lname" name="lname" type="lname" placeholder="Last Name" required></input>
+                    {/* <input className="modal-form__input login__form-inputbox" id="fname" name="fname" type="text" placeholder="First Name" required></input>
+                    <input className="modal-form__input login__form-inputbox" id="lname" name="lname" type="lname" placeholder="Last Name" required></input> */}
                     
                 </div>
                 <button className="modal-form__submit-button login__form-submit" id="submit" type="submit" form="login-form">Join Us</button>

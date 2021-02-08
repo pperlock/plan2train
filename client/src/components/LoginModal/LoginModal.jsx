@@ -21,15 +21,16 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
     const checkCredentials=(event, profile)=>{
         event.preventDefault();
 
+        console.log(profile);
         const user = {username:event.target.username.value, password:event.target.password.value};
 
         axios.post("http://localhost:8080/login", user, {withCredentials:true})
         .then(res =>{
-            setLoginResponse(res.data);
-            console.log(res.data.profile);
-            console.log(res.data);
             if (res.data.loggedIn && res.data.profile !== profile) {
+                console.log("reached");
                 setLoginResponse({loggedIn:false, error:"Incorrect Profile Type"});
+            }else{
+                setLoginResponse(res.data);
             }
         })
         .catch(err =>{

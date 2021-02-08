@@ -19,11 +19,11 @@ function ClientList({list, match, animate, onSubmit, programs}) {
             {page === "programs" && <ModalContainer modalType="update" modalName = "addProgram" buttonType="image" url="/icons/plus-square.svg" onSubmit={onSubmit}/>}
         </div>
 
+        {list &&
         <ul className="client-list__list">
             {page === "clients" && list.map(item => <Link key={item.userId} to={`/trainer/${match.params.username}/${match.params.trainerId}/clients/${item.userId}/profile`}><li className="client-list__client">{`${item.userProfile.lname}, ${item.userProfile.fname}`}</li></Link>)}
             {page === "programs" && list.map(item => <Link key={item.id} to ={`/trainer/${match.params.username}/${match.params.trainerId}/programs/${item.id}`}><li className="client-list__client">{`${item.name}`}</li></Link>)}
-         </ul>
-        
+         </ul>}
     </div>
 
     )

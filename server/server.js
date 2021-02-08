@@ -146,7 +146,6 @@ app.post('/addTrainer', (req,res)=>{
     
 /* =========================================== SIGN IN - GET USER DETAILS ================================================ */
 
-
 app.post("/login", (req,res, next)=>{
 
     const loginResponse = {
@@ -184,60 +183,20 @@ app.post("/login", (req,res, next)=>{
     })(req, res, next);
 })
 
-// app.get('/user/:profile/:username/:password', (req,res)=>{
-
-//     User.findOne({username:req.params.username}) 
-//     .then((response)=>{
-
-//         const loginResponse = {
-//             loggedIn:false, 
-//             error:null, 
-//             userId:null, 
-//             username:null, 
-//             password:null, 
-//             profile:req.params.profile
-//         };
-
-//         if(!response){
-//             loginResponse.loggedIn = false;
-//             loginResponse.error = "Username Not Found";
-//             res.send(loginResponse);
-//         }else if(response.password === req.params.password && response.profile === req.params.profile){
-//             loginResponse.loggedIn = true;
-//             loginResponse.userId = response.userId;
-//             loginResponse.username = response.username;
-//             loginResponse.password = response.password;
-//             res.send(loginResponse);
-//         }else if(response.password !== req.params.password){
-//             loginResponse.loggedIn = false;
-//             loginResponse.error = "Incorrect Password";
-//             res.send(loginResponse);
-//         }else if(response.profile !== req.params.profile){
-//             loginResponse.loggedIn = false;
-//             loginResponse.error = "Profile Type Incorrect";
-//             res.send(loginResponse);
-//         }
-//     })
-//     .catch((err) =>{
-//         console.log(err)
-//     });
-// })
-
-
 
 
 // /* =========================================== GET A SINGLE CLIENT FOR CLIENT SIDE ================================================ */
 
-// app.get('/client/:username/:userId', (req, res) => {
+app.get('/client/:username/:userId', (req, res) => {
 
-//     Client.findOne({userId:req.params.userId}) //asynchronous
-//     .then((response)=>{
-//          res.send(response);
-//     })
-//     .catch((err) =>{
-//         console.log(err)
-//     });
-// });
+    Client.findOne({userId:req.params.userId}) //asynchronous
+    .then((response)=>{
+         res.send(response);
+    })
+    .catch((err) =>{
+        console.log(err)
+    });
+});
 
 /* =========================================== UPDATE TRAINER DETAILS ================================================ */
 app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
@@ -304,49 +263,64 @@ app.put('/trainer/:trainerId/updateLogo', (req,res)=>{
 
 /* =========================================== ADD CLIENT ================================================ */
 app.post('/trainer/:trainerId/addClient', (req,res)=>{
-    //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
-
+    
     const {username,password,profile,status,userProfile, programs} = req.body;
-    //"--id" is auto generated - not a string in mongoDB - mongoose handles the conversion from to a string and then back again
     const date = new Date().getFullYear();
     const userId = uuidv4();
-    const client = new Client({
-        //pass an object with the different properties in the schema
-        userId:userId,
-        trainerId: req.params.trainerId,
-        yearAdded: date,
-        username,
-        password,
-        profile,
-        status,
-        userProfile,
-        programs,
-        lessons:[],
-        notes:"",
-        photos:[]
-    });
 
-    const user = new User({
-        //pass an object with the different properties in the schema
-        userId:userId,
-        username,
-        password,
-        profile:"client",
-    });
+    User.findOne({username:username}, async(err,doc)=>{
+        if (err) throw err;
 
-    client.save() ///asynchronous - returns a promise
-    .then((response)=>{
-        user.save()
-        .then(userRes=>{
-            res.send(response);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+        if (doc) {
+            res.send("Username already exists");
+        }
+
+        if(!doc){
+            const hashedPassword = await bcrypt.hash(password, 10);
+    
+            const newUser = new User({
+                userId:userId,
+                username,
+                password:hashedPassword,
+                profile:"client"
+            });
+
+            const client = new Client({
+                //pass an object with the different properties in the schema
+                userId:userId,
+                trainerId: req.params.trainerId,
+                yearAdded: date,
+                username,
+                password,
+                profile,
+                status,
+                userProfile,
+                programs,
+                lessons:[],
+                notes:"",
+                photos:[]
+            });
+
+            await newUser.save();
+            await client.save();
+            // loginResponse.loggedIn = true;
+            res.send(client);
+        }
     })
-    .catch((err)=>{
-        console.log(err);
-    })
+
+    // client.save() ///asynchronous - returns a promise
+    // .then((response)=>{
+    //     user.save()
+    //     .then(userRes=>{
+    //         res.send(response);
+    //     })
+    //     .catch(err=>{
+    //         console.log(err);
+    //     })
+    // })
+    // .catch((err)=>{
+    //     console.log(err);
+    // })
 })
 
 /* =========================================== DELETE CLIENT ================================================ */
