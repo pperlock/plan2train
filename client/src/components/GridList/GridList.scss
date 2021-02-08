@@ -4,6 +4,7 @@
     display:flex;
     flex-wrap:wrap;
     width:80%;
+    min-height:135px;
     
 
     &__item{
@@ -16,7 +17,7 @@
         margin-bottom:20px;
         margin-right:20px;
         width:15%;
-        box-shadow: 2px 11px 32px  black;
+        box-shadow: 2px 11px 10px  black;
         border-radius:6px; 
 
         transition:transform 0.2s;

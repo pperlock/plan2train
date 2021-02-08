@@ -1,10 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const axios = require("axios");
 const cors = require("cors");
-const app = express();
 const { v4: uuidv4 } = require('uuid');
+const passport = require('passport');
+const passportLocal = require('passport-local').Strategy;
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcryptjs');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const app = express();
 const PORT = 8080;
+
 
 //import models
 const User = require('./models/user')
@@ -13,139 +19,225 @@ const Client = require('./models/client')
 const Program = require('./models/program');
 const { update } = require("./models/user");
 
-app.use(cors());
-//use .json to solve issues between json and text formats
-app.use(express.json());
-
+//*********************************************** END OF IMPORTS ******************************************************************** */
 
 //Connect To mongodb
 dbURI = 'mongodb+srv://pperlock:!Exploration105@plan2traindb.6efyn.mongodb.net/plan2train?retryWrites=true&w=majority'
 
 //connect mongoose to the database
-
 mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //second argument stops deprecation warnings - asynchronous promise
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
 
+//use .json to solve issues between json and text formats
+app.use(express.json());
+
+//Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(cors({
+    origin: "http://localhost:3000", // <--location of the react app we are connecting to
+    credentials:true // <-- very important - must have
+}))
+
+app.use(session({
+    secret:"secretcode",
+    resave:true,
+    saveUninitialized:true
+}));
+
+app.use(cookieParser('secretcode'));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./passportConfig')(passport); //using the instance of passport we created above as the parameter
+
+//*********************************************** END OF MIDDLEWARE ******************************************************************** */
+
+//Routes
+
+
+app.get("/user", (req,res)=>{
+    //once authenticated, the user is stored in the req.user.  the req object you get from the client now has a user object inside of it and conatains all the session data
+    //this can be used and called at any time, any where in the applications
+    res.send(req.user);
+});
+
+//*********************************************** END OF AUTHENTICATION ROUTES ******************************************************************** */
+
+
+
 /* =========================================== SIGN UP - CREATE TRAINER ================================================ */
+
 app.post('/addTrainer', (req,res)=>{
 
-    const {username,password,fname,lname,email} = req.body;
+    const {username,password,email} = req.body;
 
     const userId = uuidv4();
 
-    const user = new User({
-        //pass an object with the different properties in the schema
-        userId:userId,
-        username,
-        password,
-        profile:"trainer",
-    });
-        
-    const trainer = new Trainer({
-        userId:userId,
-        contact:{
-            username,
-            password,
-            fname,
-            lname,
-            email,
-            phone:"Phone Number",
-            address:"Street Address",
-            city:"City",
-            province:"Province",
-            country:"Country",
-            postal:"Postal"
-        },
-        company:{
-            name:"Add Company Name",
-            description:"Add Company Description",
-            logo:""
-        },
-        social:{
-            facebook:"",
-            twitter:"",
-            instagram:"",
-            linkedIn:""
-        }
-    })
-
-    user.save() ///asynchronous - returns a promise
-    .then((response)=>{
-        //once the data is saved, the database sends us back a new object version of document that was saved
-        trainer.save()
-        .then(trainerRes=>{
-            const loginResponse = {
-                loggedIn:true, 
-                error:null, 
-                userId:userId, 
-                username, 
-                password, 
-                profile:"trainer"
-            };
-            res.send(loginResponse);
-        })
-        .catch((err)=>{
-            console.log(err);
-        });
-    })
-    .catch((err)=>{
-        console.log(err);
-    });
-});
-/* =========================================== SIGN IN - GET USER DETAILS ================================================ */
-app.get('/user/:profile/:username/:password', (req,res)=>{
-
-    User.findOne({username:req.params.username}) 
-    .then((response)=>{
+    User.findOne({username:username}, async(err,doc)=>{
 
         const loginResponse = {
             loggedIn:false, 
             error:null, 
-            userId:null, 
-            username:null, 
-            password:null, 
-            profile:req.params.profile
+            userId:userId, 
+            username, 
+            password, 
+            profile:"trainer"
         };
 
-        if(!response){
-            loginResponse.loggedIn = false;
-            loginResponse.error = "Username Not Found";
+        if (err) {
+            loginResponse.error = err;
+            throw err;
+        }
+
+        if (doc) {
+            loginResponse.error = "Username already exists";
             res.send(loginResponse);
-        }else if(response.password === req.params.password && response.profile === req.params.profile){
+        }
+
+        if(!doc){
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            const newUser = new User({
+                userId:userId,
+                username,
+                password:hashedPassword,
+                profile:"trainer"
+            });
+
+            const trainer = new Trainer({
+                userId:userId,
+                contact:{
+                    username,
+                    password,
+                    fname: "",
+                    lname: "",
+                    email,
+                    phone:"Phone Number",
+                    address:"Street Address",
+                    city:"City",
+                    province:"Province",
+                    country:"Country",
+                    postal:"Postal"
+                },
+                company:{
+                    name:"Add Company Name",
+                    description:"Add Company Description",
+                    logo:""
+                },
+                social:{
+                    facebook:"",
+                    twitter:"",
+                    instagram:"",
+                    linkedIn:""
+                }
+            });
+
+            await newUser.save();
+            await trainer.save();
             loginResponse.loggedIn = true;
-            loginResponse.userId = response.userId;
-            loginResponse.username = response.username;
-            loginResponse.password = response.password;
-            res.send(loginResponse);
-        }else if(response.password !== req.params.password){
-            loginResponse.loggedIn = false;
-            loginResponse.error = "Incorrect Password";
-            res.send(loginResponse);
-        }else if(response.profile !== req.params.profile){
-            loginResponse.loggedIn = false;
-            loginResponse.error = "Profile Type Incorrect";
             res.send(loginResponse);
         }
     })
-    .catch((err) =>{
-        console.log(err)
-    });
+    
+});
+    
+/* =========================================== SIGN IN - GET USER DETAILS ================================================ */
+
+
+app.post("/login", (req,res, next)=>{
+
+    const loginResponse = {
+        loggedIn:false, 
+        error:null, 
+        userId:null, 
+        username:null, 
+        password:null, 
+        profile:req.params.profile
+    };
+
+    //the string "local" tells it to use the local strategy that we defined
+    passport.authenticate("local", (err,user,info) =>{
+        if (err){
+            loginResponse.error = err;
+            throw err;
+        }
+        if (!user){
+            loginResponse.error = info.message; //contains error log in message
+            res.send(loginResponse);
+        }
+        else{
+            req.logIn(user, err =>{
+                if (err) throw err;
+                loginResponse.loggedIn = true;
+                loginResponse.userId = req.user.userId;
+                loginResponse.username = req.user.username;
+                loginResponse.password = req.user.password;
+                loginResponse.profile = req.user.profile;
+                res.send(loginResponse);
+                console.log(req.user);
+                console.log(info);
+            })
+        }
+    })(req, res, next);
 })
 
+// app.get('/user/:profile/:username/:password', (req,res)=>{
 
-/* =========================================== GET A SINGLE CLIENT FOR CLIENT SIDE ================================================ */
+//     User.findOne({username:req.params.username}) 
+//     .then((response)=>{
 
-app.get('/client/:username/:userId', (req, res) => {
+//         const loginResponse = {
+//             loggedIn:false, 
+//             error:null, 
+//             userId:null, 
+//             username:null, 
+//             password:null, 
+//             profile:req.params.profile
+//         };
 
-    Client.findOne({userId:req.params.userId}) //asynchronous
-    .then((response)=>{
-         res.send(response);
-    })
-    .catch((err) =>{
-        console.log(err)
-    });
-});
+//         if(!response){
+//             loginResponse.loggedIn = false;
+//             loginResponse.error = "Username Not Found";
+//             res.send(loginResponse);
+//         }else if(response.password === req.params.password && response.profile === req.params.profile){
+//             loginResponse.loggedIn = true;
+//             loginResponse.userId = response.userId;
+//             loginResponse.username = response.username;
+//             loginResponse.password = response.password;
+//             res.send(loginResponse);
+//         }else if(response.password !== req.params.password){
+//             loginResponse.loggedIn = false;
+//             loginResponse.error = "Incorrect Password";
+//             res.send(loginResponse);
+//         }else if(response.profile !== req.params.profile){
+//             loginResponse.loggedIn = false;
+//             loginResponse.error = "Profile Type Incorrect";
+//             res.send(loginResponse);
+//         }
+//     })
+//     .catch((err) =>{
+//         console.log(err)
+//     });
+// })
+
+
+
+
+// /* =========================================== GET A SINGLE CLIENT FOR CLIENT SIDE ================================================ */
+
+// app.get('/client/:username/:userId', (req, res) => {
+
+//     Client.findOne({userId:req.params.userId}) //asynchronous
+//     .then((response)=>{
+//          res.send(response);
+//     })
+//     .catch((err) =>{
+//         console.log(err)
+//     });
+// });
 
 /* =========================================== UPDATE TRAINER DETAILS ================================================ */
 app.put('/trainer/:trainerId/updateDetails', (req,res)=>{

@@ -22,7 +22,7 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
  
 class Programs extends React.Component {
 
-    state={selectedFile:null, showRadio:true, uploaded:false, uploadType:"", showloading:false}
+    state={selectedFile:null, showRadio:true, uploaded:false, uploadType:"", showloading:false, hideEmpty:null}
 
     // triggered by clicking on a download type radio button
     uploadType = (event) => {
@@ -63,7 +63,7 @@ class Programs extends React.Component {
                 ()=>{
                     console.log("Uploading ...")
                     //show the loading icon while resource is uploading
-                    this.setState({showloading:true})
+                    this.setState({showloading:true, hideEmpty:true})
                 },
                 //error
                 ()=>{
@@ -111,6 +111,8 @@ class Programs extends React.Component {
         //find information for the program specified in the url
         const program = programs.find(program=>program.id===match.params.programId)
 
+        console.log(this.state.showloading);
+
         return (
             <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >
                 {/* render a list of clients on the page */}
@@ -152,9 +154,13 @@ class Programs extends React.Component {
                     </div>   
 
                     {/* if there are no programs added yet then show then empty container with instructions for the user */}
-                    {program.resources.length === 0 ? 
+                    {(program.resources.length === 0 && !this.state.hideEmpty) ? 
                         <div onClick={()=>this.setState({showRadio:true})} className="empty-container empty-resources">
                             <p>Choose a Resource Type Below to Add Resources</p>
+                            {this.state.showloading && 
+                                <div className="gridlist">
+                                    <div className="component grid__list-item loading"><img src="/icons/loading-icon.gif" alt="loading"/></div>
+                                </div>}    
                         </div>
                         :  
                         <div className="gridlist">
@@ -195,7 +201,7 @@ class Programs extends React.Component {
                             <div className="resource__add-radios">
                                 {/* clicking an input box sets which resource type options to show */}
                                 <input className="resource__add-radios-button" type="radio" id="url" name="addResource" value="url" onClick={this.uploadType}/>
-                                <label className="resource__add-radios-label" htmlFor="url">Add URL</label>
+                                <label className="resource__add-radios-label" htmlFor="url">Add Website</label>
                                 <input className="resource__add-radios-button" type="radio" id="file" name="addResource" value="file" onClick={this.uploadType}/>
                                 <label className="resource__add-radios-label" htmlFor="file">Upload File</label>
                             </div>
