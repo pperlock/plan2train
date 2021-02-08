@@ -325,6 +325,7 @@ class Trainer extends React.Component{
                         match={match}
                         trainerId={this.state.trainerId}
                         trainerName={this.state.username}
+                        history={this.props.history}
                     />}
                 {/* render an empty page alerting the user to add programs based on the path */}
                 {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/programs") && 

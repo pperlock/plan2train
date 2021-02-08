@@ -32,7 +32,7 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //seco
 //use .json to solve issues between json and text formats
 app.use(express.json());
 
-//Middleware
+/* =========================================== MIDDLEWARE ====================================================================================================== */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cors({
@@ -53,22 +53,10 @@ app.use(passport.session());
 
 require('./passportConfig')(passport); //using the instance of passport we created above as the parameter
 
-//*********************************************** END OF MIDDLEWARE ******************************************************************** */
 
-//Routes
+/* ************************************************AUTHENTICATION ROUTES ********************************************************************* */
 
-
-app.get("/user", (req,res)=>{
-    //once authenticated, the user is stored in the req.user.  the req object you get from the client now has a user object inside of it and conatains all the session data
-    //this can be used and called at any time, any where in the applications
-    res.send(req.user);
-});
-
-//*********************************************** END OF AUTHENTICATION ROUTES ******************************************************************** */
-
-
-
-/* =========================================== SIGN UP - CREATE TRAINER ================================================ */
+/* =========================================== SIGN UP/ CREATE TRAINER  ================================================ */
 
 app.post('/addTrainer', (req,res)=>{
 
@@ -83,7 +71,6 @@ app.post('/addTrainer', (req,res)=>{
             error:null, 
             userId:userId, 
             username, 
-            password, 
             profile:"trainer"
         };
 
@@ -111,9 +98,9 @@ app.post('/addTrainer', (req,res)=>{
                 userId:userId,
                 contact:{
                     username,
-                    password,
-                    fname: "",
-                    lname: "",
+                    password:"",
+                    fname: "First Name",
+                    lname: "Last Name",
                     email,
                     phone:"Phone Number",
                     address:"Street Address",
@@ -144,7 +131,7 @@ app.post('/addTrainer', (req,res)=>{
     
 });
     
-/* =========================================== SIGN IN - GET USER DETAILS ================================================ */
+/* =========================================== LOG IN - GET USER DETAILS ================================================ */
 
 app.post("/login", (req,res, next)=>{
 
@@ -153,7 +140,6 @@ app.post("/login", (req,res, next)=>{
         error:null, 
         userId:null, 
         username:null, 
-        password:null, 
         profile:req.params.profile
     };
 
@@ -173,19 +159,26 @@ app.post("/login", (req,res, next)=>{
                 loginResponse.loggedIn = true;
                 loginResponse.userId = req.user.userId;
                 loginResponse.username = req.user.username;
-                loginResponse.password = req.user.password;
-                loginResponse.profile = req.user.profile;
+                 loginResponse.profile = req.user.profile;
                 res.send(loginResponse);
-                console.log(req.user);
-                console.log(info);
+                // console.log(req.user);
+                // console.log(info);
             })
         }
     })(req, res, next);
 })
 
+app.get("/logout", (req,res)=>{
+    req.logout();
+    // console.log(req);
+    res.send("Logged Out");
+});
 
 
-// /* =========================================== GET A SINGLE CLIENT FOR CLIENT SIDE ================================================ */
+//*********************************************** END OF AUTHENTICATION ROUTES ******************************************************************** */
+
+
+/* =========================================== GET A SINGLE CLIENT FOR CLIENT SIDE ================================================ */
 
 app.get('/client/:username/:userId', (req, res) => {
 
@@ -201,6 +194,12 @@ app.get('/client/:username/:userId', (req, res) => {
 /* =========================================== UPDATE TRAINER DETAILS ================================================ */
 app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
 
+    const hashPassword = async ()=>{
+        const hashedPassword = await bcrypt.hash(req.body.contact.password, 10);
+        return hashedPassword;
+    }
+    
+
     Trainer.findOne({userId:req.params.trainerId}) 
     .then((response)=>{
        
@@ -215,8 +214,10 @@ app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
             //once the trainer is updated, update the user collection
             User.findOne({userId:req.params.trainerId})
             .then(userResponse=>{
+
                 //find the user and set the new username and password
                 userResponse.username=req.body.contact.username;
+                //userResponse.password=hashPassword();
                 userResponse.password=req.body.contact.password;
                 userResponse.save()
                 .then(saveRes=>{
@@ -291,7 +292,7 @@ app.post('/trainer/:trainerId/addClient', (req,res)=>{
                 trainerId: req.params.trainerId,
                 yearAdded: date,
                 username,
-                password,
+                password:"",
                 profile,
                 status,
                 userProfile,

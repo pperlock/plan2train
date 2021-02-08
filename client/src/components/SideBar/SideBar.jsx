@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
 
 import "./SideBar.scss"
 
@@ -12,6 +13,7 @@ class SideBar extends React.Component {
     // match={match}
     //trainerId
     //username = trainer username
+    //history - history props from router
 
     state = {profile:""};
 
@@ -39,6 +41,17 @@ class SideBar extends React.Component {
 
     }
 
+    logout = ()=>{
+        axios.get(`http://localhost:8080/logout`)
+        .then(res =>{
+            this.props.history.push("/");
+            console.log(res);
+        })
+        .catch(err =>{
+            console.log(err);
+        })
+    }
+
     render(){
         const profile = this.props.match.path.split("/")[1]
 
@@ -53,16 +66,16 @@ class SideBar extends React.Component {
                     <div className="sidebar" style={{backgroundImage: "url('/images/main-background.jfif')"}}>
 
                         <div className="sidebar__logout">
-                            {/* <div className="sidebar__logout-text">Log Out</div> */}
-                            <Link to="/"><img className="sidebar__logout-icon" src="/icons/log-out.svg" alt="sign out"/></Link>
+                            <img onClick={this.logout} className="sidebar__logout-icon" src="/icons/log-out.svg" alt="sign out"/>
+                            {/* <Link to="/"><img className="sidebar__logout-icon" src="/icons/log-out.svg" alt="sign out"/></Link> */}
                         </div>
 
-                        <Link  to="/">
-                                <div className="sidebar__logo">
-                                    <h1 className="sidebar__logo-title" >P</h1>
-                                    <span className="sidebar__logo-bigLetter">2</span> 
-                                    <h1 className="sidebar__logo-title"> T</h1>
-                                </div>
+                        <Link to="/">
+                            <div className="sidebar__logo">
+                                <h1 className="sidebar__logo-title" >P</h1>
+                                <span className="sidebar__logo-bigLetter">2</span> 
+                                <h1 className="sidebar__logo-title"> T</h1>
+                            </div>
                         </Link>
 
                         <div className = "sidebar__divider"></div>
@@ -145,10 +158,6 @@ class SideBar extends React.Component {
                     
                 </>
             )
-        // }else{
-        //     return(
-        //         <h1> Invalid Profile Type</h1>
-        //     )
         }
     }
 }
