@@ -31,7 +31,7 @@ class Clients extends React.Component {
     componentDidUpdate(){
         // changes the highlighting of the lessons and profile sub navigation when a link is clicked
         const splitProps = this.props.match.path.split("/")
-        const activeLink = splitProps[6]
+        const activeLink = splitProps[5]
 
         if (document.querySelector(".active-link")){
             const previouslyActiveLink = document.querySelector(".active-link");
@@ -53,7 +53,7 @@ class Clients extends React.Component {
         const {clients, programs, addClient, updateTrainer, updateClient, deleteClient, match} = this.props;
 
         //path used to determine if we are on the lessons page or the profile page
-        const page = this.props.match.path.split("/")[6]; 
+        const page = this.props.match.path.split("/")[5]; 
 
         //set the rendered client to be the one that matches the path name
         const currentClient = this.props.clients.find(client=> client.userId ===match.params.clientId);
@@ -77,12 +77,12 @@ class Clients extends React.Component {
 
                         {/* link changes the page variable which changes the componenet rendered */}
                         <div className="client__header-nav">
-                            <Link to={`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/profile`} 
+                            <Link to={`/trainer/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/profile`} 
                                 id="profile"
                                 onClick={()=> this.removeAnimation()} 
                                 className="client__header-nav-link active-link">Profile
                             </Link>
-                            <Link to={`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/lessons`} 
+                            <Link to={`/trainer/${this.props.match.params.trainerId}/clients/${this.props.match.params.clientId}/lessons`} 
                                 id="lessons"
                                 onClick={()=> this.removeAnimation()} 
                                 className="client__header-nav-link">Lessons

@@ -149,7 +149,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
             <div className="empty-container empty-lesson__resources">
                 {/* <img className="empty-container__icon" src="/icons/add-icon.svg" alt="add icon"></img> */}
                 <h2>You Don't have any Programs Yet!</h2>
-                <Link to={`/trainer/${match.params.username}/${match.params.trainerId}/programs`} className="empty-lesson__resources-link">Click Here to Add Some Programs and Resources</Link>
+                <Link to={`/trainer/${match.params.trainerId}/programs`} className="empty-lesson__resources-link">Click Here to Add Some Programs and Resources</Link>
             </div>
         )
     
@@ -162,7 +162,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
                     <div className="current-lesson__available-content">
                         <ul className="current-lesson__available-programs"> 
                             {programs.map((program,i) => 
-                                <Link key={program.id} to={`/trainer/${match.params.username}/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}>
+                                <Link key={program.id} to={`/trainer/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}>
                                     <li id={program.id} onClick={()=>updateDisplayed(program)} 
                                         className={i===0 ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
                                     </li>

@@ -18,29 +18,29 @@ function App() {
                   <Route path="/" exact component={Intro}/>  {/* // make an axios call to get username and id on sign in*/}
                   
                   {/* Trainer - userprofile */}
-                  <Route path="/trainer/:username/:trainerId" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  <Route path="/trainer/:trainerId" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - programs - no programs */}
-                  <Route path="/trainer/:username/:trainerId/programs" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  <Route path="/trainer/:trainerId/programs" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - programs */}
-                  <Route path="/trainer/:username/:trainerId/programs/:programId" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  <Route path="/trainer/:trainerId/programs/:programId" exact render={(props)=>(<Trainer {...props}/>)}/>
                   
                   {/* Trainer - clients - profile*/}
-                  <Route path="/trainer/:username/:trainerId/clients/:clientId/profile" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  <Route path="/trainer/:trainerId/clients/:clientId/profile" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - clients-lessons*/}
-                  <Route path="/trainer/:username/:trainerId/clients/:clientId/lessons" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  <Route path="/trainer/:trainerId/clients/:clientId/lessons" exact render={(props)=>(<Trainer {...props}/>)}/>
                   {/* Trainer - clients -  no clients */}
-                  <Route path="/trainer/:username/:trainerId/clients" exact render={(props)=>(<Trainer {...props}/>)}/>
+                  <Route path="/trainer/:trainerId/clients" exact render={(props)=>(<Trainer {...props}/>)}/>
                   
                   {/* Trainer - schedule */}
-                  <Route path="/trainer/:username/:trainerId/schedule" render={(props)=>(<Trainer {...props}/>)}/>
+                  <Route path="/trainer/:trainerId/schedule" render={(props)=>(<Trainer {...props}/>)}/>
                   
                   {/* Client  - welcome*/}
-                  <Route path="/client/:username/:clientId" exact render={(props)=>(<Client {...props}/>)}/>
+                  <Route path="/client/:clientId" exact render={(props)=>(<Client {...props}/>)}/>
                   {/* Client  - next lesson*/}
-                  <Route path="/client/:username/:clientId/nextlesson/:lessonId" exact render={(props)=>(<Client {...props}/>)}/>
+                  <Route path="/client/:clientId/nextlesson/:lessonId" exact render={(props)=>(<Client {...props}/>)}/>
                   {/* Client  - past lessons*/}
-                  <Route path="/client/:username/:clientId/lessons/:lessonId" exact render={(props)=>(<Client {...props}/>)}/>
-                  <Route path="/client/:username/:clientId/lessons" exact render={(props)=>(<Client {...props}/>)}/>
+                  <Route path="/client/:clientId/lessons/:lessonId" exact render={(props)=>(<Client {...props}/>)}/>
+                  <Route path="/client/:clientId/lessons" exact render={(props)=>(<Client {...props}/>)}/>
                   
               </Switch>
           </BrowserRouter>

@@ -92,9 +92,6 @@ class ClientProfile extends React.Component {
         console.log(program);
         console.log(index);
 
-        // let foundIndex;
-        // response.notes.find((note, index) => {foundIndex = index; return note.id === req.params.noteId; });
-
         if(program){
             document.getElementById(programId).checked=false;
             copyClient.programs.splice(index,1);

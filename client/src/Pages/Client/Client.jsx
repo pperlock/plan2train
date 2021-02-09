@@ -30,7 +30,7 @@ function Client ({match}) {
     
     // pull the data from the db and set the results in state
     useEffect(()=>{
-        axios.get(`http://localhost:8080/client/${match.params.username}/${match.params.clientId}`)
+        axios.get(`http://localhost:8080/client/${match.params.clientId}`)
         .then(res =>{
            
             setClient(res.data)
@@ -57,26 +57,26 @@ function Client ({match}) {
 
             {/* render the appropriate component based on the specified path */}
             
-            {(trainer && match.path==="/client/:username/:clientId") && 
+            {(trainer && match.path==="/client/:clientId") && 
                 <ClientWelcome
                     client={client}
                     trainer={trainer}    
                 />
             }
 
-            {(client && nextLesson && match.path==="/client/:username/:clientId/nextlesson/:lessonId") && 
+            {(client && nextLesson && match.path==="/client/:clientId/nextlesson/:lessonId") && 
                 <NextLesson
                     nextLesson={nextLesson}
                 />
             }
 
-            {(client && pastLessons && match.path==="/client/:username/:clientId/lessons/:lessonId") && 
+            {(client && pastLessons && match.path==="/client/:clientId/lessons/:lessonId") && 
                 <Lessons
                     pastLessons={pastLessons}
                 />
             }
 
-            {(client && match.path==="/client/:username/:clientId/lessons") && <EmptyPage match={match}/>}
+            {(client && match.path==="/client/:clientId/lessons") && <EmptyPage match={match}/>}
         </div>
     )
 }

@@ -184,7 +184,7 @@ app.get('/auth/google',passport.authenticate('google', { scope: ['profile', 'ema
 app.get('/auth/google/callback',passport.authenticate('google', { failureRedirect: 'http://localhost:3000' }),
   function(req, res) {
     console.log(req.user);
-    res.redirect(`http://localhost:3000/trainer/pperlock/${req.user.userId}`);
+    res.redirect(`http://localhost:3000/trainer/${req.user.userId}`);
   });
 
 
@@ -193,7 +193,7 @@ app.get('/auth/google/callback',passport.authenticate('google', { failureRedirec
 
 /* =========================================== GET A SINGLE CLIENT FOR CLIENT SIDE ================================================ */
 
-app.get('/client/:username/:userId', (req, res) => {
+app.get('/client/:userId', (req, res) => {
 
     Client.findOne({userId:req.params.userId}) //asynchronous
     .then((response)=>{

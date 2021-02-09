@@ -104,7 +104,7 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                             {(modalType === "logintrainer" && showSignIn) && <button className="modal-login__body-signup" onClick={toggleLoginForm}>New to the Community? Click Here to Join Us</button>}
                         </div>
                     </div>
-                    {loggedIn && <Redirect to={`/${profile}/${username}/${userId}`}></Redirect>}
+                    {loggedIn && <Redirect to={`/${profile}/${userId}`}></Redirect>}
                 </aside>
             </FocusTrap>, document.body
         );

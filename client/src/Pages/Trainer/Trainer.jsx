@@ -123,7 +123,7 @@ class Trainer extends React.Component{
         .then(res =>{
             this.setState({programs:[...this.state.programs, res.data]},()=>{
                 // direct the user to the new program page
-                this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${res.data.id}`)
+                this.props.history.push(`/trainer/${this.props.match.params.trainerId}/programs/${res.data.id}`)
             })
         })
         .catch(err=>{
@@ -164,14 +164,14 @@ class Trainer extends React.Component{
             this.setState({updated:true},()=>{
                 //if the program removed is the only program then send the user to the empty page
                 if((this.state.programs.length - 1) === 0){
-                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs`)
+                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/programs`)
                 }else{
                     //if the program on the list was the first on on the list send it to the program at index 1 otherwise index 0
                     const programLoc = this.state.programs.findIndex(program => program.id === programId);
                     programLoc !== 0 ? 
-                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${this.state.programs[0].id}`)
+                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/programs/${this.state.programs[0].id}`)
                     :
-                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/programs/${this.state.programs[1].id}`)
+                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/programs/${this.state.programs[1].id}`)
                 }
             });
         })
@@ -244,7 +244,7 @@ class Trainer extends React.Component{
         axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
         .then(res =>{
             this.setState({clients:[...this.state.clients, res.data]},()=>{
-                this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
+                this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
             })
         })
         .catch(err=>{
@@ -263,14 +263,14 @@ class Trainer extends React.Component{
             this.setState({updated:true},()=>{
                 //if the client removed was the only one on the list send the user to the empty clients page
                 if((this.state.clients.length - 1) === 0){
-                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients`)
+                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients`)
                 }else{
                     const programLoc = this.state.clients.findIndex(client => client.userId === clientId);
                     //send the user to the first client on the list unless the one removed was at 0 index, the route to client at index 1
                     programLoc !== 0 ? 
-                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.state.clients[0].userId}/profile`)
+                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${this.state.clients[0].userId}/profile`)
                     :
-                    this.props.history.push(`/trainer/${this.props.match.params.username}/${this.props.match.params.trainerId}/clients/${this.state.clients[1].userId}/profile`)
+                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${this.state.clients[1].userId}/profile`)
                 }
             });
         })
@@ -328,7 +328,7 @@ class Trainer extends React.Component{
                         history={this.props.history}
                     />}
                 {/* render an empty page alerting the user to add programs based on the path */}
-                {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/programs") && 
+                {(this.state.userProfile && match.path==="/trainer/:trainerId/programs") && 
                     <EmptyPage 
                         match={match}
                         list={this.state.programs} 
@@ -337,7 +337,7 @@ class Trainer extends React.Component{
                     />}
 
                 {/* render an empty page alerting the user to add clients based on the path */}
-                {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/clients") && 
+                {(this.state.userProfile && match.path==="/trainer/:trainerId/clients") && 
                     <EmptyPage 
                         match={match}
                         list={this.state.clients}
@@ -347,7 +347,7 @@ class Trainer extends React.Component{
                 
                 {/* render the program, clients or user components based on the path */}
 
-                {(this.state.userProfile && match.path==="/trainer/:username/:trainerId/programs/:programId") && 
+                {(this.state.userProfile && match.path==="/trainer/:trainerId/programs/:programId") && 
                     <Programs 
                         programs={this.state.programs} 
                         currentProgramId={match.params.programId} 
@@ -359,7 +359,7 @@ class Trainer extends React.Component{
                         updateProgram={this.updateProgram} 
                     />}
 
-                {(this.state.clients && this.state.clients.length !== 0 && match.path==="/trainer/:username/:trainerId/clients/:clientId/profile") && 
+                {(this.state.clients && this.state.clients.length !== 0 && match.path==="/trainer/:trainerId/clients/:clientId/profile") && 
                     <Clients {...this.props} 
                         programs={this.state.programs} 
                         clients={this.state.clients} 
@@ -370,7 +370,7 @@ class Trainer extends React.Component{
                         updateTrainer={this.updateTrainer}
                     />}
 
-                {(this.state.clients  && this.state.clients.length !== 0 && match.path==="/trainer/:username/:trainerId/clients/:clientId/lessons") && 
+                {(this.state.clients  && this.state.clients.length !== 0 && match.path==="/trainer/:trainerId/clients/:clientId/lessons") && 
                     <Clients {...this.props} 
                         programs={this.state.programs} 
                         clients={this.state.clients} 
@@ -378,7 +378,7 @@ class Trainer extends React.Component{
                         deleteClient={this.deleteClient}
                         />}
                 
-                {(this.state.userProfile && match.path==="/trainer/:username/:trainerId") && 
+                {(this.state.userProfile && match.path==="/trainer/:trainerId") && 
                     <User 
                         user={this.state.userProfile} 
                         updateUserProfile={this.updateUserProfile} 
