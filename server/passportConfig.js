@@ -2,6 +2,10 @@ const User = require('./models/user')
 const bcrypt = require('bcryptjs');
 const localStrategy = require('passport-local').Strategy;
 
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
+// var GoogleStrategy = require('passport-google-oauth20').Strategy;
+
 module.exports = function(passport){
 
     //username: req.body.username
@@ -27,6 +31,32 @@ module.exports = function(passport){
             
         })
     );
+
+    passport.use(new GoogleStrategy({
+        clientID: "953271172173-bjiopmlfoaeds8vs4h8rm4nsv0le51b2.apps.googleusercontent.com",
+        clientSecret: "xJtxaVUAHFcpxtbNH7ERhDwY",
+        callbackURL: "http://localhost:8080/auth/google/callback"
+      },
+      
+      function(token, tokenSecret, profile, done) {
+        //   User.findOrCreate({ googleId: profile.id }, function (err, user) {
+        //     return done(err, user);
+        //   });
+        console.log(profile.emails[0].value);
+
+        User.findOne({userId:profile.id}, (err, user) =>{
+            if (err) return done(err);
+            if (!user){
+                console.log(profile.id)
+                return done(null, false, {message:"User not Found"}); //null is the error and false is the user
+            }
+            if (user) return done(null, user); //return null as the error and the user as the user
+        });
+      }
+    ));
+
+
+
     //passport requires a serialized user and a deserialized user
 
     //stores a cookie inside of the browser, take the user we got from our local strategy and create a cookie with a user id inside of it

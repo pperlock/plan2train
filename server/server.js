@@ -3,13 +3,15 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { v4: uuidv4 } = require('uuid');
 const passport = require('passport');
-const passportLocal = require('passport-local').Strategy;
+//const passportLocal = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
 const PORT = 8080;
+
+require ('./passportConfig');
 
 
 //import models
@@ -37,7 +39,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cors({
     origin: "http://localhost:3000", // <--location of the react app we are connecting to
-    credentials:true // <-- very important - must have
+    credentials:true, // <-- very important - must have
+    allowedHeaders: "Content-Type, Authorization",
 }))
 
 app.use(session({
@@ -144,7 +147,7 @@ app.post("/login", (req,res, next)=>{
     };
 
     //the string "local" tells it to use the local strategy that we defined
-    passport.authenticate("local", (err,user,info) =>{
+    passport.authenticate('local', (err,user,info) =>{
         if (err){
             loginResponse.error = err;
             throw err;
@@ -175,6 +178,17 @@ app.get("/logout", (req,res)=>{
 });
 
 
+//login using google
+app.get('/auth/google',passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// app.get('/auth/google/callback',passport.authenticate('google', { failureRedirect: 'http://localhost:3000/login' }),
+app.get('/auth/google/callback',passport.authenticate('google', { failureRedirect: 'http://localhost:3000' }),
+  function(req, res) {
+    console.log(req.user);
+    res.redirect(`http://localhost:3000/trainer/pperlock/${req.user.userId}`);
+  });
+
+
 //*********************************************** END OF AUTHENTICATION ROUTES ******************************************************************** */
 
 
@@ -198,7 +212,6 @@ app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
         const hashedPassword = await bcrypt.hash(req.body.contact.password, 10);
         return hashedPassword;
     }
-    
 
     Trainer.findOne({userId:req.params.trainerId}) 
     .then((response)=>{
@@ -308,20 +321,6 @@ app.post('/trainer/:trainerId/addClient', (req,res)=>{
             res.send(client);
         }
     })
-
-    // client.save() ///asynchronous - returns a promise
-    // .then((response)=>{
-    //     user.save()
-    //     .then(userRes=>{
-    //         res.send(response);
-    //     })
-    //     .catch(err=>{
-    //         console.log(err);
-    //     })
-    // })
-    // .catch((err)=>{
-    //     console.log(err);
-    // })
 })
 
 /* =========================================== DELETE CLIENT ================================================ */

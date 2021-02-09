@@ -39,6 +39,10 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
         toggleScrollLock(); 
     }
 
+    const googleSignIn=()=>{
+        window.location.href = `http://localhost:8080/auth/google`;
+    }
+
 
     //triggered by the sign up form submit
     const createTrainer = (event)=>{
@@ -94,10 +98,9 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                             </svg>
                         </button>
                         <div className="modal-body modal-login__body">
-                            {showSignIn &&<LoginForm onSubmit={checkCredentials} profile={modalType} signIn={showSignIn} closeModal={closeModal}/>}
+                            {showSignIn &&<LoginForm onSubmit={checkCredentials} googleSignIn={googleSignIn} profile={modalType} signIn={showSignIn} closeModal={closeModal}/>}
                             {showSignUp && <LoginForm onSubmit={createTrainer} profile={modalType} signIn={showSignIn} closeModal={closeModal}/>}
                             {error && <p className="modal-login__body-error">{error}</p>}  
-                            {/* {this.state.noUser && <p className="modal-login__body-error">"Username Not Found"</p>} */}
                             {(modalType === "logintrainer" && showSignIn) && <button className="modal-login__body-signup" onClick={toggleLoginForm}>New to the Community? Click Here to Join Us</button>}
                         </div>
                     </div>
