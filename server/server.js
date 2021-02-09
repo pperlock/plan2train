@@ -10,6 +10,8 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
 const PORT = 8080;
+const dotenv= require('dotenv');
+dotenv.config();
 
 require ('./passportConfig');
 
@@ -23,11 +25,8 @@ const { update } = require("./models/user");
 
 //*********************************************** END OF IMPORTS ******************************************************************** */
 
-//Connect To mongodb
-dbURI = 'mongodb+srv://pperlock:!Exploration105@plan2traindb.6efyn.mongodb.net/plan2train?retryWrites=true&w=majority'
-
 //connect mongoose to the database
-mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology:true}) //second argument stops deprecation warnings - asynchronous promise
+mongoose.connect(process.env.MONGO_DBURI, {useNewUrlParser: true, useUnifiedTopology:true}) //second argument stops deprecation warnings - asynchronous promise
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
 

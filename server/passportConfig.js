@@ -33,8 +33,8 @@ module.exports = function(passport){
     );
 
     passport.use(new GoogleStrategy({
-        clientID: "953271172173-bjiopmlfoaeds8vs4h8rm4nsv0le51b2.apps.googleusercontent.com",
-        clientSecret: "xJtxaVUAHFcpxtbNH7ERhDwY",
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: "http://localhost:8080/auth/google/callback"
       },
       

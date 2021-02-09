@@ -79,9 +79,7 @@ class SideBar extends React.Component {
                         </Link>
 
                         <div className = "sidebar__divider"></div>
-                        
-
-                        
+                
                         <ul className="sidebar__menu">
                             <Link to={`/trainer/${trainerName}/${trainerId}`}>
                                 <li id="trainer-link" className="sidebar__menu-link sidebar__menu-link--active">
