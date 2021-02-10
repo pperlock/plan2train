@@ -255,14 +255,26 @@ app.get('/auth/google/callback', (req,res, next)=>{
             });
             await newUser.save();
             await trainer.save();
-            res.redirect(`http://localhost:3000/trainer/${userId}`);
+
+            if (process.env.NODE_ENV === "production"){
+                res.redirect(`https://plan2train.herokuapp.com/trainer/${userId}`);
+            }else{
+                res.redirect(`http://localhost:3000/trainer/${userId}`);
+            }
+            
             // console.log(info.profile.givenName);
         }
         else{
             req.logIn(user, err =>{
                 console.log('req.login');
                 if (err) console.log(err);
-                res.redirect(`http://localhost:3000/trainer/${user.userId}`);
+                // res.redirect(`http://localhost:3000/trainer/${user.userId}`);
+
+                if (process.env.NODE_ENV === "production"){
+                    res.redirect(`https://plan2train.herokuapp.com/trainer/${user.userId}`);
+                }else{
+                    res.redirect(`http://localhost:3000/trainer/${user.userId}`);
+                }
             })
         }
     })(req, res, next)
