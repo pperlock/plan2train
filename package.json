@@ -1,0 +1,24 @@
+{
+  "name": "plan2train",
+  "version": "1.0.0",
+  "description": "Plan2Train is an organizational app focused on help small businesses in the personal training space (ie. fitness trainers, animal trainers, physiotherapists, tutors, etc..). Trainers are be able to manage and store their training resources, client information, schedules and notes in one place and share them with their clients to make handling their business easier.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm start --prefix client",
+    "start": "npm start --prefix server",
+    "server": "nodemon index --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm install --prefix server && npm run build --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pperlock/plan2train.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pperlock/plan2train/issues"
+  },
+  "homepage": "https://github.com/pperlock/plan2train#readme"
+}
