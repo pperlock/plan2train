@@ -38,6 +38,7 @@ class Trainer extends React.Component{
 
 
     componentDidMount(){
+        console.log(`${API_URL}/trainer/${this.state.trainerId}`);
        //get the trainer's information and their associated clients from the db when the component is mounted
         axios.get(`${API_URL}/trainer/${this.state.trainerId}`)
         .then(res =>{

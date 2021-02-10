@@ -29,7 +29,6 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
         axios.post(`${API_URL}/login`, user, {withCredentials:true})
         .then(res =>{
             if (res.data.loggedIn && res.data.profile !== profile) {
-                console.log("reached");
                 setLoginResponse({loggedIn:false, error:"Incorrect Profile Type"});
             }else{
                 setLoginResponse(res.data);
