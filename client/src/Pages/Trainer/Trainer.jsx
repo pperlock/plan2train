@@ -327,6 +327,7 @@ class Trainer extends React.Component{
    
     render(){
         const {match} = this.props;
+        console.log("render reached");
         return (
             <>
                 {/* render the sidebar for all instances */}
