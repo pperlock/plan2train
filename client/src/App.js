@@ -15,7 +15,7 @@ function App() {
           <BrowserRouter>
               <Switch>
                   
-                  <Route path="/" exact component={Intro}/>  {/* // make an axios call to get username and id on sign in*/}
+                  <Route path="/" exact component={Intro}/>
                   
                   {/* Trainer - userprofile */}
                   <Route path="/trainer/:trainerId" exact render={(props)=>(<Trainer {...props}/>)}/>

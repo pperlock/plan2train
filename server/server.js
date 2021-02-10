@@ -23,12 +23,22 @@ const Client = require('./models/client')
 const Program = require('./models/program');
 const { update } = require("./models/user");
 
+
 //*********************************************** END OF IMPORTS ******************************************************************** */
 
 //connect mongoose to the database
 mongoose.connect(process.env.MONGO_DBURI, {useNewUrlParser: true, useUnifiedTopology:true}) //second argument stops deprecation warnings - asynchronous promise
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
+
+if (process.env.NODE_ENV === "production") {
+    // Set static folder
+    app.use(express.static("../client/build"));
+  
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
+    });
+  }
 
 //use .json to solve issues between json and text formats
 app.use(express.json());
