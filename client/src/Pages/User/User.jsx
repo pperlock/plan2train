@@ -13,7 +13,7 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
  * @param {Function} updateTrainer - used to update the state on the trainer component
  */
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:8080';
 
 function User({user, updateUserProfile, match, updateTrainer}) {
 

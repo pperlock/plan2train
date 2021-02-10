@@ -7,7 +7,7 @@ import './ClientProfile.scss';
 import Map from '../../components/Map/Map';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:8080';
 
 // props = currentClient
 class ClientProfile extends React.Component {

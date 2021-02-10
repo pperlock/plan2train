@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import "./SideBar.scss"
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:8080';
 
 class SideBar extends React.Component {
 

@@ -22,7 +22,7 @@ import EmptyPage from '../EmptyPage/EmptyPage';
  * @param {String} selectedFile - file selected to update trainer logo
  */
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:8080';
 
 class Trainer extends React.Component{
     

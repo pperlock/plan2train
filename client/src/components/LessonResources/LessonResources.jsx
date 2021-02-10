@@ -22,7 +22,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
         CARD:'card',
     };
 
-    const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+    const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:8080';
 
     const [allResources, setAllResources] = useState(programs);
     

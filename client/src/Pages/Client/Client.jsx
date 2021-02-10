@@ -14,7 +14,7 @@ import EmptyPage from '../EmptyPage/EmptyPage';
 * @param {Object} match - used to make axios calls and conditionally render based on the path
 */
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:8080';
 
 function Client ({match}) {
     
