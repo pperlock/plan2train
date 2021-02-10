@@ -14,7 +14,7 @@ import Map from '../../components/Map/Map';
  * @param {Object} programs 
  */
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:8080';
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
 
 class ClientLessons extends React.Component {
 
