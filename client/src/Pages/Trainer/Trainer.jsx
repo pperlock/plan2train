@@ -42,9 +42,11 @@ class Trainer extends React.Component{
        //get the trainer's information and their associated clients from the db when the component is mounted
         axios.get(`${API_URL}/trainer/${this.state.trainerId}`)
         .then(res =>{
+            console.log(res);
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
                 axios.get(`${API_URL}/trainer/${this.state.trainerId}/clients`)
                 .then(clientRes=>{
+                    console.log(clientRes);
                     this.setState({clients:clientRes.data})
                 })
                 .catch(clientErr =>{
