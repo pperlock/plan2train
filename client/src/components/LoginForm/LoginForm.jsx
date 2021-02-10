@@ -26,15 +26,17 @@ function LoginForm({onSubmit, profile, signIn, googleSignIn}) {
         )
     }else{
         return(
-            <form id="login-form" className="login__form" onSubmit={onSubmit} >
-                <div className="login__form-input">
-                    <input className="modal-form__input login__form-inputbox" id="username" name="username" type="text" placeholder="Username" required></input>
-                    <input className="modal-form__input login__form-inputbox" id="password" name="password" type="password" placeholder="Password" required></input>
-                    <input className="modal-form__input login__form-inputbox" id="email" name="email" type="email" placeholder="Email" required></input>
-                </div>
-                <button className="modal-form__submit-button login__form-submit" id="submit" type="submit" form="login-form">Join Us</button>
-                <button onClick={googleSignIn} className="modal-form__submit-button login__form-submit" id="google" type="button" form="login-form">Google</button>
-            </form>
+            <>
+                <form id="login-form" className="login__form" onSubmit={onSubmit} >
+                    <div className="login__form-input">
+                        <input className="modal-form__input login__form-inputbox" id="username" name="username" type="text" placeholder="Username" required></input>
+                        <input className="modal-form__input login__form-inputbox" id="password" name="password" type="password" placeholder="Password" required></input>
+                        <input className="modal-form__input login__form-inputbox" id="email" name="email" type="email" placeholder="Email" required></input>
+                    </div>
+                    <button className="modal-form__submit-button login__form-submit" id="submit" type="submit" form="login-form">Join Us</button>
+                </form>
+                <button onClick={googleSignIn} className="social-login" id="google" type="button" form="login-form"><img className="social-login__icon" src="/icons/google.png"></img></button>
+            </>
         )
     }
 }

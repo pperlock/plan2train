@@ -41,7 +41,10 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
 
     const googleSignIn=()=>{
         window.location.href = `http://localhost:8080/auth/google`;
-    }
+        const response = window.json;
+        console.log("reached");
+        console.log(response);
+     }
 
 
     //triggered by the sign up form submit
@@ -73,7 +76,7 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
         setShowSignIn(!showSignIn);
     }
 
-        const {loggedIn, error, userId, username, profile} = loginResponse;
+        const {loggedIn, error, userId, profile} = loginResponse;
 
         console.log(loginResponse);
 

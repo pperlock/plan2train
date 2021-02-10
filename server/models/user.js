@@ -17,6 +17,10 @@ const userSchema = new Schema({
         required:true
     },
 
+    googleId:{
+        type:String
+    },
+
     profile: {
         type: String,
         required:true

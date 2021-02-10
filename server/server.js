@@ -177,15 +177,80 @@ app.get("/logout", (req,res)=>{
 });
 
 
+
 //login using google
 app.get('/auth/google',passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 // app.get('/auth/google/callback',passport.authenticate('google', { failureRedirect: 'http://localhost:3000/login' }),
-app.get('/auth/google/callback',passport.authenticate('google', { failureRedirect: 'http://localhost:3000' }),
-  function(req, res) {
-    console.log(req.user);
-    res.redirect(`http://localhost:3000/trainer/${req.user.userId}`);
-  });
+// app.get('/auth/google/callback',passport.authenticate('google', { failureRedirect: 'http://localhost:3000' }),
+//   function(req, res) {
+//     console.log(req.user);
+//     res.redirect(`http://localhost:3000/trainer/${req.user.userId}`);
+//   });
+
+app.get('/auth/google/callback', (req,res, next)=>{
+
+    passport.authenticate('google', async (err,user,info) =>{
+        const userId = uuidv4();
+
+        if (err){
+            res.send(err);
+            console.log(err);
+        }
+        if (!user){
+            const newUser = new User({
+                userId:userId,
+                googleId:info.profile.id,
+                username:"google",
+                password:"google",
+                profile:"trainer"
+            });
+
+            const trainer = new Trainer({
+                userId:userId,
+                contact:{
+                    username:"google",
+                    password:"google",
+                    fname: info.profile.givenName,
+                    lname: info.profile.familyName,
+                    email: info.profile.emails[0].value,
+                    phone:"Phone Number",
+                    address:"Street Address",
+                    city:"City",
+                    province:"Province",
+                    country:"Country",
+                    postal:"Postal"
+                },
+                company:{
+                    name:"Add Company Name",
+                    description:"Add Company Description",
+                    logo:""
+                },
+                social:{
+                    facebook:"",
+                    twitter:"",
+                    instagram:"",
+                    linkedIn:""
+                }
+            });
+            await newUser.save();
+            await trainer.save();
+            res.redirect(`http://localhost:3000/trainer/${userId}`);
+            console.log(info.profile.emails[0].value);
+        }
+        else{
+            req.logIn(user, err =>{
+                console.log('req.login');
+                if (err) console.log(err);
+                res.redirect(`http://localhost:3000/trainer/${user.userId}`);
+            })
+        }
+    })(req, res, next)
+});
+
+// function(req, res) {
+//     console.log(req.user);
+//     res.redirect(`http://localhost:3000/trainer/${req.user.userId}`);
 
 
 //*********************************************** END OF AUTHENTICATION ROUTES ******************************************************************** */
