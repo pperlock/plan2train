@@ -47,7 +47,13 @@ class Trainer extends React.Component{
                 .then(clientRes=>{
                     this.setState({clients:clientRes.data})
                 })
+                .catch(clientErr =>{
+                    console.log(clientErr);
+                })
             })
+        })
+        .catch(err =>{
+            console.log(err);
         })
     }
 
@@ -60,6 +66,9 @@ class Trainer extends React.Component{
                     axios.get(`${API_URL}/trainer/${this.props.match.params.trainerId}/clients`)
                     .then(clientRes=>{
                         this.setState({clients:clientRes.data})
+                    })
+                    .catch(clientErr =>{
+                        console.log(clientErr);
                     })
                 })
                 // if the update is fired by another component then set updated back to false
