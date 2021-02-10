@@ -107,7 +107,7 @@ class ClientLessons extends React.Component {
 
     geoCode = () =>{
         const {address, city, province} = this.state.currentLesson.location;
-        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
+        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
             // console.log(res.data.results[0].locations[0].displayLatLng);
             this.setState({mapLocation:res.data.results[0].locations[0].displayLatLng});     

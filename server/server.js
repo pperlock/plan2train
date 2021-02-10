@@ -236,7 +236,7 @@ app.get('/auth/google/callback', (req,res, next)=>{
             await newUser.save();
             await trainer.save();
             res.redirect(`http://localhost:3000/trainer/${userId}`);
-            console.log(info.profile.emails[0].value);
+            // console.log(info.profile.givenName);
         }
         else{
             req.logIn(user, err =>{

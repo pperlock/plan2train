@@ -18,7 +18,7 @@ function NextLesson({nextLesson}) {
 
     useEffect(()=>{
         //send the location of the next lesson to the api to geocode the location for google maps
-        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
+        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
             //once the location is geocoded set it in state
             setMapLocation(res.data.results[0].locations[0].displayLatLng);

@@ -47,7 +47,7 @@ class ClientProfile extends React.Component {
 
     geoCode = () =>{
         const {address, city, province} = this.state.currentClient.userProfile;
-        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
+        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
             // console.log(res.data.results[0].locations[0].displayLatLng);
             this.setState({mapLocation:res.data.results[0].locations[0].displayLatLng});     
@@ -59,13 +59,9 @@ class ClientProfile extends React.Component {
     }
 
     addNote=(note)=>{
-        // const newNote={message:event.target.newNote.value};
-        console.log(note);
-
         const newNote={
             note:note
         }
-
         axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addNote`, newNote)
         .then(res =>{
             console.log(res.data);

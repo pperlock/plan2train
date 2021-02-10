@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 
 const config={
-    apiKey: "AIzaSyDgWvC87VuPOKlsEn300F8hUHkC94WCFuM",
+    apiKey: process.env.REACT_APP_FIREBASE_API,
     authDomain: "plan2train-11243.firebaseapp.com",
     projectId: "plan2train-11243",
     storageBucket: "plan2train-11243.appspot.com",
