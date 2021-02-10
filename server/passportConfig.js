@@ -30,10 +30,17 @@ module.exports = function(passport){
         })
     );
 
+    let callbackURL="";
+    if (process.env.NODE_ENV === "production"){
+        callbackURL = "https://plan2train.herokuapp.com/auth/google/callback"
+    }else{
+        callbackURL = "http://localhost:5000/auth/google/callback"
+    }
+
     passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:8080/auth/google/callback"
+        callbackURL: callbackURL
       },
       
       function(token, tokenSecret, profile, done) {
