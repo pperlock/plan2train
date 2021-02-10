@@ -4,8 +4,6 @@ const localStrategy = require('passport-local').Strategy;
 
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-// var GoogleStrategy = require('passport-google-oauth20').Strategy;
-
 module.exports = function(passport){
 
     //username: req.body.username

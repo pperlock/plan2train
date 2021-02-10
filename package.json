@@ -1,8 +1,12 @@
 {
   "name": "plan2train",
   "version": "1.0.0",
+  "engines": {
+    "node": "14.x"
+  },
   "description": "Plan2Train is an organizational app focused on help small businesses in the personal training space (ie. fitness trainers, animal trainers, physiotherapists, tutors, etc..). Trainers are be able to manage and store their training resources, client information, schedules and notes in one place and share them with their clients to make handling their business easier.",
   "main": "index.js",
+  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm start --prefix client",
