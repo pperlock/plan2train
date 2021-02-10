@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const dotenv= require('dotenv');
 dotenv.config();
 
@@ -247,10 +247,6 @@ app.get('/auth/google/callback', (req,res, next)=>{
         }
     })(req, res, next)
 });
-
-// function(req, res) {
-//     console.log(req.user);
-//     res.redirect(`http://localhost:3000/trainer/${req.user.userId}`);
 
 
 //*********************************************** END OF AUTHENTICATION ROUTES ******************************************************************** */
