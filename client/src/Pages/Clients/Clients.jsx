@@ -18,6 +18,7 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
  * @param {function} deleteClient - delete a client from the db
  */
 
+ 
 class Clients extends React.Component {
 
     // This may change from a class to functional but I would like to add a sliding menu- still in progress - will look into it

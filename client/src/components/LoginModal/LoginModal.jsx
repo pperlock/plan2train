@@ -8,6 +8,8 @@ import "./LoginModal.scss";
 
 import LoginForm from '../LoginForm/LoginForm';
 
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+
 function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal, onSubmit, modalType, toggleScrollLock}) {
 
     
@@ -24,7 +26,7 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
         console.log(profile);
         const user = {username:event.target.username.value, password:event.target.password.value};
 
-        axios.post("http://localhost:8080/login", user, {withCredentials:true})
+        axios.post(`${API_URL}/login`, user, {withCredentials:true})
         .then(res =>{
             if (res.data.loggedIn && res.data.profile !== profile) {
                 console.log("reached");
@@ -40,7 +42,7 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
     }
 
     const googleSignIn=()=>{
-        window.location.href = `http://localhost:8080/auth/google`;
+        window.location.href = `${API_URL}/auth/google`;
         const response = window.json;
         console.log("reached");
         console.log(response);
@@ -59,7 +61,7 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
             email:email.value,
         }
 
-        axios.post(`http://localhost:8080/addTrainer`, newTrainer, {withCredentials:true})
+        axios.post(`${API_URL}/addTrainer`, newTrainer, {withCredentials:true})
         .then(res =>{
             setLoginResponse(res.data);
             console.log(res.data);

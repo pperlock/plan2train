@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import "./SideBar.scss"
 
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
 
 class SideBar extends React.Component {
 
@@ -42,7 +43,7 @@ class SideBar extends React.Component {
     }
 
     logout = ()=>{
-        axios.get(`http://localhost:8080/logout`)
+        axios.get(`${API_URL}/logout`)
         .then(res =>{
             this.props.history.push("/");
             console.log(res);

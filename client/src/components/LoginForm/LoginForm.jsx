@@ -2,6 +2,7 @@ import React from 'react';
 
 import './LoginForm.scss';
 
+
 function LoginForm({onSubmit, profile, signIn, googleSignIn}) {
     
     const profileType = profile.substring(5, profile.length);

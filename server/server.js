@@ -46,11 +46,20 @@ app.use(express.json());
 /* =========================================== MIDDLEWARE ====================================================================================================== */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(cors({
-    origin: "http://localhost:3000", // <--location of the react app we are connecting to
-    credentials:true, // <-- very important - must have
-    allowedHeaders: "Content-Type, Authorization",
-}))
+
+if (process.env.NODE_ENV === "production"){
+    app.use(cors({
+        origin:"https://plan2train.herokuapp.com",
+        credentials:true, // <-- very important - must have
+        allowedHeaders: "Content-Type, Authorization",
+    }))
+}else{
+    app.use(cors({
+        origin: "http://localhost:3000", // <--location of the react app we are connecting to
+        credentials:true, // <-- very important - must have
+        allowedHeaders: "Content-Type, Authorization",
+    }))
+}
 
 app.use(session({
     secret:"secretcode",

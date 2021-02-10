@@ -7,6 +7,8 @@ import './ClientProfile.scss';
 import Map from '../../components/Map/Map';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+
 // props = currentClient
 class ClientProfile extends React.Component {
  
@@ -62,7 +64,7 @@ class ClientProfile extends React.Component {
         const newNote={
             note:note
         }
-        axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addNote`, newNote)
+        axios.post(`${API_URL}/client/${this.state.currentClient.userId}/addNote`, newNote)
         .then(res =>{
             console.log(res.data);
             const copyClient = {...this.state.currentClient};
@@ -97,7 +99,7 @@ class ClientProfile extends React.Component {
         }
         
         this.setState({currentClient:copyClient},()=>{
-            axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/updatePrograms`, copyClient.programs)
+            axios.put(`${API_URL}/client/${this.state.currentClient.userId}/updatePrograms`, copyClient.programs)
             .then(res =>{
                 this.props.updateTrainer();
             })

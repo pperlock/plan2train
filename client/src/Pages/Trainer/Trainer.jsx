@@ -22,6 +22,8 @@ import EmptyPage from '../EmptyPage/EmptyPage';
  * @param {String} selectedFile - file selected to update trainer logo
  */
 
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+
 class Trainer extends React.Component{
     
     state={files:null, 
@@ -37,10 +39,10 @@ class Trainer extends React.Component{
 
     componentDidMount(){
        //get the trainer's information and their associated clients from the db when the component is mounted
-        axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
+        axios.get(`${API_URL}/trainer/${this.state.trainerId}`)
         .then(res =>{
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
-                axios.get(`http://localhost:8080/trainer/${this.state.trainerId}/clients`)
+                axios.get(`${API_URL}/trainer/${this.state.trainerId}/clients`)
                 .then(clientRes=>{
                     this.setState({clients:clientRes.data})
                 })
@@ -51,10 +53,10 @@ class Trainer extends React.Component{
     componentDidUpdate(){
         //get the trainer's information and their associated clients from the db when the component is updated
         if(this.state.updated){
-            axios.get(`http://localhost:8080/trainer/${this.state.trainerId}`)
+            axios.get(`${API_URL}/trainer/${this.state.trainerId}`)
             .then(res =>{
                 this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
-                    axios.get(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/clients`)
+                    axios.get(`${API_URL}/trainer/${this.props.match.params.trainerId}/clients`)
                     .then(clientRes=>{
                         this.setState({clients:clientRes.data})
                     })
@@ -98,7 +100,7 @@ class Trainer extends React.Component{
         }
 
         //send a request to the db to save the new information and set it in state
-        axios.put(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/updateDetails`, updatedProfile)
+        axios.put(`${API_URL}/trainer/${this.props.match.params.trainerId}/updateDetails`, updatedProfile)
         .then(res =>{
             this.setState({userProfile:updatedProfile});
         })
@@ -119,7 +121,7 @@ class Trainer extends React.Component{
         }
 
         //send a request to the db to save the new information and set it in state using the returned information
-        axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addProgram`, newProgram)
+        axios.post(`${API_URL}/trainer/${this.props.match.params.trainerId}/addProgram`, newProgram)
         .then(res =>{
             this.setState({programs:[...this.state.programs, res.data]},()=>{
                 // direct the user to the new program page
@@ -144,7 +146,7 @@ class Trainer extends React.Component{
         }
 
         //send a request to the db to save the new information - trigger an update of the component to fetch the new data       
-        axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/${this.props.match.params.programId}/updateProgram`, newProgram)
+        axios.post(`${API_URL}/trainer/${this.props.match.params.trainerId}/${this.props.match.params.programId}/updateProgram`, newProgram)
         .then(res =>{
             this.setState({updated:true})
         })
@@ -158,7 +160,7 @@ class Trainer extends React.Component{
     deleteProgram = (programId) =>{
 
         // send a request to the db to delete a program with the specified programId
-        axios.delete(`http://localhost:8080/program/${this.props.match.params.programId}`)
+        axios.delete(`${API_URL}/program/${this.props.match.params.programId}`)
         .then(res =>{
             //trigger the state to update the component and the redirect the user to the first program on the list
             this.setState({updated:true},()=>{
@@ -183,7 +185,7 @@ class Trainer extends React.Component{
     /** ================================================ ADD RESOURCE ================================================*/
     addResource=(newResource)=>{
         //a new resources is made in the programs component and passed back to trainer to save in the db
-        axios.post(`http://localhost:8080/program/${this.props.match.params.programId}/addResource`, newResource)
+        axios.post(`${API_URL}/program/${this.props.match.params.programId}/addResource`, newResource)
         .then(res =>{
             this.setState({updated:true});//trigger the component did update to pull updated data from db
         })
@@ -195,7 +197,7 @@ class Trainer extends React.Component{
     /** ================================================ DELETE RESOURCE ================================================*/
     deleteResource = (resourceId) =>{
         //a resourceId is sent back from the programs component and removed from the db
-        axios.delete(`http://localhost:8080/program/${this.props.match.params.programId}/${resourceId}`)
+        axios.delete(`${API_URL}/program/${this.props.match.params.programId}/${resourceId}`)
         .then(res =>{
             this.setState({updated:true});//trigger the component did update to pull updated data from db
         })
@@ -241,7 +243,7 @@ class Trainer extends React.Component{
         }
 
         // save the new client in the db and return send the user to the new clients profile page
-        axios.post(`http://localhost:8080/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
+        axios.post(`${API_URL}/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
         .then(res =>{
             this.setState({clients:[...this.state.clients, res.data]},()=>{
                 this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
@@ -257,7 +259,7 @@ class Trainer extends React.Component{
     deleteClient=(clientId)=>{
 
        // send a request to the db to delete a client with the specified programId
-        axios.delete(`http://localhost:8080/client/${clientId}`)
+        axios.delete(`${API_URL}/client/${clientId}`)
         .then(res =>{
             //trigger the state to update the component and the redirect the user to the appropriate client
             this.setState({updated:true},()=>{
@@ -297,7 +299,7 @@ class Trainer extends React.Component{
         }
 
         // send the new client information to the db and update the state to pull from the db
-        axios.put(`http://localhost:8080/client/${this.props.match.params.clientId}/updateDetails`, updatedClient)
+        axios.put(`${API_URL}/client/${this.props.match.params.clientId}/updateDetails`, updatedClient)
         .then(res =>{
             //pulls new data from db on component did update
             this.setState({updated:true})

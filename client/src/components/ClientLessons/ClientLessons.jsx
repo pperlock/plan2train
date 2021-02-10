@@ -14,6 +14,8 @@ import Map from '../../components/Map/Map';
  * @param {Object} programs 
  */
 
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+
 class ClientLessons extends React.Component {
 
     state={
@@ -140,7 +142,7 @@ class ClientLessons extends React.Component {
         if (list==="addNote"){
             //if the target is the notes section then save it to the appropriate spot in the db
             // const newItem={message:event.target.newNote.value}
-            axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addNote`, newItem)
+            axios.post(`${API_URL}/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addNote`, newItem)
             .then(res =>{
                 const lessonCopy = this.state.currentLesson;
                 lessonCopy.notes = res.data;
@@ -153,7 +155,7 @@ class ClientLessons extends React.Component {
             //if the target is the homework section then save it to the appropriate spot in the db
             // console.log(event);
             // const newItem={message:event.target.newHomework.value}
-            axios.post(`http://localhost:8080/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addHomework`, newItem)
+            axios.post(`${API_URL}/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addHomework`, newItem)
             .then(res =>{
                 const lessonCopy = this.state.currentLesson;
                 lessonCopy.homework = res.data;
@@ -190,7 +192,7 @@ class ClientLessons extends React.Component {
             }
         }
 
-        axios.post(`http://localhost:8080/client/${this.state.currentClient.userId}/addLesson`,newLesson)
+        axios.post(`${API_URL}/client/${this.state.currentClient.userId}/addLesson`,newLesson)
         .then(res =>{
             const clientCopy = {...this.state.currentClient};
             clientCopy.lessons.push(res.data)
@@ -203,7 +205,7 @@ class ClientLessons extends React.Component {
 
     deleteLesson = (lessonId)=>{
        
-        axios.delete(`http://localhost:8080/client/${this.state.currentClient.userId}/${lessonId}/deleteLesson`)
+        axios.delete(`${API_URL}/client/${this.state.currentClient.userId}/${lessonId}/deleteLesson`)
             .then(res =>{
                 // console.log(res.data);
                 const clientCopy = {...this.state.currentClient};
@@ -234,7 +236,7 @@ class ClientLessons extends React.Component {
             }
         }
 
-        axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateLessonDetails`, updatedClient)
+        axios.put(`${API_URL}/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateLessonDetails`, updatedClient)
         .then(res =>{
             console.log(res);
             const clientCopy = {...this.state.currentClient};
@@ -253,7 +255,7 @@ class ClientLessons extends React.Component {
         const id = event.target.id;
         console.log(id);
         console.log(this.state.currentLesson.current);
-        axios.put(`http://localhost:8080/client/${this.state.currentClient.userId}/${id}/updateStatus`)
+        axios.put(`${API_URL}/client/${this.state.currentClient.userId}/${id}/updateStatus`)
         .then(res =>{
             
             const clientCopy = {...this.state.currentClient};

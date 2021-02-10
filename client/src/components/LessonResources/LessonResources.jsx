@@ -22,6 +22,8 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
         CARD:'card',
     };
 
+    const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+
     const [allResources, setAllResources] = useState(programs);
     
     //resources that are currently being displayed - change based on program chosen
@@ -81,7 +83,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
             console.log(updatedResources);
 
             //update the db with the new lesson resources
-            axios.put(`http://localhost:8080/client/${currentClient.userId}/${currentLessonResources.id}/updateResource`, updatedResources)
+            axios.put(`${API_URL}/client/${currentClient.userId}/${currentLessonResources.id}/updateResource`, updatedResources)
             .then(res =>{
                 console.log(res);
             })
@@ -123,7 +125,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
             console.log(updatedResources);
 
             // update the db with the new lesson resources
-            axios.put(`http://localhost:8080/client/${currentClient.userId}/${currentLessonResources.id}/updateResource`, updatedResources)
+            axios.put(`${API_URL}/client/${currentClient.userId}/${currentLessonResources.id}/updateResource`, updatedResources)
             .then(res =>{
                 console.log(res);
             })

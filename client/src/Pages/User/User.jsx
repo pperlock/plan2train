@@ -13,6 +13,8 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
  * @param {Function} updateTrainer - used to update the state on the trainer component
  */
 
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+
 function User({user, updateUserProfile, match, updateTrainer}) {
 
     const {lname,fname,username,password,email,phone,address,city,province,country,postal} = user.contact;
@@ -56,7 +58,7 @@ function User({user, updateUserProfile, match, updateTrainer}) {
                     storageLoc.child(`/${bucketName}/${selectedFile.name}`).getDownloadURL()
                     .then((url)=>{
                         const logo={logo:url}
-                        axios.put(`http://localhost:8080/trainer/${match.params.trainerId}/updateLogo`, logo)
+                        axios.put(`${API_URL}/trainer/${match.params.trainerId}/updateLogo`, logo)
                         .then(res =>{
                             updateTrainer();
                         })

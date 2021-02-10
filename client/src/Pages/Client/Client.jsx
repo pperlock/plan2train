@@ -14,6 +14,8 @@ import EmptyPage from '../EmptyPage/EmptyPage';
 * @param {Object} match - used to make axios calls and conditionally render based on the path
 */
 
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/': 'http://localhost:8080';
+
 function Client ({match}) {
     
     //object containing information associated with specified client
@@ -30,12 +32,12 @@ function Client ({match}) {
     
     // pull the data from the db and set the results in state
     useEffect(()=>{
-        axios.get(`http://localhost:8080/client/${match.params.clientId}`)
+        axios.get(`${API_URL}/client/${match.params.clientId}`)
         .then(res =>{
            
             setClient(res.data)
             
-            axios.get(`http://localhost:8080/trainer/${res.data.trainerId}`)
+            axios.get(`${API_URL}/trainer/${res.data.trainerId}`)
             .then(trainerRes=>{
                 setTrainer(trainerRes.data.userProfile)
             })
