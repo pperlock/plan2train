@@ -62,9 +62,11 @@ class Trainer extends React.Component{
         if(this.state.updated){
             axios.get(`${API_URL}/trainer/${this.state.trainerId}`)
             .then(res =>{
+                console.log(res);
                 this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
                     axios.get(`${API_URL}/trainer/${this.props.match.params.trainerId}/clients`)
                     .then(clientRes=>{
+                        console.log(clientRes);
                         this.setState({clients:clientRes.data})
                     })
                     .catch(clientErr =>{
@@ -327,7 +329,7 @@ class Trainer extends React.Component{
    
     render(){
         const {match} = this.props;
-        console.log("render reached");
+        console.log(this.state.userProfile);
         return (
             <>
                 {/* render the sidebar for all instances */}
