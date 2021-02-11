@@ -40,7 +40,7 @@ class Trainer extends React.Component{
     componentDidMount(){
         console.log(`${API_URL}/trainer/${this.state.trainerId}`);
        //get the trainer's information and their associated clients from the db when the component is mounted
-        axios.get(`${API_URL}/trainer/${this.state.trainerId}`)
+        axios.get(`${API_URL}/api/trainer/${this.state.trainerId}`)
         .then(res =>{
             console.log(res);
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
@@ -62,7 +62,7 @@ class Trainer extends React.Component{
     componentDidUpdate(){
         //get the trainer's information and their associated clients from the db when the component is updated
         if(this.state.updated){
-            axios.get(`${API_URL}/trainer/${this.state.trainerId}`)
+            axios.get(`${API_URL}/api/trainer/${this.state.trainerId}`)
             .then(res =>{
                 console.log(res);
                 this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
@@ -332,6 +332,7 @@ class Trainer extends React.Component{
     render(){
         const {match} = this.props;
         console.log(this.state.userProfile);
+        console.log(this.state.clients);
         return (
             <>
                 {/* render the sidebar for all instances */}

@@ -7,6 +7,8 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
 function ClientList({list, match, animate, onSubmit, programs}) {
 
     const page = match.path.split("/")[3];
+
+    console.log(list);
     
     return (
 

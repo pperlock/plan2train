@@ -32,14 +32,6 @@ mongoose.connect(process.env.MONGO_DBURI, {useNewUrlParser: true, useUnifiedTopo
 .then((res)=> app.listen(PORT, function() {console.log("Server is running on Port: " + PORT)})) //only listening if connected to db
 .catch((err)=>console.log(err))
 
-if (process.env.NODE_ENV === "production") {
-    // Set static folder
-    app.use(express.static("../client/build"));
-  
-    app.get("/", (req, res) => {
-      res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
-    });
-  }
 
 //use .json to solve issues between json and text formats
 app.use(express.json());
@@ -662,7 +654,7 @@ app.get('/trainer/:trainerId/clients', (req, res) => {
 
 /* =========================================== GET TRAINER ================================================ */
 
-app.get('/trainer/:trainerId', (req, res) => {
+app.get('/api/trainer/:trainerId', (req, res) => {
 
     let trainer = {userProfile:{}, programs:[] }
 
@@ -893,3 +885,12 @@ app.put('/client/:clientId/:lessonId/updateStatus', (req,res)=>{
         console.log(err)
     });
 })
+
+if (process.env.NODE_ENV === "production") {
+    // Set static folder
+    app.use(express.static("../client/build"));
+  
+    app.get("/", (req, res) => {
+      res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
+    });
+}
