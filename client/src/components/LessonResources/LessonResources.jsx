@@ -2,6 +2,7 @@ import React, {useState, useEffect}  from 'react';
 import {useDrop} from 'react-dnd';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import ScrollMenu from 'react-horizontal-scrolling-menu';
 
 import './LessonResources.scss'
 
@@ -31,7 +32,8 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
 
     //current lesson being rendered - changed based on drag and drop from available resources 
     const[currentLessonResources, updateCurrentLesson] = useState(currentLesson);
-   
+
+       
      //update the resources of the current lesson when state changes
     useEffect(() => {
         updateCurrentLesson(currentLesson);
@@ -144,8 +146,36 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
         // }),
     });
 
+//program list scrolling
+    function sideScroll(element,direction,speed,distance,step){
+        let scrollAmount = 0;
+        var slideTimer = setInterval(function(){
+            if(direction == 'left'){
+                element.scrollLeft -= step;
+            } else {
+                element.scrollLeft += step;
+            }
+            scrollAmount += step;
+            if(scrollAmount >= distance){
+                window.clearInterval(slideTimer);
+            }
+        }, speed);
+    }
 
-     if(programs.length===0){
+    const scrollContainer = document.querySelector('.current-lesson__available-programs');
+
+    scrollContainer.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        if (e.deltaY > 0) sideScroll(scrollContainer,'left',25,100,10);
+        else sideScroll(scrollContainer,'right',25,100,10);
+    });
+
+    const scrollList = (direction)=>{
+        const scrollContainer = document.querySelector('.current-lesson__available-programs');
+        direction ==="right" ? sideScroll(scrollContainer,'right',25,100,10): sideScroll(scrollContainer,'left',25,100,10);
+    }
+
+    if(programs.length===0){
         return(                                     
             // <div onClick={this.addNewLesson} className="empty-container">
             <div className="empty-container empty-lesson__resources">
@@ -162,18 +192,22 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
                 <div className="current-lesson__available">
                     {/* <p>Available Resources</p> */}
                     <div className="current-lesson__available-content">
-                        <ul className="current-lesson__available-programs"> 
-                            {programs.map((program,i) => 
-                                <Link key={program.id} to={`/trainer/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}>
-                                    <li id={program.id} onClick={()=>updateDisplayed(program)} 
-                                        className={i===0 ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
-                                    </li>
-                                </Link>)}
-                        </ul>
-                            <div ref={drop} className="list current-lesson__available-resources">
-                                {displayResources.filter(resource => resource.applied === false)
-                                    .map(resource=> <DNDList key={resource.id} content={resource.name} link={resource.link} id={resource.id}/>)}
-                            </div>                
+                        <div className="scroll-container">
+                            <img src="/icons/chevron-left.svg" className="chevron-left" onClick={()=>{scrollList("left")}}/>
+                            <ul className="current-lesson__available-programs"> 
+                                {programs.map((program,i) => 
+                                    <Link key={program.id} to={`/trainer/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}>
+                                        <li id={program.id} onClick={()=>updateDisplayed(program)} 
+                                            className={i===0 ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
+                                        </li>
+                                    </Link>)}
+                            </ul>
+                            <img src="/icons/chevron-left.svg" className="chevron-right" onClick={()=>{scrollList("right")}}/>
+                        </div>
+                        <div ref={drop} className="list current-lesson__available-resources">
+                            {displayResources.filter(resource => resource.applied === false)
+                                .map(resource=> <DNDList key={resource.id} content={resource.name} link={resource.link} id={resource.id}/>)}
+                        </div>                
                     </div>
                 </div>
                 {/* applied resources component set up as a drop component */}

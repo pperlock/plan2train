@@ -266,9 +266,7 @@ app.get('/auth/google/callback', (req,res, next)=>{
         }
         else{
             req.logIn(user, err =>{
-                console.log('req.login');
                 if (err) console.log(err);
-                // res.redirect(`http://localhost:3000/trainer/${user.userId}`);
 
                 if (process.env.NODE_ENV === "production"){
                     res.redirect(`https://plan2train.herokuapp.com/trainer/${user.userId}`);
