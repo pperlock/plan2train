@@ -37,7 +37,7 @@ function Client ({match}) {
            
             setClient(res.data)
             
-            axios.get(`${API_URL}/trainer/${res.data.trainerId}`)
+            axios.get(`${API_URL}/api/trainer/${res.data.trainerId}`)
             .then(trainerRes=>{
                 setTrainer(trainerRes.data.userProfile)
             })
