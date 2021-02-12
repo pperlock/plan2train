@@ -12,7 +12,7 @@
     }
     &-inputbox{
         margin-right:0;
-        margin-bottom:30px;
+        margin-bottom:37px;
         width:95%;
     }
     &-submit{
@@ -27,6 +27,11 @@
     cursor: pointer;
     &__icon{
         width:40px;
+        cursor: pointer;
+        &:hover{
+            transform:scale(1.1);
+            // box-shadow: 2px 2px 10px $dark-text;
+        }
     }
     &:hover{
         transform:scale(1.04);
@@ -34,6 +39,10 @@
     }
     &:focus{
         outline:none;
+    }
+
+    &-facebook{
+
     }
 }
 

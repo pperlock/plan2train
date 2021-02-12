@@ -32,18 +32,41 @@
         &-signup{
             background-color:transparent;
             border:none;
-            color:$accent-color;
-            font-weight:bold;
-            font-size:18px;
-            width: 211px;
-            margin-top:40px;
+            font-size:16px;
             cursor:pointer;
+            margin-left:10px;
+            margin-bottom:10px;
+        
+            &-accent{
+                color:$accent-color;
+                font-weight:bold;
+                &:hover{
+                    font-style:italic;
+                }
+            }
+            &:focus{
+                outline:none;
+            }
         }
 
         &-error{
             color:#ff0033;
             font-weight:bold;
             font-style:italic;
+            position:absolute;
+            top:53%;
+            &--signUp{
+                top:47%;
+            }
+        }
+    }
+
+    &__alternate{
+        display:flex;
+        align-items:center;
+        margin-bottom:10px;
+        &-text{
+            margin-left:10px;
         }
     }
 }

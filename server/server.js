@@ -74,7 +74,7 @@ require('./passportConfig')(passport); //using the instance of passport we creat
 
 app.post('/addTrainer', (req,res)=>{
 
-    const {username,password,email} = req.body;
+    const {username,password} = req.body;
 
     const userId = uuidv4();
 
@@ -115,7 +115,7 @@ app.post('/addTrainer', (req,res)=>{
                     password:"",
                     fname: "First Name",
                     lname: "Last Name",
-                    email,
+                    email: "Email",
                     phone:"Phone Number",
                     address:"Street Address",
                     city:"City",

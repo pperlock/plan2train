@@ -52,12 +52,11 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
     const createTrainer = (event)=>{
         event.preventDefault();
         
-        const {username, password, email} = event.target;
+        const {username, password} = event.target;
 
         const newTrainer={
             username:username.value,
             password:password.value,
-            email:email.value,
         }
 
         axios.post(`${API_URL}/addTrainer`, newTrainer, {withCredentials:true})
@@ -75,12 +74,15 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
     const toggleLoginForm = ()=>{
         setShowSignUp(!showSignUp);
         setShowSignIn(!showSignIn);
+        setLoginResponse({loggedIn:false, error:""});
     }
 
         const {loggedIn, error, userId, profile} = loginResponse;
 
         console.log(loginResponse);
 
+        const profileType = modalType.substring(5, modalType.length);
+ 
         return ReactDOM.createPortal(
             <FocusTrap>
                 <aside 
@@ -91,7 +93,7 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                         <div className="modal-login__header">
                             {modalType === "loginclient" && <h1 className="modal-title modal-login__header-title">Client Login</h1>}
                             {modalType === "logintrainer" && <h1 className= "modal-login__header-title">Trainer Login</h1>}
-                            {(modalType === "logintrainer" && showSignIn) && <p className= "modal-login__header-info">Already Part of the Community? Sign In</p>}
+                            {(profileType === "trainer" && showSignIn) && <button className="modal-login__body-signup" onClick={toggleLoginForm}>New to the Community? <span className="modal-login__body-signup-accent">Sign Up</span></button>}
                         </div>
                         <button
                             ref={buttonRef}
@@ -102,10 +104,29 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                             </svg>
                         </button>
                         <div className="modal-body modal-login__body">
-                            {showSignIn &&<LoginForm onSubmit={checkCredentials} googleSignIn={googleSignIn} profile={modalType} signIn={showSignIn} closeModal={closeModal}/>}
-                            {showSignUp && <LoginForm onSubmit={createTrainer} profile={modalType} signIn={showSignIn} closeModal={closeModal}/>}
-                            {error && <p className="modal-login__body-error">{error}</p>}  
-                            {(modalType === "logintrainer" && showSignIn) && <button className="modal-login__body-signup" onClick={toggleLoginForm}>New to the Community? Click Here to Join Us</button>}
+                            {showSignIn && <LoginForm onSubmit={checkCredentials} profile={profileType} signIn={showSignIn} closeModal={closeModal}/>}
+                            {showSignUp && <LoginForm onSubmit={createTrainer} profile={profileType} signIn={showSignIn} closeModal={closeModal}/>}
+                            {error && <p className={showSignIn ? "modal-login__body-error" : "modal-login__body-error modal-login__body-error--signUp"}>{error}</p>}  
+                            {profileType==="trainer" &&
+                            <>
+                            <div className="login-divider">
+                                <div className="login-divider__line"></div>
+                                <p className="login-divider__text"> OR</p>
+                                <div className="login-divider__line"></div>
+                            </div>
+                            <div className="modal-login__alternate">
+                                {/* <button onClick={googleSignIn} className="social-login" id="google" type="button" form="login-form"> */}
+                                    <img className="social-login__icon" onClick={googleSignIn} src="/icons/google.png" alt="google signin"></img>
+                                {/* </button> */}
+                                <p className="modal-login__alternate-text"> {showSignIn ? "Login With Google" : "Sign Up With Google"}</p>
+                            </div>
+                            <div className="modal-login__alternate">
+                                {/* <button onClick={googleSignIn} className="social-login social-login-facebook" id="google" type="button" form="login-form"> */}
+                                    <img className="social-login__icon" onClick={googleSignIn} src="/icons/facebook-icon-square.png" alt="google signin"></img>
+                                {/* </button> */}
+                                <p className="modal-login__alternate-text">{showSignIn ? "Login With Facebook" : "Sign Up With Facebook"}</p>
+                            </div>
+                            </>}
                         </div>
                     </div>
                     {loggedIn && <Redirect to={`/${profile}/${userId}`}></Redirect>}
