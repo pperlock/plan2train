@@ -27,11 +27,21 @@
         background-color:$lighter-green;
         border:0;
         border-bottom:1px solid grey;
-        padding:10px;
+        padding:5px;
         box-sizing:border-box;
         margin-top:40px;
         margin-bottom:20px;
-        width:85%;
+        width:95%;
+        color:white;
+        font-size:16px;
+        &:focus{
+            outline:none;
+            background-color:$lighter-green;
+        }
+    }
+
+    &__list{
+        margin-top:20px;
     }
 
     &__client{

@@ -42,12 +42,15 @@ class Trainer extends React.Component{
        //get the trainer's information and their associated clients from the db when the component is mounted
         axios.get(`${API_URL}/api/trainer/${this.state.trainerId}`)
         .then(res =>{
-            console.log(res);
             this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
                 axios.get(`${API_URL}/trainer/${this.state.trainerId}/clients`)
                 .then(clientRes=>{
-                    console.log(clientRes);
-                    this.setState({clients:clientRes.data})
+                    clientRes.data.sort((a,b)=>{
+                        if(a.userProfile.lname < b.userProfile.lname) return -1;
+                        if(a.userProfile.lname > b.userProfile.lname) return 1;
+                        return 0;
+                    })
+                     this.setState({clients:clientRes.data})
                 })
                 .catch(clientErr =>{
                     console.log(clientErr);
@@ -64,12 +67,15 @@ class Trainer extends React.Component{
         if(this.state.updated){
             axios.get(`${API_URL}/api/trainer/${this.state.trainerId}`)
             .then(res =>{
-                console.log(res);
                 this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
                     axios.get(`${API_URL}/trainer/${this.props.match.params.trainerId}/clients`)
                     .then(clientRes=>{
-                        console.log(clientRes);
-                        this.setState({clients:clientRes.data})
+                         clientRes.data.sort((a,b)=>{
+                             if(a.userProfile.lname < b.userProfile.lname) return -1;
+                             if(a.userProfile.lname > b.userProfile.lname) return 1;
+                             return 0;
+                            })
+                         this.setState({clients:clientRes.data})
                     })
                     .catch(clientErr =>{
                         console.log(clientErr);
@@ -259,7 +265,13 @@ class Trainer extends React.Component{
         // save the new client in the db and return send the user to the new clients profile page
         axios.post(`${API_URL}/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
         .then(res =>{
-            this.setState({clients:[...this.state.clients, res.data]},()=>{
+            const newClientList = [...this.state.clients, res.data];
+            newClientList.sort((a,b)=>{
+                if(a.userProfile.lname < b.userProfile.lname) return -1;
+                if(a.userProfile.lname > b.userProfile.lname) return 1;
+                return 0;
+               })
+            this.setState({clients:newClientList},()=>{
                 this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
             })
         })
@@ -404,7 +416,7 @@ class Trainer extends React.Component{
                         updateTrainer={this.updateTrainer} 
                     />}
                 
-                {(this.state.userProfile && match.path==="/schedule") && <Schedule />}
+                {(this.state.userProfile && match.path==="/trainer/:trainerId/schedule") && <Schedule />}
             </>
         )
     }

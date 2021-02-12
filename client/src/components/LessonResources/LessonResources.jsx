@@ -164,11 +164,13 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
 
     const scrollContainer = document.querySelector('.current-lesson__available-programs');
 
-    scrollContainer.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        if (e.deltaY > 0) sideScroll(scrollContainer,'left',25,100,10);
-        else sideScroll(scrollContainer,'right',25,100,10);
-    });
+    if (!!scrollContainer){
+        scrollContainer.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            if (e.deltaY > 0) sideScroll(scrollContainer,'left',25,100,10);
+            else sideScroll(scrollContainer,'right',25,100,10);
+        });
+    }
 
     const scrollList = (direction)=>{
         const scrollContainer = document.querySelector('.current-lesson__available-programs');

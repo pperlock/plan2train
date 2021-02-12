@@ -7,6 +7,7 @@ import {DndProvider} from 'react-dnd';
 import Intro from './Pages/Intro/Intro';
 import Trainer from './Pages/Trainer/Trainer';
 import Client from './Pages/Client/Client';
+import Schedule from './Pages/Schedule/Schedule';
 
 function App() {
   return (

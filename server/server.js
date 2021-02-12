@@ -184,7 +184,6 @@ app.post("/login", (req,res, next)=>{
 
 app.get("/logout", (req,res)=>{
     req.logout();
-    // console.log(req);
     res.send("Logged Out");
 });
 
@@ -192,13 +191,6 @@ app.get("/logout", (req,res)=>{
 
 //login using google
 app.get('/auth/google',passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-// app.get('/auth/google/callback',passport.authenticate('google', { failureRedirect: 'http://localhost:3000/login' }),
-// app.get('/auth/google/callback',passport.authenticate('google', { failureRedirect: 'http://localhost:3000' }),
-//   function(req, res) {
-//     console.log(req.user);
-//     res.redirect(`http://localhost:3000/trainer/${req.user.userId}`);
-//   });
 
 app.get('/auth/google/callback', (req,res, next)=>{
 
