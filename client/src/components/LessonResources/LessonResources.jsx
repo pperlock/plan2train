@@ -2,7 +2,6 @@ import React, {useState, useEffect}  from 'react';
 import {useDrop} from 'react-dnd';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import ScrollMenu from 'react-horizontal-scrolling-menu';
 
 import './LessonResources.scss'
 
@@ -150,7 +149,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
     function sideScroll(element,direction,speed,distance,step){
         let scrollAmount = 0;
         var slideTimer = setInterval(function(){
-            if(direction == 'left'){
+            if(direction === 'left'){
                 element.scrollLeft -= step;
             } else {
                 element.scrollLeft += step;
@@ -194,7 +193,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
                     {/* <p>Available Resources</p> */}
                     <div className="current-lesson__available-content">
                         <div className="scroll-container">
-                            <img src="/icons/chevron-left.svg" className="chevron-left" onClick={()=>{scrollList("left")}}/>
+                            <img src="/icons/chevron-left.svg" className="chevron-left" alt="scroll left" onClick={()=>{scrollList("left")}}/>
                             <ul className="current-lesson__available-programs"> 
                                 {programs.map((program,i) => 
                                     <Link key={program.id} to={`/trainer/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}>
@@ -203,7 +202,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
                                         </li>
                                     </Link>)}
                             </ul>
-                            <img src="/icons/chevron-left.svg" className="chevron-right" onClick={()=>{scrollList("right")}}/>
+                            <img src="/icons/chevron-left.svg" className="chevron-right" alt="scroll right" onClick={()=>{scrollList("right")}}/>
                         </div>
                         <div ref={drop} className="list current-lesson__available-resources">
                             {displayResources.filter(resource => resource.applied === false)

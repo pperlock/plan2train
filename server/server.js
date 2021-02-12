@@ -268,7 +268,7 @@ app.get('/auth/google/callback', (req,res, next)=>{
 
 /* =========================================== GET A SINGLE CLIENT FOR CLIENT SIDE ================================================ */
 
-app.get('/client/:userId', (req, res) => {
+app.get('/api/client/:userId', (req, res) => {
 
     Client.findOne({userId:req.params.userId}) //asynchronous
     .then((response)=>{

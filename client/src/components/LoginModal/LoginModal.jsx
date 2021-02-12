@@ -52,7 +52,7 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
     const createTrainer = (event)=>{
         event.preventDefault();
         
-        const {username, password, email, fname, lname} = event.target;
+        const {username, password, email} = event.target;
 
         const newTrainer={
             username:username.value,

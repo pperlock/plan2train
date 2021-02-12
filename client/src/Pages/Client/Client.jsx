@@ -32,7 +32,7 @@ function Client ({match}) {
     
     // pull the data from the db and set the results in state
     useEffect(()=>{
-        axios.get(`${API_URL}/client/${match.params.clientId}`)
+        axios.get(`${API_URL}/api/client/${match.params.clientId}`)
         .then(res =>{
            
             setClient(res.data)

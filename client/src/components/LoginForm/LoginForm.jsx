@@ -25,7 +25,7 @@ function LoginForm({onSubmit, profile, signIn, googleSignIn}) {
                         <div className="login-divider__line"></div>
                     </div>
                     
-                    <button onClick={googleSignIn} className="social-login" id="google" type="button" form="login-form"><img className="social-login__icon" src="/icons/google.png"></img></button>
+                    <button onClick={googleSignIn} className="social-login" id="google" type="button" form="login-form"><img className="social-login__icon" src="/icons/google.png" alt="google signin"></img></button>
                     </>}
             </div>
         )

@@ -20,11 +20,8 @@ class SideBar extends React.Component {
 
     componentDidMount(){
         const splitProps = this.props.match.path.split("/")
-        // console.log(splitProps);
         const profile = splitProps.length === 4 ? splitProps[1] : splitProps[4]
         this.setState({profile:profile});
-
-        
     }
 
     componentDidUpdate(){
@@ -57,7 +54,7 @@ class SideBar extends React.Component {
         const profile = this.props.match.path.split("/")[1]
 
         if (profile){
-            var {trainerId, trainerName, programs, clients, match} = this.props;
+            var {trainerId, programs, clients, match} = this.props;
             var defaultClientId = (clients && clients.length !==0) ? clients[0].userId : match.params.clientId
         }
 

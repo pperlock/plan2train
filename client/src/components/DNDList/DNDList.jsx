@@ -32,7 +32,7 @@ function DNDList({id, content, link, description}) {
 
     return (
         <div ref={drag} className="list__item" opacity={isDragging ? '1' : '1'}>
-            <a href={link} className="list__item-name" target="_blank">{content}</a>
+            <a href={link} className="list__item-name" target="_blank" rel="noopener noreferrer">{content}</a>
             <div className="list__right" >
                 {description && <p className="list__right-type">{description}</p>}
             </div>
