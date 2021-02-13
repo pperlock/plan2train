@@ -21,6 +21,10 @@ const userSchema = new Schema({
         type:String
     },
 
+    facebookId:{
+        type:String
+    },
+
     profile: {
         type: String,
         required:true

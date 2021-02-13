@@ -205,7 +205,7 @@ app.get('/auth/google/callback', (req,res, next)=>{
             const newUser = new User({
                 userId:userId,
                 googleId:info.profile.id,
-                username:`${info.profile._json.given_name.substring(0,1)}${info.profile._json.family_name}`,
+                username:"google",
                 password:"google",
                 profile:"trainer"
             });
@@ -213,7 +213,7 @@ app.get('/auth/google/callback', (req,res, next)=>{
             const trainer = new Trainer({
                 userId:userId,
                 contact:{
-                    username:`${info.profile._json.given_name.substring(0,1)}${info.profile._json.family_name}`,
+                    username:"google",
                     password:"google",
                     fname: info.profile._json.given_name,
                     lname: info.profile._json.family_name,

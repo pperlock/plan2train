@@ -72,8 +72,7 @@ module.exports = function(passport){
         User.findOne({facebookId:profile.id}, (err, user) =>{
             if (err) return done(err,false, {message:err});
             if (!user){
-                // console.log(profile._json)
-                return done(null, false, {profile}); //null is the error and false is the user
+                 return done(null, false, {profile}); //null is the error and false is the user
             }
             if (user) return done(null, user); //return null as the error and the user as the user
         });
