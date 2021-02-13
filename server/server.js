@@ -215,9 +215,9 @@ app.get('/auth/google/callback', (req,res, next)=>{
                 contact:{
                     username:"google",
                     password:"google",
-                    fname: info.profile.givenName,
-                    lname: info.profile.familyName,
-                    email: info.profile.emails[0].value,
+                    fname: info.profile._json.given_name,
+                    lname: info.profile._json.family_name,
+                    email: info.profile._json.email,
                     phone:"Phone Number",
                     address:"Street Address",
                     city:"City",
@@ -245,8 +245,6 @@ app.get('/auth/google/callback', (req,res, next)=>{
             }else{
                 res.redirect(`http://localhost:3000/trainer/${userId}`);
             }
-            
-            // console.log(info.profile.givenName);
         }
         else{
             req.logIn(user, err =>{
@@ -262,8 +260,78 @@ app.get('/auth/google/callback', (req,res, next)=>{
     })(req, res, next)
 });
 
+//login using facebook
+app.get('/auth/facebook',passport.authenticate('facebook', { scope: 'email' }));
 
-//*********************************************** END OF AUTHENTICATION ROUTES ******************************************************************** */
+app.get('/auth/facebook/callback', (req,res, next)=>{
+
+    passport.authenticate('facebook', async (err,user,info) =>{
+        const userId = uuidv4();
+
+        if (err){
+            res.send(err);
+            console.log(err);
+        }
+        if (!user){
+            const newUser = new User({
+                userId:userId,
+                facebookId:info.profile.id,
+                username:"facebook",
+                password:"facebook",
+                profile:"trainer"
+            });
+
+            const trainer = new Trainer({
+                userId:userId,
+                contact:{
+                    username:"facebook",
+                    password:"facebook",
+                    fname: info.profile._json.first_name,
+                    lname: info.profile._json.last_name,
+                    email: info.profile._json.email,
+                    phone:"Phone Number",
+                    address:"Street Address",
+                    city:"City",
+                    province:"Province",
+                    country:"Country",
+                    postal:"Postal"
+                },
+                company:{
+                    name:"Add Company Name",
+                    description:"Add Company Description",
+                    logo:""
+                },
+                social:{
+                    facebook:"",
+                    twitter:"",
+                    instagram:"",
+                    linkedIn:""
+                }
+            });
+            await newUser.save();
+            await trainer.save();
+
+            console.log(info.profile._json);
+
+            if (process.env.NODE_ENV === "production"){
+                res.redirect(`https://plan2train.herokuapp.com/trainer/${userId}`);
+            }else{
+                res.redirect(`http://localhost:3000/trainer/${userId}`);
+            }
+        }
+        else{
+            req.logIn(user, err =>{
+                if (err) console.log(err);
+
+                if (process.env.NODE_ENV === "production"){
+                    res.redirect(`https://plan2train.herokuapp.com/trainer/${user.userId}`);
+                }else{
+                    res.redirect(`http://localhost:3000/trainer/${user.userId}`);
+                }
+            })
+        }
+    })(req, res, next)
+});
 
 
 /* =========================================== GET A SINGLE CLIENT FOR CLIENT SIDE ================================================ */

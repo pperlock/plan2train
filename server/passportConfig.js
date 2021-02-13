@@ -4,6 +4,8 @@ const localStrategy = require('passport-local').Strategy;
 
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+var FacebookStrategy = require('passport-facebook').Strategy;
+
 module.exports = function(passport){
 
     //username: req.body.username
@@ -32,15 +34,17 @@ module.exports = function(passport){
 
     let callbackURL="";
     if (process.env.NODE_ENV === "production"){
-        callbackURL = "https://plan2train.herokuapp.com/auth/google/callback"
+        googleCallbackURL = "https://plan2train.herokuapp.com/auth/google/callback"
+        facebookCallbackURL = "https://plan2train.herokuapp.com/auth/facebook/callback"
     }else{
-        callbackURL = "http://localhost:5000/auth/google/callback"
+        googleCallbackURL = "http://localhost:5000/auth/google/callback"
+        facebookCallbackURL = "http://localhost:5000/auth/facebook/callback"
     }
 
     passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: callbackURL
+        callbackURL: googleCallbackURL
       },
       
       function(token, tokenSecret, profile, done) {
@@ -56,6 +60,25 @@ module.exports = function(passport){
       }
     ));
 
+    passport.use(new FacebookStrategy({
+        clientID: process.env.FACEBOOK_APP_ID,
+        clientSecret: process.env.FACEBOOK_APP_SECRET,
+        callbackURL: facebookCallbackURL,
+        profileFields: ['id', 'email', 'displayName', 'name']
+      },
+      
+      function(accessToken, refreshToken, profile, done) {
+
+        User.findOne({facebookId:profile.id}, (err, user) =>{
+            if (err) return done(err,false, {message:err});
+            if (!user){
+                // console.log(profile._json)
+                return done(null, false, {profile}); //null is the error and false is the user
+            }
+            if (user) return done(null, user); //return null as the error and the user as the user
+        });
+      }
+    ));
 
 
     //passport requires a serialized user and a deserialized user

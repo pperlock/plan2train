@@ -42,10 +42,12 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
 
     const googleSignIn=()=>{
         window.location.href = `${API_URL}/auth/google`;
-        const response = window.json;
-        console.log("reached");
-        console.log(response);
      }
+
+    const facebookSignIn=()=>{
+        window.location.href = `${API_URL}/auth/facebook`;
+        console.log("reached");
+    }
 
 
     //triggered by the sign up form submit
@@ -122,7 +124,7 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                             </div>
                             <div className="modal-login__alternate">
                                 {/* <button onClick={googleSignIn} className="social-login social-login-facebook" id="google" type="button" form="login-form"> */}
-                                    <img className="social-login__icon" onClick={googleSignIn} src="/icons/facebook-icon-square.png" alt="google signin"></img>
+                                    <img className="social-login__icon" onClick={facebookSignIn} src="/icons/facebook-icon-square.png" alt="google signin"></img>
                                 {/* </button> */}
                                 <p className="modal-login__alternate-text">{showSignIn ? "Login With Facebook" : "Sign Up With Facebook"}</p>
                             </div>
