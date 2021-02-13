@@ -276,7 +276,7 @@ app.get('/auth/facebook/callback', (req,res, next)=>{
             const newUser = new User({
                 userId:userId,
                 facebookId:info.profile.id,
-                username:`${info.profile._json.first_name.substring(0,1)}${info.profile._json.last_name}`,
+                username:"facebook",
                 password:"facebook",
                 profile:"trainer"
             });
@@ -284,7 +284,7 @@ app.get('/auth/facebook/callback', (req,res, next)=>{
             const trainer = new Trainer({
                 userId:userId,
                 contact:{
-                    username:`${info.profile._json.first_name.substring(0,1)}${info.profile._json.last_name}`,
+                    username:"facebook",
                     password:"facebook",
                     fname: info.profile._json.first_name,
                     lname: info.profile._json.last_name,
