@@ -15,6 +15,7 @@ import TriggerModalButton from '../TriggerModalButton/TriggerModalButton';
  * @param {String} deleteString - used to render a dynamic message based on what is being deleted
  * @param {String} deleteId - attached to the delete modal to identify the item being deleted
  * @param {String} url - image to be used if the trigger button is of type "image" 
+ * @param {String} clientError - message to indicate that a username already exists
  */
 
 class ModalContainer extends React.Component {

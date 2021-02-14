@@ -153,11 +153,11 @@ app.post("/login", (req,res, next)=>{
         loggedIn:false, 
         error:null, 
         userId:null, 
-        username:null, 
+        username:null,
+        email:null, 
         profile:req.params.profile
     };
 
-    //the string "local" tells it to use the local strategy that we defined
     passport.authenticate('local', (err,user,info) =>{
         if (err){
             loginResponse.error = err;
@@ -173,10 +173,10 @@ app.post("/login", (req,res, next)=>{
                 loginResponse.loggedIn = true;
                 loginResponse.userId = req.user.userId;
                 loginResponse.username = req.user.username;
-                 loginResponse.profile = req.user.profile;
+                loginResponse.profile = req.user.profile;
                 res.send(loginResponse);
                 // console.log(req.user);
-                // console.log(info);
+                // console.log(info)
             })
         }
     })(req, res, next);
@@ -416,6 +416,25 @@ app.put('/trainer/:trainerId/updateLogo', (req,res)=>{
         console.log(err)
     });
 })
+
+/* =========================================== CHECK USER NAME ================================================ */
+
+app.get('/api/checkUsername/:username', (req,res)=>{
+    
+   User.findOne({username:req.params.username}, async(err,doc)=>{
+        if (err) throw err;
+
+        //sends true back if the username already exists
+        if (doc) {
+            res.send(true);
+        }
+        
+         //sends false back if the username doesn't exist
+        if(!doc){
+            res.send(false);
+        }
+    });
+});
 
 /* =========================================== ADD CLIENT ================================================ */
 app.post('/trainer/:trainerId/addClient', (req,res)=>{

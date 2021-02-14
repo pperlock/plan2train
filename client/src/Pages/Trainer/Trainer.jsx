@@ -262,24 +262,23 @@ class Trainer extends React.Component{
             programs:programs
         }
 
-        // save the new client in the db and return send the user to the new clients profile page
+        // save the new client in the db and return send the user to the new client's profile page
         axios.post(`${API_URL}/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
         .then(res =>{
-            const newClientList = [...this.state.clients, res.data];
-            newClientList.sort((a,b)=>{
-                if(a.userProfile.lname < b.userProfile.lname) return -1;
-                if(a.userProfile.lname > b.userProfile.lname) return 1;
-                return 0;
-               })
-            this.setState({clients:newClientList},()=>{
-                this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
-            })
+                const newClientList = [...this.state.clients, res.data];
+                newClientList.sort((a,b)=>{
+                    if(a.userProfile.lname < b.userProfile.lname) return -1;
+                    if(a.userProfile.lname > b.userProfile.lname) return 1;
+                    return 0;
+                })
+                this.setState({clients:newClientList},()=>{
+                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
+                })
         })
         .catch(err=>{
             console.log(err);
         })
-
-    }
+        }
 
     /** ================================================ DELETE CLIENT ================================================*/
     deleteClient=(clientId)=>{
@@ -406,7 +405,7 @@ class Trainer extends React.Component{
                         clients={this.state.clients} 
                         addClient={this.addClient}
                         deleteClient={this.deleteClient}
-                        />}
+                    />}
                 
                 {(this.state.userProfile && match.path==="/trainer/:trainerId") && 
                     <User 

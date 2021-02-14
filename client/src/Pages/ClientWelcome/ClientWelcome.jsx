@@ -86,10 +86,10 @@ function ClientWelcome({client, trainer}) {
                             </div>
 
                             <div className="user-profile__social">
-                                <a href={facebook}><img className="contact-icon--social" src="/icons/facebook-icon.svg" alt="facebook"/></a>
-                                <a href={twitter}><img className="contact-icon--social" src="/icons/twitter-icon.svg" alt="twitter"/></a>
-                                <a href={instagram}><img className="contact-icon--social" src="/icons/instagram-icon.svg" alt="instagram"/></a>
-                                <a href={linkedIn}><img className="contact-icon--social" src="/icons/linkedin-icon.svg" alt="linked-in"/></a>
+                                <a href={facebook}><img className="contact-icon--social" rel="noopener noreferrer" src="/icons/facebook-icon.svg" alt="facebook"/></a>
+                                <a href={twitter}><img className="contact-icon--social" rel="noopener noreferrer" src="/icons/twitter-icon.svg" alt="twitter"/></a>
+                                <a href={instagram}><img className="contact-icon--social" rel="noopener noreferrer" src="/icons/instagram-icon.svg" alt="instagram"/></a>
+                                <a href={linkedIn}><img className="contact-icon--social" rel="noopener noreferrer" src="/icons/linkedin-icon.svg" alt="linked-in"/></a>
                             </div>
                         </div>
                         <div className="user-profile__address welcome__trainer-address">

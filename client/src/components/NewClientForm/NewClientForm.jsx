@@ -1,10 +1,32 @@
-import React from 'react'
+import React, {useState} from 'react'
+import axios from 'axios';
+
+import './NewClientForm.scss';
+
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
 
 function NewClientForm({onSubmit, closeModal, programs}) {
 
+    const[clientError, setClientError] = useState(null);
+
     const handleSubmit=(event)=>{
-        onSubmit(event);
-        closeModal();
+        event.preventDefault();
+        
+        axios.get(`${API_URL}/api/checkUserName/${event.target.username.value}`)
+        .then(res =>{
+            console.log(res.data);
+            if (!res.data){
+                setClientError(null);
+                onSubmit(event);
+                closeModal();
+            }else{
+                console.log(res.data);
+                setClientError("Username Already Exists");
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
 
     return (
@@ -21,7 +43,8 @@ function NewClientForm({onSubmit, closeModal, programs}) {
               
                 <div className="modal-form__section">
                     <input className="modal-form__input" id="username" name="username" type="text" required></input>
-                    <label className="modal-form__label" htmlFor="username">Username</label>
+                    {!clientError && <label className="modal-form__label" htmlFor="username">Username</label>}
+                    {clientError && <p className="error"> {clientError}</p>}
                 </div>
             
                 <div className="modal-form__section">
