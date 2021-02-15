@@ -101,6 +101,7 @@ function User({user, updateUserProfile, match, updateTrainer}) {
                 <div className="component user-profile__container">
                     <p className="component-title user-profile__title">{`${fname} ${lname}`}</p>
                     
+                    {(username !=="google" && username !=="facebook") &&
                     <div className="user-profile__sign-in">                       
                         <p className="user-label" >UserName: </p>
                         <p className="user-text"> {username}</p>
@@ -108,6 +109,7 @@ function User({user, updateUserProfile, match, updateTrainer}) {
                         <p className="user-label" >Password: </p>
                         <p className="user-text"> {hiddenPassword}</p>
                     </div>
+                    }
 
                     <div className="user-profile__details">
                         <div className="user-profile__contact">
