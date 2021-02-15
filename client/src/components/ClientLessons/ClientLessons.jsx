@@ -99,7 +99,6 @@ class ClientLessons extends React.Component {
             } 
         }
 
-        console.log("client-lessons - componentUpdated")
         if(prevProps.currentLesson){
             if(prevProps.currentLesson.location.address !==this.state.currentLesson.location.address || prevProps.currentLesson.location.city !==this.state.currentLesson.location.city ){
                 this.geoCode();
@@ -153,8 +152,6 @@ class ClientLessons extends React.Component {
             })
         }else{
             //if the target is the homework section then save it to the appropriate spot in the db
-            // console.log(event);
-            // const newItem={message:event.target.newHomework.value}
             axios.post(`${API_URL}/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addHomework`, newItem)
             .then(res =>{
                 const lessonCopy = this.state.currentLesson;
@@ -169,7 +166,6 @@ class ClientLessons extends React.Component {
   
     //changes the lesson being rendered when a lesson is clicked from top list
     updateCurrentLesson = (lessonId) =>{
-        console.log(lessonId);
         const currentLesson = this.props.currentClient.lessons.find(lesson => lesson.id === lessonId);
         this.setState({currentLesson:currentLesson});
     }
@@ -207,10 +203,8 @@ class ClientLessons extends React.Component {
        
         axios.delete(`${API_URL}/client/${this.state.currentClient.userId}/${lessonId}/deleteLesson`)
             .then(res =>{
-                // console.log(res.data);
                 const clientCopy = {...this.state.currentClient};
                 clientCopy.lessons = (res.data);
-                console.log(clientCopy.lessons);
                 this.setState({currentClient:clientCopy, currentLesson:this.props.currentClient.lessons[0]});   
             })
             .catch(err=>{
@@ -238,7 +232,6 @@ class ClientLessons extends React.Component {
 
         axios.put(`${API_URL}/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateLessonDetails`, updatedClient)
         .then(res =>{
-            console.log(res);
             const clientCopy = {...this.state.currentClient};
             const index = clientCopy.lessons.findIndex(lesson=>lesson.id === this.state.currentLesson.id);
             clientCopy.lessons.splice(index,1);
@@ -253,8 +246,6 @@ class ClientLessons extends React.Component {
     updateStatus = (event)=>{
 
         const id = event.target.id;
-        console.log(id);
-        console.log(this.state.currentLesson.current);
         axios.put(`${API_URL}/client/${this.state.currentClient.userId}/${id}/updateStatus`)
         .then(res =>{
             
@@ -262,7 +253,6 @@ class ClientLessons extends React.Component {
             const lessonCopy = {...this.state.currentLesson};
             clientCopy.lessons.forEach(lesson => lesson.current = (lesson.id === id) ? true : false);
             lessonCopy.current = true;
-            console.log(clientCopy);
             this.setState({currentClient:clientCopy, currentLesson:lessonCopy});
         })
         .catch(err=>{
@@ -276,9 +266,6 @@ class ClientLessons extends React.Component {
         const lessons = [...this.state.currentClient.lessons];
         const currentClient = {...this.state.currentClient};
         const currentLesson = {...this.state.currentLesson};
-
-        console.log(this.state.currentClient);
-        console.log(this.state.currentLesson);
 
         if(lessons.length===0){
             return(                                     

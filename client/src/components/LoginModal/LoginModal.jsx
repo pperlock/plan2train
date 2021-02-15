@@ -23,7 +23,6 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
     const checkCredentials=(event, profile)=>{
         event.preventDefault();
 
-        console.log(profile);
         const user = {username:event.target.username.value, password:event.target.password.value};
 
         axios.post(`${API_URL}/login`, user, {withCredentials:true})
@@ -46,7 +45,6 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
 
     const facebookSignIn=()=>{
         window.location.href = `${API_URL}/auth/facebook`;
-        console.log("reached");
     }
 
 
@@ -64,7 +62,6 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
         axios.post(`${API_URL}/addTrainer`, newTrainer, {withCredentials:true})
         .then(res =>{
             setLoginResponse(res.data);
-            console.log(res.data);
         })
         .catch(err =>{
             console.log(err);
@@ -80,8 +77,6 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
     }
 
         const {loggedIn, error, userId, profile} = loginResponse;
-
-        console.log(loginResponse);
 
         const profileType = modalType.substring(5, modalType.length);
  

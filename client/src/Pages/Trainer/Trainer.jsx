@@ -38,7 +38,6 @@ class Trainer extends React.Component{
 
 
     componentDidMount(){
-        console.log(`${API_URL}/trainer/${this.state.trainerId}`);
        //get the trainer's information and their associated clients from the db when the component is mounted
         axios.get(`${API_URL}/api/trainer/${this.state.trainerId}`)
         .then(res =>{
@@ -233,10 +232,10 @@ class Trainer extends React.Component{
 
         // get the list of selected programs from the selection element
         const options = event.target.programs.options;
-        let opt="";
+        // let opt="";
         let programs = [];
         for(var i=0; i<options.length; i++){
-            opt = options[i];
+            let opt = options[i];
             const program = this.state.programs.find(program=> program.id===opt.value);
             opt.selected && programs.push(program);
         }
@@ -342,8 +341,6 @@ class Trainer extends React.Component{
    
     render(){
         const {match} = this.props;
-        console.log(this.state.userProfile);
-        console.log(this.state.clients);
         return (
             <>
                 {/* render the sidebar for all instances */}

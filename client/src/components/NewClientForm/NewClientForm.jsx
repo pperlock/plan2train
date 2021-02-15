@@ -14,13 +14,11 @@ function NewClientForm({onSubmit, closeModal, programs}) {
         
         axios.get(`${API_URL}/api/checkUserName/${event.target.username.value}`)
         .then(res =>{
-            console.log(res.data);
             if (!res.data){
                 setClientError(null);
                 onSubmit(event);
                 closeModal();
             }else{
-                console.log(res.data);
                 setClientError("Username Already Exists");
             }
         })

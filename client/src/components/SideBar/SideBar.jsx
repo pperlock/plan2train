@@ -43,10 +43,8 @@ class SideBar extends React.Component {
         axios.get(`${API_URL}/logout`)
         .then(res =>{
             this.props.history.push("/");
-            console.log(res);
         })
         .catch(err =>{
-            console.log(err);
         })
     }
 

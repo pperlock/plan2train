@@ -29,12 +29,10 @@ const Map = ({mapLocation, containerSize}) => {
 
     return isLoaded ? (
         <GoogleMap 
-            // defaultZoom={10}
             center={mapLocation}
-            zoom={10} 
             onLoad={onLoad}
             onUnmount={onUnmount}
-            options={{styles:mapStyles, zoomControl:false, mapTypeControl:false}}
+            options={{styles:mapStyles, zoomControl:false, mapTypeControl:false, minZoom:15}}
             mapContainerStyle={containerSize}
         >
 

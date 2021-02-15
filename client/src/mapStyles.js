@@ -1,5 +1,5 @@
 //googe map styling - downloaded from snazzy maps
-export default [
+const mapStyle = [
     {
         "featureType": "all",
         "elementType": "geometry.fill",
@@ -169,3 +169,5 @@ export default [
         ]
     }
 ]
+
+export default mapStyle;

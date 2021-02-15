@@ -21,7 +21,7 @@ function ClientWelcome({client, trainer}) {
 
     //when the component loads geocode the trainers location and set it in state
     useEffect(()=>{
-        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=amHyO923YUE511fynEWxbf7Gf5S45VRP&street=${address}&city=${city}&state=${province}`)
+        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
             setMapLocation(res.data.results[0].locations[0].displayLatLng);
         })
@@ -100,7 +100,7 @@ function ClientWelcome({client, trainer}) {
                                 <p className="user-profile__address-item">{postal}</p>
                             </div>
                             {/* renders a map of the trainer's geocoded location */}
-                            <div className = "client__contact-map">
+                            <div className = "welcome__map">
                                 <Map
                                     mapLocation={mapLocation}
                                     containerSize={{width:"346px", height:"211px"}}

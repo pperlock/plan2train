@@ -15,7 +15,6 @@ class ClientProfile extends React.Component {
     state={currentClient:this.props.currentClient, mapLocation:null}
 
     componentDidMount(){
-        console.log("client profile - did mount")
         this.geoCode();
         this.state.currentClient.programs.forEach(program=>{
             const inputBox = document.getElementById(program.id);
@@ -25,7 +24,6 @@ class ClientProfile extends React.Component {
 
     componentDidUpdate(prevState,prevProps){
         const {address, city, province} = this.state.currentClient.userProfile;
-        console.log("client profile - did update")
         this.props.programs.forEach(program => {
             const inputBox = document.getElementById(program.id);
             if(!!inputBox){inputBox.checked = false};
@@ -66,7 +64,6 @@ class ClientProfile extends React.Component {
         }
         axios.post(`${API_URL}/client/${this.state.currentClient.userId}/addNote`, newNote)
         .then(res =>{
-            console.log(res.data);
             const copyClient = {...this.state.currentClient};
             copyClient.notes = (res.data);
             this.setState({currentClient:copyClient});
@@ -80,15 +77,10 @@ class ClientProfile extends React.Component {
 
     toggleProgram=(programId)=>{
 
-        console.log(programId)
-        
         const program = this.state.currentClient.programs.find((program)=>program.id === programId);
         const index = this.state.currentClient.programs.findIndex((program)=>program.id === programId);
 
         const copyClient={...this.state.currentClient}
-
-        console.log(program);
-        console.log(index);
 
         if(program){
             document.getElementById(programId).checked=false;
@@ -110,7 +102,6 @@ class ClientProfile extends React.Component {
     }
 
     render(){
-        // console.log(this.props.currentClient.programs);
         const {address, city, province, country, postal, email, phone} = this.props.currentClient.userProfile;
         return (
             <>

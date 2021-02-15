@@ -45,7 +45,6 @@ class Programs extends React.Component {
 
     // fired by clicking the upload button
     fileUpload=(event,uploadType)=>{
-        console.log(uploadType)
         event.preventDefault();
         
        
@@ -110,8 +109,6 @@ class Programs extends React.Component {
         const {programs, match, addProgram}=this.props;
         //find information for the program specified in the url
         const program = programs.find(program=>program.id===match.params.programId)
-
-        console.log(this.state.showloading);
 
         return (
             <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >

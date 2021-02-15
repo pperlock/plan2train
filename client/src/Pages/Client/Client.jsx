@@ -45,7 +45,7 @@ function Client ({match}) {
             setNextLesson(res.data.lessons.find(lesson=> lesson.current===true));
             setPastLessons(res.data.lessons.filter(lesson=> lesson.current!==true));
         })
-    },[]);
+    },[match.params.clientId]);
 
     return (
         <div>

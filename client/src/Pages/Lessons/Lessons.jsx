@@ -15,7 +15,6 @@ function Lessons({pastLessons}) {
 
     //changes the lesson being rendered when a lesson is clicked from top list
     const showLesson = (lessonId) =>{
-        console.log(lessonId);
         const selectedLesson = pastLessons.find(lesson => lesson.id === lessonId);
         setSelectedLesson(selectedLesson);
     }
