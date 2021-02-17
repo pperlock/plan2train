@@ -55,7 +55,7 @@ function Schedule() {
     return (
         <>
             <div className="schedule" style={{backgroundImage: "url('/images/main2.jfif')"}}>
-                <FullCalendar
+                {/* <FullCalendar
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                     headerToolbar={{
                     left: 'prev,next today',
@@ -77,10 +77,10 @@ function Schedule() {
                     eventAdd={function(){}}
                     eventChange={function(){}}
                     eventRemove={function(){}}
-                    */
-                />
-            </div>
-            
+                    */}
+                {/* /> */}
+				<img className="construction" src="/images/construction.jfif"/>
+            </div>            
         </>
     )
 }
