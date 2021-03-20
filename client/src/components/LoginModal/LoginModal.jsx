@@ -16,8 +16,7 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
     const [showSignIn, setShowSignIn] = useState(true);
     const [showSignUp, setShowSignUp] = useState(false);
   
-    const [loginResponse, setLoginResponse] = useState({}); //PRETTY MUCH THE SAME AS TUTORIAL
-
+    const [loginResponse, setLoginResponse] = useState({}); 
 
     //triggered by the log in form submit check the credentials and store response in state
     const checkCredentials=(event, profile)=>{
