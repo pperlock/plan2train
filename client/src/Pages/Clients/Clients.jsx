@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
 
 import "./Clients.scss";
 
@@ -7,6 +8,7 @@ import ClientList from '../../components/ClientList/ClientList';
 import ClientProfile from '../../components/ClientProfile/ClientProfile';
 import ClientLessons from '../../components/ClientLessons/ClientLessons';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
+import {API_URL} from '../../App.js';
 
 /**
  * props passed to Clients from Trainer
@@ -19,7 +21,7 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
  * @param {function} deleteClient - delete a client from the db
  */
 
-function Clients({programs, clients, updateTrainer, match, addClient, updateClient, deleteClient}) {
+function Clients({programs, clients, updateTrainer, match, addClient, updateClient, deleteClient, addNote}) {
 
     //path used to determine if we are on the lessons page or the profile page
     const page = match.path.split("/")[5]; 
@@ -85,6 +87,7 @@ function Clients({programs, clients, updateTrainer, match, addClient, updateClie
                         updateClient={updateClient}
                         deleteClient={deleteClient}
                         programs={programs}
+                        addNote={addNote}
                     />}
 
                 {page === "lessons" && <ClientLessons currentClient = {currentClient} programs = {programs} match = {match}/>}

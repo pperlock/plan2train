@@ -7,8 +7,8 @@ import FocusTrap from 'focus-trap-react';
 import "./LoginModal.scss";
 
 import LoginForm from '../LoginForm/LoginForm';
+import {API_URL} from '../../App.js';
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
 
 function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal, onSubmit, modalType, toggleScrollLock}) {
 

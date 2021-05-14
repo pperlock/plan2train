@@ -8,13 +8,13 @@ import ClientWelcome from '../ClientWelcome/ClientWelcome';
 import Lessons from '../Lessons/Lessons';
 import NextLesson from '../NextLesson/NextLesson';
 import EmptyPage from '../EmptyPage/EmptyPage';
+import {API_URL} from '../../App.js';
 
 /**
 * Renders the Client side 
 * @param {Object} match - used to make axios calls and conditionally render based on the path
 */
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
 
 function Client ({match}) {
     

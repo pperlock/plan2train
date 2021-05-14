@@ -9,6 +9,7 @@ import Clients from '../Clients/Clients';
 import Schedule from '../Schedule/Schedule';
 import User from '../User/User';
 import EmptyPage from '../EmptyPage/EmptyPage';
+import {API_URL} from '../../App.js';
 
 /**
  * @param {Object} props - used to access the username and trainer id from the url
@@ -22,7 +23,6 @@ import EmptyPage from '../EmptyPage/EmptyPage';
  * @param {String} selectedFile - file selected to update trainer logo
  */
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
 
 class Trainer extends React.Component{
     
@@ -337,8 +337,7 @@ class Trainer extends React.Component{
     updateTrainer=()=>{
         this.setState({updated:true})
     }
-  
-   
+
     render(){
         const {match} = this.props;
         return (

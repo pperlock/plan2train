@@ -9,6 +9,7 @@ import GridList from '../../components/GridList/GridList';
 /**
  * @param {Object} nextLesson - contains all the information for the next lesson
  */
+
 function NextLesson({nextLesson}) {
 
     const {address, city, province} = nextLesson.location

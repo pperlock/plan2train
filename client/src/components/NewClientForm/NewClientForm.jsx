@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import './NewClientForm.scss';
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
+import {API_URL} from '../../App.js';
 
 function NewClientForm({onSubmit, closeModal, programs}) {
 

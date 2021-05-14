@@ -1,56 +1,56 @@
 import React from 'react'
-import "./Schedule.scss"
-import { INITIAL_EVENTS, createEventId } from './event-utils'
+// import "./Schedule.scss"
+// import { INITIAL_EVENTS, createEventId } from './event-utils'
 
 
-import FullCalendar, { formatDate } from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
+// import FullCalendar, { formatDate } from '@fullcalendar/react'
+// import dayGridPlugin from '@fullcalendar/daygrid'
+// import timeGridPlugin from '@fullcalendar/timegrid'
+// import interactionPlugin from '@fullcalendar/interaction'
 
 
 function Schedule() {
 
 
 
-    const handleDateSelect = (selectInfo) => {
-        console.log(selectInfo)
-        let title = prompt('Please enter a new title for your event')
-        let calendarApi = selectInfo.view.calendar
+    // const handleDateSelect = (selectInfo) => {
+    //     console.log(selectInfo)
+    //     let title = prompt('Please enter a new title for your event')
+    //     let calendarApi = selectInfo.view.calendar
 
-        calendarApi.unselect() // clear date selection
+    //     calendarApi.unselect() // clear date selection
 
-        if (title) {
-            calendarApi.addEvent({
-            id: createEventId(),
-            title,
-            start: selectInfo.startStr,
-            end: selectInfo.endStr,
-            allDay: selectInfo.allDay
-            })
-        }
-    }
+    //     if (title) {
+    //         calendarApi.addEvent({
+    //         id: createEventId(),
+    //         title,
+    //         start: selectInfo.startStr,
+    //         end: selectInfo.endStr,
+    //         allDay: selectInfo.allDay
+    //         })
+    //     }
+    // }
 
-    const handleEventClick = (clickInfo) => {
-        if (alert(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-          clickInfo.event.remove()
-        }
-      }
+    // const handleEventClick = (clickInfo) => {
+    //     if (alert(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    //       clickInfo.event.remove()
+    //     }
+    //   }
     
-    const handleEvents = (events) => {
-        // this.setState({
-        //   currentEvents: events
-        // })
-      }
+    // const handleEvents = (events) => {
+    //     // this.setState({
+    //     //   currentEvents: events
+    //     // })
+    //   }
     
-    function renderEventContent(eventInfo) {
-      return (
-        <>
-          <b>{eventInfo.timeText}</b>
-          <i>{eventInfo.event.title}</i>
-        </>
-      )
-    }
+    // function renderEventContent(eventInfo) {
+    //   return (
+    //     <>
+    //       <b>{eventInfo.timeText}</b>
+    //       <i>{eventInfo.event.title}</i>
+    //     </>
+    //   )
+    // }
     
     return (
         <>

@@ -8,7 +8,10 @@ import Intro from './Pages/Intro/Intro';
 import Trainer from './Pages/Trainer/Trainer';
 import Client from './Pages/Client/Client';
 
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
+
 function App() {
+  
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="App">
@@ -49,4 +52,4 @@ function App() {
   );
 }
 
-export default App;
+export {App as default, API_URL};
