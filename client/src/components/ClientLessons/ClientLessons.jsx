@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
+import {useParams, useHistory} from 'react-router-dom';
 import axios from 'axios';
 
 import './ClientLessons.scss'
@@ -6,48 +7,51 @@ import './ClientLessons.scss'
 import GridList from '../../components/GridList/GridList';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 import LessonResources from '../../components/LessonResources/LessonResources';
+import ClientsLayout from  '../../components/ClientsLayout/ClientsLayout';
+import ClientNav from '../../components/ClientNav/ClientNav';
 
 import Map from '../../components/Map/Map';
 
-/**
- * @param {Object} currentClient 
- * @param {Object} programs 
- */
+import TrainerContext from '../../store/trainer-context';
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
+import {API_URL} from '../../App.js';
 
-class ClientLessons extends React.Component {
+const ClientLessons  = () => {
 
-    state={
-        currentClient:this.props.currentClient, 
-        currentLesson: this.props.currentClient.lessons.find(lesson=>lesson.current === true), //might want to change this to last on the list -
-        availablePrograms:this.props.programs,
-        displayResources: this.props.programs ? [] : this.props.programs[0].resources, 
-        showAddNote:false, showAddHomework:false, animateBar:true,
-        mapLocation:null
-    }
+    const {setTrainerId, clients, setClients, programs} = useContext(TrainerContext);
 
-    componentDidMount(){
+    const {trainerId, clientId} = useParams();
+    const history = useHistory();
 
-        if(this.state.currentLesson){
-            this.geoCode();
+    const [currentLesson, setCurrentLesson] = useState(null);
+    const [mapLocation, setMapLocation] = useState(null);
+    const [currentClient, setCurrentClient] = useState(null);
+
+    useEffect(()=>{
+        console.log('lessons updated')
+        if (!!clients){
+            const findClient = clients.find(client=>client.userId === clientId);
+            setCurrentClient(findClient);
+            setCurrentLesson(findClient.lessons.find(lesson=>lesson.current))
+        }
+        setTrainerId(trainerId);
+        
+        if(currentLesson){
+            geoCode();
 
             //gets an array of all the resource ids that have been applied to all lessons
             let allApplied = [];
-            const lessons = this.state.currentClient.lessons;
+            const lessons = currentClient.lessons;
             lessons.map(lesson=> lesson.resources.map(resource => allApplied.push(resource)));
             
             // adds a key name applied to each resource for all trainer programs
-            const programs = [...this.state.availablePrograms];
+            // const programs = [...this.state.availablePrograms];
             programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
-
         
-            const copyClient = {...this.props.currentClient};
-
             //adds the resource information for each lesson resource and adds a value of true for applied to the programs
             programs.forEach(program=>
                 program.resources.forEach(programResource=>
-                    copyClient.lessons.forEach(lesson => 
+                    currentClient.lessons.forEach(lesson => 
                         lesson.resources.forEach((resource, i)=> {
                             if(resource.id === programResource.id){
                                 //sets a value of true for applied resources
@@ -61,102 +65,72 @@ class ClientLessons extends React.Component {
                     )          
                 )
             )
-
-            // sets the state to reflect the modified objects
-            this.setState({currentClient:copyClient, availablePrograms:programs})
         }
-    }
+    }, [currentClient, currentLesson, clients])
 
-    componentDidUpdate(prevState, prevProps){
-        
-        if(this.state.availablePrograms.length !==0){
-            if(!("applied" in this.state.availablePrograms[0].resources[0])){
-            // adds a key name applied to each resource for all trainer programs
-            const programs = [...this.state.availablePrograms];
-            programs.map(program => program.resources.map(resource => Object.assign(resource,{applied:false})))
+    //old component did update for maps
+    //         if(prevProps.currentLesson){
+    //             if(prevProps.currentLesson.location.address !==this.state.currentLesson.location.address || prevProps.currentLesson.location.city !==this.state.currentLesson.location.city ){
+    //                 this.geoCode();
+    //             }
+    //         }
 
-        
-            const copyClient = {...this.state.currentClient};
 
-            //adds the resource information for each lesson resource and adds a value of true for applied to the programs
-            programs.forEach(program=>
-                program.resources.forEach(programResource=>
-                    copyClient.lessons.forEach(lesson => 
-                        lesson.resources.forEach((resource, i)=> {
-                            if(resource.id === programResource.id){
-                                //sets a value of true for applied resources
-                                programResource.applied=true;
-                                //remove the single id
-                                lesson.resources.splice(i,1);
-                                //replace the resource with the object
-                                lesson.resources.push(programResource);
-                            }  
-                        })
-                    )          
-                )
-            )
-            this.setState({currentClient:copyClient, availablePrograms:programs, displayResources:programs[0].resources})
-            } 
-        }
-
-        if(prevProps.currentLesson){
-            if(prevProps.currentLesson.location.address !==this.state.currentLesson.location.address || prevProps.currentLesson.location.city !==this.state.currentLesson.location.city ){
-                this.geoCode();
-            }
-        }
-}
-
-    geoCode = () =>{
-        const {address, city, province} = this.state.currentLesson.location;
+    const geoCode = () =>{
+        const {address, city, province} = currentLesson.location;
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
             // console.log(res.data.results[0].locations[0].displayLatLng);
-            this.setState({mapLocation:res.data.results[0].locations[0].displayLatLng});     
+            // this.setState({mapLocation:res.data.results[0].locations[0].displayLatLng}); 
+            setMapLocation(res.data.results[0].locations[0].displayLatLng)    
         })
         .catch(err=>{
             console.log(err);
         })
     }
 
-    //updates the resources that are displayed based on which program is chosen in the available resources section
-    updateResources=(program)=>{
-       this.setState({displayResources:program.resources});
-    }
-
-    //shows the textbox used to add a note or homework when the plus button is clicked
-    showForm=(form)=>{
-        form === "note" ? this.setState({showAddNote:true}) : this.setState({showAddHomework:true});
-    }
+    // //updates the resources that are displayed based on which program is chosen in the available resources section
+    // const updateResources = program =>{
+    //    setDisplayResources(programs.resources);
+    // }
 
     //adds an item to either the homework or the notes lists when the form is submitted
-    addListItem=(note, list)=>{
+    const addListItem = (note, list) =>{
 
         const newItem={
             note:note
         }
-
-        //determine which form to close based on the target name
-        // !!event.target.newNote ? this.setState({showAddNote:false}) : this.setState({showAddHomework:false});
     
         if (list==="addNote"){
             //if the target is the notes section then save it to the appropriate spot in the db
-            // const newItem={message:event.target.newNote.value}
-            axios.post(`${API_URL}/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addNote`, newItem)
+
+            axios.post(`${API_URL}/client/${clientId}/${currentLesson.id}/addNote`, newItem)
             .then(res =>{
-                const lessonCopy = this.state.currentLesson;
+                const lessonCopy = {...currentLesson};
                 lessonCopy.notes = res.data;
-                this.setState({currentLesson:lessonCopy});
+
+                const clientCopy = {...currentClient};
+                const lessonloc = clientCopy.lessons.findIndex(lesson => lesson.id === currentLesson.id);
+                clientCopy.lessons.splice(lessonloc,1,lessonCopy);
+
+                setCurrentClient(clientCopy);
+                setCurrentLesson(lessonCopy);
             })
             .catch(err=>{
                 console.log(err);
             })
         }else{
             //if the target is the homework section then save it to the appropriate spot in the db
-            axios.post(`${API_URL}/client/${this.props.currentClient.userId}/${this.state.currentLesson.id}/addHomework`, newItem)
+            axios.post(`${API_URL}/client/${clientId}/${currentLesson.id}/addHomework`, newItem)
             .then(res =>{
-                const lessonCopy = this.state.currentLesson;
+                const lessonCopy = {...currentLesson};
                 lessonCopy.homework = res.data;
-                this.setState({currentLesson:lessonCopy});
+
+                const clientCopy = {...currentClient};
+                const lessonloc = clientCopy.lessons.findIndex(lesson => lesson.id === currentLesson.id);
+                clientCopy.lessons.splice(lessonloc,1,lessonCopy);
+
+                setCurrentLesson(lessonCopy);
             })
             .catch(err=>{
                 console.log(err);
@@ -165,15 +139,15 @@ class ClientLessons extends React.Component {
     }
   
     //changes the lesson being rendered when a lesson is clicked from top list
-    updateCurrentLesson = (lessonId) =>{
-        const currentLesson = this.props.currentClient.lessons.find(lesson => lesson.id === lessonId);
-        this.setState({currentLesson:currentLesson});
+    const updateCurrentLesson = lessonId =>{
+        const currentLesson = currentClient.lessons.find(lesson => lesson.id === lessonId);
+        setCurrentLesson(currentLesson);
     }
 
     //adds a new empty lesson when +New is clicked and saves it to the db
-    addNewLesson = (event) =>{
+    const addNewLesson = event =>{
         event.preventDefault();
-        const {lessonName,date,time, locationName,address,city, province, country}=event.target
+        const {lessonName,date,time, locationName,address,city, province, country} = event.target
 
         const newLesson = {
             name:lessonName.value,
@@ -188,221 +162,215 @@ class ClientLessons extends React.Component {
             }
         }
 
-        axios.post(`${API_URL}/client/${this.state.currentClient.userId}/addLesson`,newLesson)
+        axios.post(`${API_URL}/client/${clientId}/addLesson`,newLesson)
         .then(res =>{
-            const clientCopy = {...this.state.currentClient};
+            const clientCopy = {...currentClient};
             clientCopy.lessons.push(res.data)
-            this.setState({currentClient:clientCopy, currentLesson: res.data});
+            setCurrentClient(clientCopy);
+            setCurrentLesson(res.data);
         })
         .catch(err=>{
             console.log(err);
         })
     }
 
-    deleteLesson = (lessonId)=>{
+    const deleteLesson = lessonId =>{
        
-        axios.delete(`${API_URL}/client/${this.state.currentClient.userId}/${lessonId}/deleteLesson`)
+        axios.delete(`${API_URL}/client/${clientId}/${lessonId}/deleteLesson`)
             .then(res =>{
-                const clientCopy = {...this.state.currentClient};
-                clientCopy.lessons = (res.data);
-                this.setState({currentClient:clientCopy, currentLesson:this.props.currentClient.lessons[0]});   
+                const clientCopy = {...currentClient};
+                const lessonLoc = clientCopy.lessons.findIndex(lesson => lesson.id === lessonId);
+                clientCopy.lessons.splice(lessonLoc, 1);
+                setCurrentClient(clientCopy);
+                setCurrentLesson(currentClient.lessons[0]);
             })
             .catch(err=>{
                 console.log(err);
             })
     }
 
-    updateDetails = (event) =>{
+    const updateDetails = event =>{
 
         event.preventDefault();
+
+        const {lessonName, date, time, locationName, address, city, province, country} = event.target;
         
-        const updatedClient = {
-            current:this.state.currentLesson.current,
-            name:event.target.lessonName.value,
-            date:event.target.date.value,
-            time:event.target.time.value,
+        const updatedLesson = {
+            current:currentLesson.current,
+            name:lessonName.value,
+            date:date.value,
+            time:time.value,
             location:{
-                name:event.target.locationName.value,
-                address:event.target.address.value,
-                city:event.target.city.value,
-                province:event.target.province.value,
-                country:event.target.country.value
+                name:locationName.value,
+                address:address.value,
+                city:city.value,
+                province:province.value,
+                country:country.value
             }
         }
 
-        axios.put(`${API_URL}/client/${this.state.currentClient.userId}/${this.state.currentLesson.id}/updateLessonDetails`, updatedClient)
+        axios.put(`${API_URL}/client/${currentClient.userId}/${currentLesson.id}/updateLessonDetails`, updatedLesson)
         .then(res =>{
-            const clientCopy = {...this.state.currentClient};
-            const index = clientCopy.lessons.findIndex(lesson=>lesson.id === this.state.currentLesson.id);
+            const clientCopy = {...currentClient};
+            const index = clientCopy.lessons.findIndex(lesson=>lesson.id === currentLesson.id);
             clientCopy.lessons.splice(index,1);
             clientCopy.lessons.splice(index, 0, res.data);
-            this.setState({currentClient:clientCopy, currentLesson: res.data});
+            setCurrentClient(clientCopy);
+            setCurrentLesson(res.data);
         })
         .catch(err=>{
             console.log(err);
         })
     }
 
-    updateStatus = (event)=>{
+    const updateStatus = event =>{
 
-        const id = event.target.id;
-        axios.put(`${API_URL}/client/${this.state.currentClient.userId}/${id}/updateStatus`)
+        const {id} = event.target;
+        axios.put(`${API_URL}/client/${clientId}/${id}/updateStatus`)
         .then(res =>{
-            
-            const clientCopy = {...this.state.currentClient};
-            const lessonCopy = {...this.state.currentLesson};
+            const clientCopy = {...currentClient};
+            const lessonCopy = {...currentLesson};
             clientCopy.lessons.forEach(lesson => lesson.current = (lesson.id === id) ? true : false);
             lessonCopy.current = true;
-            this.setState({currentClient:clientCopy, currentLesson:lessonCopy});
+            setCurrentClient(clientCopy);
+            setCurrentLesson(lessonCopy);
+
         })
         .catch(err=>{
             console.log(err);
         })
     }
 
-    render(){
-        //copy of state saved to variables - unnecessary but saved time when converted to classful component
-        const programs = [...this.state.availablePrograms];
-        const lessons = [...this.state.currentClient.lessons];
-        const currentClient = {...this.state.currentClient};
-        const currentLesson = {...this.state.currentLesson};
+    return (
+        <>
+            {clients && <ClientsLayout> 
 
-        if(lessons.length===0){
-            return(                                     
-                <div className="empty-container empty-lessons">
-                    <div className="empty-lessons__modal">
-                        <ModalContainer 
-                            modalType = "update" 
-                            modalName = "addLesson" 
-                            buttonType="image"
-                            url="/icons/add-icon.svg"
-                            onSubmit={this.addNewLesson} 
-                        />
-                    </div>
-                    <p>Click to Add a Lesson</p>
-                </div>
-            )
-        }else{
-            return (
+                <ClientNav />
+
                 <div className="lessons">
                     {/* list of all client's lessons - click to render a specific lesson */}
                     <div className="lessons__list">
 
-                    {lessons.map(lesson=> 
-                        <GridList 
-                            key={lesson.id} 
-                            content={{name:lesson.name, date: lesson.date, time:lesson.time, current:lesson.current}}
-                            id={lesson.id} 
-                            modalName={!lesson.current ? "delete" : "noDelete"}
-                            deleteBtn={true}
-                            deleteType="modal" 
-                            deleteString = {!lesson.current ? lesson.name : "Cannot Delete Next Lesson"}
-                            deleteFunction={this.deleteLesson}
-                            onClick={this.updateCurrentLesson}
-                            updateStatus={this.updateStatus}
-                            slider={true}
-                        />)}
+                        {currentClient &&
+                            currentClient.lessons.map(lesson=> 
+                            <GridList 
+                                key={lesson.id} 
+                                content={{name:lesson.name, date: lesson.date, time:lesson.time, current:lesson.current}}
+                                id={lesson.id} 
+                                modalName={!lesson.current ? "delete" : "noDelete"}
+                                deleteBtn={true}
+                                deleteType="modal" 
+                                deleteString = {!lesson.current ? lesson.name : "Cannot Delete Next Lesson"}
+                                deleteFunction={deleteLesson}
+                                onClick={updateCurrentLesson}
+                                updateStatus={updateStatus}
+                                slider={true}
+                            />)
+                        }
+
                         <div className="lessons__list-new">
                             <ModalContainer 
                                 modalType = "update" 
                                 modalName = "addLesson" 
                                 buttonType="image"
                                 url="/icons/plus-square.svg"
-                                onSubmit={this.addNewLesson} 
+                                onSubmit={addNewLesson} 
                             />
                         </div>
                     </div>
 
                     {/* displays the chosen lesson set in state */}
                 
-                    <div className="component current-lesson">
-                    <h2 className="component-title">{currentLesson.name}</h2>
-                        <div className = "current-lesson__top">
-                            {/* shows the details for the lesson */}
-                            <div className="current-lesson__top-details">
-                                <div className="current-lesson__top-details-text">
-                                    <div className="current-lesson__top-details-where">
-                                        <p className="current-lesson__top-details-title">Where</p>
-                                        <p className="current-lesson__top-details-item">{currentLesson.location.name}</p>
-                                        <p className="current-lesson__top-details-item">{`${currentLesson.location.address}, ${currentLesson.location.city}`}</p>
+                    {currentLesson && 
+                        <div className="component current-lesson">
+                        <h2 className="component-title">{currentLesson.name}</h2>
+                            <div className = "current-lesson__top">
+                                {/* shows the details for the lesson */}
+                                <div className="current-lesson__top-details">
+                                    <div className="current-lesson__top-details-text">
+                                        <div className="current-lesson__top-details-where">
+                                            <p className="current-lesson__top-details-title">Where</p>
+                                            <p className="current-lesson__top-details-item">{currentLesson.location.name}</p>
+                                            <p className="current-lesson__top-details-item">{`${currentLesson.location.address}, ${currentLesson.location.city}`}</p>
+                                        </div>
+                                        <div className="current-lesson__top-details-when">
+                                            <p className="current-lesson__top-details-title">When</p>
+                                            <p className="current-lesson__top-details-item">{`Date: ${currentLesson.date}`}</p>
+                                            <p className="current-lesson__top-details-item">{`Time: ${currentLesson.time}`}</p>
+                                        </div>
                                     </div>
-                                    <div className="current-lesson__top-details-when">
-                                        <p className="current-lesson__top-details-title">When</p>
-                                        <p className="current-lesson__top-details-item">{`Date: ${currentLesson.date}`}</p>
-                                        <p className="current-lesson__top-details-item">{`Time: ${currentLesson.time}`}</p>
+                                    {/* modal to update the lesson details */}
+                                    <div className="current-lesson__top-details-edit">
+                                        <ModalContainer 
+                                            modalType = "update" 
+                                            modalName = "modifyLesson" 
+                                            buttonType="image"
+                                            url="/icons/edit-icon.svg"
+                                            onSubmit={updateDetails} 
+                                            information={currentLesson}
+                                        />
                                     </div>
                                 </div>
-                                {/* modal to update the lesson details */}
-                                <div className="current-lesson__top-details-edit">
-                                    <ModalContainer 
-                                        modalType = "update" 
-                                        modalName = "modifyLesson" 
-                                        buttonType="image"
-                                        url="/icons/edit-icon.svg"
-                                        onSubmit={this.updateDetails} 
-                                        information={currentLesson}
+                                
+                                <div className = "client__contact-map">
+                                    <Map
+                                        mapLocation={mapLocation}
+                                        containerSize={{width:"346px", height:"268px"}}
                                     />
                                 </div>
                             </div>
+
+                            <div className="lesson-divider"></div>
+
+                            <h2 className="section-title section-title-resources">Resources</h2>
                             
-                            <div className = "client__contact-map">
-                                <Map
-                                    mapLocation={this.state.mapLocation}
-                                    containerSize={{width:"346px", height:"268px"}}
-                                />
+                            {/* renders the resource section for the lessons */}
+                            <LessonResources programs={programs} currentLesson={currentLesson} currentClient={currentClient}/>
+                    
+                            {/* renders the notes and the homework section */}
+                            <div className="current-lesson__bottom">
+                                <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                                    <div className="client__notes-submit">
+                                        <ModalContainer 
+                                            modalType = "note" 
+                                            modalName = "addNote" 
+                                            buttonType="image"
+                                            url="/icons/add-note.svg" 
+                                            information = {currentLesson.notes}
+                                            onSubmit={addListItem} 
+                                        />
+                                    </div>
+                                    <div className = "client__notes-body">
+                                        <p className="client__notes-title">Lesson Notes ...</p>
+                                        <div className="client__notes-text"> {currentLesson.notes}</div>
+                                    </div>
+                                </div>
+
+                                <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                                    <div className="client__notes-submit">
+                                        <ModalContainer 
+                                            modalType = "note" 
+                                            modalName = "addHomework" 
+                                            buttonType="image"
+                                            url="/icons/add-note.svg" 
+                                            information = {currentLesson.homework}
+                                            onSubmit={addListItem} 
+                                        />
+                                    </div>
+                                    <div className = "client__notes-body">
+                                        <p className="client__notes-title">Homework ...</p>
+                                        <div className="client__notes-text"> {currentLesson.homework}</div>
+                                    </div>    
+
+                                </div>
                             </div>
                         </div>
-
-                        <div className="lesson-divider"></div>
-
-                        <h2 className="section-title section-title-resources">Resources</h2>
-                        
-                        {/* renders the resource section for the lessons */}
-                        <LessonResources programs={programs} currentLesson={currentLesson} currentClient={currentClient} match={this.props.match}/>
-                
-                        {/* renders the notes and the homework section */}
-                        <div className="current-lesson__bottom">
-
-                            <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
-                                <div className="client__notes-submit">
-                                    <ModalContainer 
-                                        modalType = "note" 
-                                        modalName = "addNote" 
-                                        buttonType="image"
-                                        url="/icons/add-note.svg" 
-                                        information = {this.state.currentLesson.notes}
-                                        onSubmit={this.addListItem} 
-                                    />
-                                </div>
-                                <div className = "client__notes-body">
-                                    <p className="client__notes-title">Lesson Notes ...</p>
-                                    <div className="client__notes-text"> {this.state.currentLesson.notes}</div>
-                                </div>
-                            </div>
-
-                            <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
-                                <div className="client__notes-submit">
-                                    <ModalContainer 
-                                        modalType = "note" 
-                                        modalName = "addHomework" 
-                                        buttonType="image"
-                                        url="/icons/add-note.svg" 
-                                        information = {this.state.currentLesson.homework}
-                                        onSubmit={this.addListItem} 
-                                    />
-                                </div>
-                                <div className = "client__notes-body">
-                                    <p className="client__notes-title">Homework ...</p>
-                                    <div className="client__notes-text"> {this.state.currentLesson.homework}</div>
-                                </div>    
-
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
-            )
-        }
-    }
+            </ClientsLayout> 
+            }
+        </>
+    )
 }
 
 export default ClientLessons

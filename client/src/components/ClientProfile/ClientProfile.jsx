@@ -1,44 +1,54 @@
-import React, {useState, useEffect} from 'react';
-
+import React, {useState, useEffect, useContext} from 'react';
+import {useParams} from 'react-router-dom';
 import axios from 'axios';
 
 import './ClientProfile.scss';
 
 import Map from '../../components/Map/Map';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
+import ClientNav from '../../components/ClientNav/ClientNav';
+import ClientsLayout from '../../components/ClientsLayout/ClientsLayout';
+
 import {API_URL} from '../../App.js';
 
-/**
- * @param {Object} currentClient  
- * @param {Object} match  
- * @param {Object} programs  
- * @param {Function} updateTrainer  
- * @param {Function} updateClient  
- */
+import TrainerContext from '../../store/trainer-context';
 
+const ClientProfile = () => {
 
-const ClientProfile = ({currentClient, match, programs, updateTrainer, updateClient}) => {
+    const {clients, setClients, programs, setTrainerId} = useContext(TrainerContext);
+    
+    const {clientId, trainerId} = useParams();
 
-    console.log(currentClient);
     const [mapLocation, setMapLocation] = useState();
 
-    useEffect(()=>{
-        
-        programs.forEach(program => {
-            const inputBox = document.getElementById(program.id);
-            if(!!inputBox){inputBox.checked = false};
-        })
+    const [currentClient, setCurrentClient] = useState(null);
 
-        currentClient.programs.forEach(program=>{
-            const inputBox = document.getElementById(program.id);
-            if(!!inputBox){inputBox.checked = true};
-        });
+    useEffect(()=>{
+        console.log('client profile loaded');
+        !!clients && setCurrentClient(clients.find(client => client.userId === clientId));
+        setTrainerId(trainerId);
+        
+        if(programs){
+            programs.forEach(program => {
+                const inputBox = document.getElementById(program.id);
+                if(!!inputBox){inputBox.checked = false};
+            })
+
+            if (currentClient){
+                currentClient.programs.forEach(program=>{
+                    const inputBox = document.getElementById(program.id);
+                    if(!!inputBox){inputBox.checked = true};
+                });
+            }
+        }
         
         //if the userId currently in state doesn't match the userId in the path then update the currentClient in state to match the one in the path
-        if(currentClient.userId !== match.params.clientId){
+        if (currentClient){
+            if(currentClient.userId !== clientId){
                 geoCode();
-        }  
-    }, [currentClient.userId])
+            }  
+        }
+    }, [programs, clients, clientId, currentClient, setCurrentClient])
 
     const geoCode = () =>{
         const {address, city, province} = currentClient.userProfile;
@@ -58,7 +68,10 @@ const ClientProfile = ({currentClient, match, programs, updateTrainer, updateCli
 
         axios.post(`${API_URL}/client/${currentClient.userId}/addNote`, newNote)
         .then(res =>{
-             updateTrainer();
+            const clientLoc = clients.findIndex(client => client.userId === clientId);
+            const clientCopy=[...clients];
+            clientCopy.splice(clientLoc, 1 ,res.data);
+            setClients(clientCopy);
         })
         .catch(err=>{
             console.log(err);
@@ -67,93 +80,141 @@ const ClientProfile = ({currentClient, match, programs, updateTrainer, updateCli
 
     const toggleProgram=(programId)=>{
 
-        const program = currentClient.programs.find((program)=>program.id === programId);
-        const index = currentClient.programs.findIndex((program)=>program.id === programId);
+        const currentPrograms = currentClient.programs;
+        const program = currentPrograms.find((program)=>program.id === programId);
+        const index = currentPrograms.findIndex((program)=>program.id === programId);
 
         if(program){
             document.getElementById(programId).checked=false;
-            currentClient.programs.splice(index,1);
+            currentPrograms.splice(index,1);
             
         }else{
-            currentClient.programs.push(programs.find(program=> programId===program.id))
+            currentPrograms.push(programs.find(program=> programId===program.id))
         }
         
-        axios.put(`${API_URL}/client/${currentClient.userId}/updatePrograms`, currentClient.programs)
+        axios.put(`${API_URL}/client/${currentClient.userId}/updatePrograms`, currentPrograms)
         .catch(err=>{
             console.log(err);
         }) 
     }
 
-    const {address, city, province, country, postal, email, phone} = currentClient.userProfile;
+    /** ================================================ UPDATE CLIENT ================================================*/
+    const updateClient=(event)=>{
+        event.preventDefault();
+
+        const {fname, lname, email, phone, address, city, province, country, postal} = event.target;
+        
+        //create a new client object using the input information from the form
+        const updatedClient = {
+            fname:fname.value,
+            lname:lname.value,
+            email:email.value,
+            phone:phone.value,
+            address:address.value,
+            city: city.value,
+            province: province.value,
+            country: country.value,
+            postal:postal.value
+        }
+
+        // send the new client information to the db and update the state to pull from the db
+        axios.put(`${API_URL}/client/${clientId}/updateDetails`, updatedClient)
+        .then(res =>{
+            console.log(res);
+            const clientLoc = clients.findIndex(client => client.userId === clientId);
+            const clientCopy=[...clients];
+            clientCopy.splice(clientLoc,1,res.data);
+            clientCopy.sort((a,b)=>{
+                if(a.userProfile.lname < b.userProfile.lname) return -1;
+                if(a.userProfile.lname > b.userProfile.lname) return 1;
+                return 0;
+            })
+            setClients(clientCopy);
+           })
+        .catch(err=>{
+            console.log(err);
+        })
+    }
+    
+    const {address, city, province, country, postal, email, phone} = currentClient ? currentClient.userProfile : {};
 
     return (
         <>
-        <div className="client__programs">
-            <p className="client__programs-title">Programs</p>
-            <div className="client__programs-list">
-                {!!programs && programs.map(program => 
-                    <label className="client__programs-label" key={program.id} >{program.name} 
-                        <input onClick={()=>{toggleProgram(program.id)}} type="checkbox" name={program.id} id={program.id} value={program.name}/> 
-                        <span className="client__programs-check"></span>
-                    </label>
-                )}
-            </div>
-        </div>
-
-        <div className = "client__profile">
-            <div className = "component client__contact">
-                <div className="client__contact-info">
-                    <div className="client__contact-info-top">
-                    <p className="component-title client__contact-title">Contact</p>
-                        <div className="client__contact-address"> 
-                            <img className="contact-icon"src="/icons/map-marker.svg" alt="address"/>
-                            <div>
-                                <p className="client__contact-item"> {address}</p>
-                                <p className="client__contact-item">  {`${city}, ${province}, ${country}`}</p>
-                                <p className="client__contact-item"> {postal}</p>
+        {clients && <ClientsLayout> 
+            <ClientNav/>
+            <div className="client__profile-container">
+                    <div className="client__programs">
+                        <p className="client__programs-title">Programs</p>
+                        <div className="client__programs-list">
+                            {!!programs && programs.map(program => 
+                                <label className="client__programs-label" key={program.id} >{program.name} 
+                                    <input onClick={()=>{toggleProgram(program.id)}} type="checkbox" name={program.id} id={program.id} value={program.name}/> 
+                                    <span className="client__programs-check"></span>
+                                </label>
+                            )}
+                        </div>
+                    </div>
+                    {currentClient &&
+                    <div className = "client__profile">
+                        <div className = "component client__contact">
+                            <div className="client__contact-info">
+                                <div className="client__contact-info-top">
+                                <p className="component-title client__contact-title">Contact</p>
+                                    <div className="client__contact-address"> 
+                                        <img className="contact-icon"src="/icons/map-marker.svg" alt="address"/>
+                                        <div>
+                                            <p className="client__contact-item"> {address}</p>
+                                            <p className="client__contact-item">  {`${city}, ${province}, ${country}`}</p>
+                                            <p className="client__contact-item"> {postal}</p>
+                                        </div>
+                                    </div>
+                                    <div className="client__contact-contact">
+                                        <p className="client__contact-item client__contact-item--email"><img className="contact-icon" src="/icons/email-icon.svg" alt="email"/> <a href={`mailto:${email}`}> {email}</a></p>
+                                        <p className="client__contact-item"><img className="contact-icon" src="/icons/phone-icon.svg" alt="phone"/> {phone}</p>
+                                    </div>
+                                </div>
+                                <div className="client__contact-modify">
+                                    <ModalContainer 
+                                        modalType = "update" 
+                                        modalName = "updateClient" 
+                                        buttonType="image"
+                                        url="/icons/user-edit.svg"
+                                        onSubmit={updateClient} 
+                                        information={currentClient}
+                                        />
+                                </div>
+                            </div>
+                            <div className = "client__contact-map">
+                                <Map
+                                    mapLocation={mapLocation}
+                                    containerSize={{width:"386px", height:"200px"}}
+                                />
                             </div>
                         </div>
-                        <div className="client__contact-contact">
-                            <p className="client__contact-item client__contact-item--email"><img className="contact-icon" src="/icons/email-icon.svg" alt="email"/> <a href={`mailto:${email}`}> {email}</a></p>
-                            <p className="client__contact-item"><img className="contact-icon" src="/icons/phone-icon.svg" alt="phone"/> {phone}</p>
-                        </div>
+
+                            <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
+                                <div className="client__notes-submit">
+                                    <ModalContainer 
+                                        modalType = "note" 
+                                        modalName = "addNote" 
+                                        url="/icons/add-note.svg" 
+                                        buttonType="image"
+                                        information = {currentClient.notes}
+                                        onSubmit={addNote} 
+                                    />
+                                </div>
+
+                                <div className = "client__notes-body">
+                                    <p className="client__notes-title">Notes to Self ...</p>
+                                    <div className="client__notes-text"> {currentClient.notes}</div>
+                                </div>
+                            </div>
                     </div>
-                    <div className="client__contact-modify">
-                        <ModalContainer 
-                            modalType = "update" 
-                            modalName = "updateClient" 
-                            buttonType="image"
-                            url="/icons/user-edit.svg"
-                            onSubmit={updateClient} 
-                            information={currentClient}
-                            />
-                    </div>
-                </div>
-                <div className = "client__contact-map">
-                    <Map
-                        mapLocation={mapLocation}
-                        containerSize={{width:"386px", height:"200px"}}
-                    />
-                </div>
-            </div>
-            <div className = "client__notes" style={{backgroundImage: "url('/images/notePaper.png')"}}>
-                <div className="client__notes-submit">
-                    <ModalContainer 
-                        modalType = "note" 
-                        modalName = "addNote" 
-                        url="/icons/add-note.svg" 
-                        buttonType="image"
-                        information = {currentClient.notes}
-                        onSubmit={addNote} 
-                    />
+                    }
                 </div>
 
-                <div className = "client__notes-body">
-                    <p className="client__notes-title">Notes to Self ...</p>
-                    <div className="client__notes-text"> {currentClient.notes}</div>
-                </div>
-            </div>
-        </div>
+        </ClientsLayout> 
+        }
         </>
     )
 }

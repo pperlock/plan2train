@@ -35,7 +35,6 @@ function PersonalDetailsForm({onSubmit, closeModal, information, modalName}) {
     }
 
     return (
-        
         <form id="modal-form" className={modalName==="updateUser" ? "modal-form modal-form__personal" : "modal-form modal-form__client"} onSubmit={handleSubmit} >
             <div className="modal-form__upper">
                 <div className={modalName==="updateUser" ? "modal-form__left" : ""}>
@@ -131,7 +130,6 @@ function PersonalDetailsForm({onSubmit, closeModal, information, modalName}) {
                                 <label className="modal-form__label" htmlFor="linkedIn">Company Name</label>
                             </div>    
                             <div className="modal-form__section">
-                                {/* <input className="modal-form__input" id="companyDescription" name="companyDescription" type="text" placeholder="Company Description" defaultValue={description}></input> */}
                                 <label className="modal-form__label modal-form__textarea-label" htmlFor="linkedIn">Company Description</label>
                                 <textarea className="modal-form__input modal-form__textarea" form="modal-form" wrap="hard" name="companyDescription" id="companyDescription" defaultValue={description} placeholder="Enter Company Description" rows="20" cols="35"></textarea>
                             </div>

@@ -5,7 +5,14 @@
         display:flex;
         justify-content:center;
         margin:40px 0;
-        width:90%;
+        width:100%;
+
+        &-container{
+            width: 68%;
+            position: absolute;
+            top: 270px;
+            right: 67px;
+        }
     }
 
     &__programs{

@@ -1,10 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import firebase from '../../firebase';
 import axios from 'axios';
 
 import "./User.scss"
 
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
+import TrainerContext from '../../store/trainer-context';
+
+import {API_URL} from '../../App';
 
 /**
  * @param {Object} user - trainer information
@@ -13,15 +16,17 @@ import ModalContainer from '../../components/ModalContainer/ModalContainer';
  * @param {Function} updateTrainer - used to update the state on the trainer component
  */
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
 
-function User({user, updateUserProfile, match, updateTrainer}) {
+function User({user, match, updateTrainer}) {
 
     const {lname,fname,username,password,email,phone,address,city,province,country,postal} = user.contact;
     const {facebook, twitter, instagram, linkedIn} = user.social;
     const {name, description, logo} = user.company;
+    
     //show the password as *****
     const hiddenPassword = password.split("").map(character => "*");
+
+    const {updateUserProfile} = useContext(TrainerContext);
 
     //store the selected file in state
     const [selectedFile, setSelectedFile] = useState(null)
@@ -77,7 +82,7 @@ function User({user, updateUserProfile, match, updateTrainer}) {
     //fire the fileupload function any time the selectedFile is changed in state
     useEffect(()=>{
         fileUpload()
-    },[selectedFile])
+    },[selectedFile, fileUpload])
     
     return (
         <div className="user-profile" style={{backgroundImage: "url('/images/main2.jfif')"}}>
