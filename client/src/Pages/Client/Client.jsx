@@ -1,4 +1,5 @@
 import React, {useState,useEffect} from 'react';
+import {useParams, useRouteMatch} from 'react-router-dom';
 import axios from 'axios';
 
 import "./Client.scss";
@@ -10,13 +11,11 @@ import NextLesson from '../NextLesson/NextLesson';
 import EmptyPage from '../EmptyPage/EmptyPage';
 import {API_URL} from '../../App.js';
 
-/**
-* Renders the Client side 
-* @param {Object} match - used to make axios calls and conditionally render based on the path
-*/
 
+function Client () {
 
-function Client ({match}) {
+    const {clientId} = useParams();
+    const {path} = useRouteMatch();
     
     //object containing information associated with specified client
     const [client, setClient] = useState(null)
@@ -32,7 +31,7 @@ function Client ({match}) {
     
     // pull the data from the db and set the results in state
     useEffect(()=>{
-        axios.get(`${API_URL}/api/client/${match.params.clientId}`)
+        axios.get(`${API_URL}/api/client/${clientId}`)
         .then(res =>{
            
             setClient(res.data)
@@ -45,7 +44,7 @@ function Client ({match}) {
             setNextLesson(res.data.lessons.find(lesson=> lesson.current===true));
             setPastLessons(res.data.lessons.filter(lesson=> lesson.current!==true));
         })
-    },[match.params.clientId]);
+    },[clientId]);
 
     return (
         <div>
@@ -54,31 +53,30 @@ function Client ({match}) {
                 nextLesson={nextLesson}
                 pastLessons={pastLessons}
                 client={client} 
-                match={match}
             />
 
             {/* render the appropriate component based on the specified path */}
             
-            {(trainer && match.path==="/client/:clientId") && 
+            {(trainer && path==="/client/:clientId") && 
                 <ClientWelcome
                     client={client}
                     trainer={trainer}    
                 />
             }
 
-            {(client && nextLesson && match.path==="/client/:clientId/nextlesson/:lessonId") && 
+            {(client && nextLesson && path==="/client/:clientId/nextlesson/:lessonId") && 
                 <NextLesson
                     nextLesson={nextLesson}
                 />
             }
 
-            {(client && pastLessons && match.path==="/client/:clientId/lessons/:lessonId") && 
+            {(client && pastLessons && path==="/client/:clientId/lessons/:lessonId") && 
                 <Lessons
                     pastLessons={pastLessons}
                 />
             }
 
-            {(client && match.path==="/client/:clientId/lessons") && <EmptyPage match={match}/>}
+            {(client && path==="/client/:clientId/lessons") && <EmptyPage />}
         </div>
     )
 }

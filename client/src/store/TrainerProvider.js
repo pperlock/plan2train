@@ -14,7 +14,8 @@ const TrainerProvider = props =>{
     useEffect(()=>{
         console.log('trainer-context');
         //get the trainer's information and their associated clients from the db when the component is mounted
-        axios.get(`${API_URL}/api/trainer/${trainerId}`)
+        if(!!trainerId){
+            axios.get(`${API_URL}/api/trainer/${trainerId}`)
             .then(res =>{
                 console.log('reached');
                 setUserProfile(res.data.userProfile);
@@ -36,6 +37,7 @@ const TrainerProvider = props =>{
             .catch(err =>{
                 console.log(err);
             }) 
+        }
     },[trainerId]);
 
     /** ================================================ UPDATE TRAINER ================================================*/

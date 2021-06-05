@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {useParams, useHistory} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import axios from 'axios';
 
 import './ClientLessons.scss'
@@ -18,10 +18,9 @@ import {API_URL} from '../../App.js';
 
 const ClientLessons  = () => {
 
-    const {setTrainerId, clients, setClients, programs} = useContext(TrainerContext);
+    const {setTrainerId, clients, programs} = useContext(TrainerContext);
 
     const {trainerId, clientId} = useParams();
-    const history = useHistory();
 
     const [currentLesson, setCurrentLesson] = useState(null);
     const [mapLocation, setMapLocation] = useState(null);
@@ -75,7 +74,6 @@ const ClientLessons  = () => {
     //             }
     //         }
 
-
     const geoCode = () =>{
         const {address, city, province} = currentLesson.location;
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
@@ -89,12 +87,7 @@ const ClientLessons  = () => {
         })
     }
 
-    // //updates the resources that are displayed based on which program is chosen in the available resources section
-    // const updateResources = program =>{
-    //    setDisplayResources(programs.resources);
-    // }
-
-    //adds an item to either the homework or the notes lists when the form is submitted
+     //adds an item to either the homework or the notes lists when the form is submitted
     const addListItem = (note, list) =>{
 
         const newItem={

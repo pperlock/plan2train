@@ -10,8 +10,8 @@ import Programs from './Pages/Programs/Programs';
 import Client from './Pages/Client/Client';
 import Clients from './Pages/Clients/Clients';
 import SideBar from './components/SideBar/SideBar';
-import ClientLessons from './components/ClientLessons/ClientLessons';
-import ClientProfile from './components/ClientProfile/ClientProfile';
+import ClientLessons from './Pages/ClientLessons/ClientLessons';
+import ClientProfile from './Pages/ClientProfile/ClientProfile';
 
 import TrainerProvider from './store/TrainerProvider';
 

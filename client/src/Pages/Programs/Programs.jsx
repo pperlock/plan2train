@@ -1,4 +1,5 @@
 import React, {useState, useRef, useEffect, useContext} from 'react';
+import {useParams, useHistory} from 'react-router-dom';
 import firebase from '../../firebase';
 import axios from 'axios';
 
@@ -12,20 +13,12 @@ import TrainerContext from '../../store/trainer-context';
 
 import {API_URL} from '../../App.js';
 
-/**
- * Props Passed in by Trainer
- * @param {Object} programs 
- * @param {Object} match
- * @param {function} addProgram
- * @param {function} deleteProgram
- * @param {function} addResource
- * @param {function} deleteResource
- * @param {function} updateProgram
- */
- 
-const Programs  = ({match, history}) => {
+const Programs  = () => {
 
     const {setTrainerId, programs, setPrograms} = useContext(TrainerContext);
+
+    const {programId, trainerId} = useParams();
+    const history = useHistory();
 
     const fileInput = useRef(null);
 
@@ -39,23 +32,9 @@ const Programs  = ({match, history}) => {
 
 
     useEffect(()=>{
-        //conditional added if the page is refreshed
-        // if(!programs) { 
-        //     axios.get(`${API_URL}/api/trainer/${match.params.trainerId}`)
-        //     .then(res =>{
-        //         setPrograms(res.data.programs);
-        //         setTrainerId(match.params.trainerId);
-        //         return res.data.programs
-        //     })
-        //     .then(res2 => {
-        //         setCurrentProgram(res2.find(program=>program.id===match.params.programId));
-        //     })
-        // }else{
-        //     setCurrentProgram(programs.find(program=>program.id===match.params.programId));
-        //     setTrainerId(match.params.trainerId);
-        // }
-        setCurrentProgram(programs.find(program=>program.id===match.params.programId));
-    },[match.params.programId, programs, match.params.trainerId, setPrograms, setTrainerId])
+        !!programs && setCurrentProgram(programs.find(program=>program.id===programId));
+        setTrainerId(trainerId);
+    },[programId, programs, trainerId, setPrograms, setTrainerId])
 
     // triggered by clicking on a download type radio button
     const uploadType = (event) => {
@@ -116,7 +95,7 @@ const Programs  = ({match, history}) => {
                             type: selectedType
                         }
                         //save the new resource to the database using the function passed down by the trainer component
-                        addResource(newResource, match.params.programId);
+                        addResource(newResource, programId);
                         //stop showing the loading icon
                         setShowLoading(false);
                     })
@@ -133,7 +112,7 @@ const Programs  = ({match, history}) => {
                 url:event.target.uploadURL.value,
                 type:"url"
             }
-            addResource(newResource, match.params.programId);
+            addResource(newResource, programId);
         }
 
         // return the radio buttons to the screen and hide the resource input elements
@@ -153,13 +132,13 @@ const Programs  = ({match, history}) => {
            description:event.target.programDescription.value
        }
 
-       axios.post(`${API_URL}/trainer/${match.params.trainerId}/addProgram`, newProgram)
+       axios.post(`${API_URL}/trainer/${trainerId}/addProgram`, newProgram)
        .then(res =>{
            setPrograms([...programs, res.data]);
            return res;
        })
        .then(res2=>{
-           history.push(`/trainer/${match.params.trainerId}/programs/${res2.data.id}`)
+           history.push(`/trainer/${trainerId}/programs/${res2.data.id}`)
        })
        .catch(err=>{
            console.log(err);
@@ -178,7 +157,7 @@ const Programs  = ({match, history}) => {
        }
 
        //send a request to the db to save the new information - trigger an update of the component to fetch the new data       
-       axios.post(`${API_URL}/trainer/${match.params.trainerId}/${match.params.programId}/updateProgram`, newProgram)
+       axios.post(`${API_URL}/trainer/${trainerId}/${programId}/updateProgram`, newProgram)
        .then(res =>{
             console.log(res);
             const programsCopy = [...programs];
@@ -206,14 +185,14 @@ const Programs  = ({match, history}) => {
        .then(() =>{
            //if the program removed is the only program then send the user to the empty page
            if((programs.length - 1) === 0){
-               history.push(`/trainer/${match.params.trainerId}/programs`)
+               history.push(`/trainer/${trainerId}/programs`)
            }else{
                //if the program on the list was the first on on the list send it to the program at index 1 otherwise index 0
                const programLoc = programs.findIndex(program => program.id === programId);
                programLoc !== 0 ? 
-               history.push(`/trainer/${match.params.trainerId}/programs/${programs[0].id}`)
+               history.push(`/trainer/${trainerId}/programs/${programs[0].id}`)
                :
-               history.push(`/trainer/${match.params.trainerId}/programs/${programs[1].id}`)
+               history.push(`/trainer/${trainerId}/programs/${programs[1].id}`)
            }
        })
        .catch(err=>{
@@ -224,7 +203,7 @@ const Programs  = ({match, history}) => {
    /** ================================================ ADD RESOURCE ================================================*/
    const addResource=(newResource)=>{
        //a new resources is made in the programs component and passed back to trainer to save in the db
-       axios.post(`${API_URL}/program/${match.params.programId}/addResource`, newResource)
+       axios.post(`${API_URL}/program/${programId}/addResource`, newResource)
        .then(res =>{
             const programCopy = {...currentProgram};
             programCopy.resources = [...programCopy.resources, res.data.resources.pop()];
@@ -238,7 +217,7 @@ const Programs  = ({match, history}) => {
    /** ================================================ DELETE RESOURCE ================================================*/
    const deleteResource = (resourceId) =>{
        //a resourceId is sent back from the programs component and removed from the db
-       axios.delete(`${API_URL}/program/${match.params.programId}/${resourceId}`)
+       axios.delete(`${API_URL}/program/${programId}/${resourceId}`)
        .then(res =>{
         //    setUpdated(true);//trigger the component did update to pull updated data from db
             const programCopy = {...currentProgram};
@@ -251,12 +230,10 @@ const Programs  = ({match, history}) => {
        }) 
     }
 
-    console.log(programs);
-
     return (
         <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >
             {/* render a list of clients on the page */}
-            {programs && <ClientList list={programs} match={match} onSubmit={addProgram}/>}
+            {programs && <ClientList />}
             
             {currentProgram && 
                 <div className="programs__container-right">
