@@ -2,6 +2,8 @@ import React, {useContext} from 'react'
 import {NavLink, useParams, useHistory} from 'react-router-dom';
 import axios from 'axios';
 
+import './ClientNav.scss';
+
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 
 import TrainerContext from '../../store/trainer-context';
@@ -38,7 +40,6 @@ function ClientNav() {
                 :
                 history.push(`/trainer/${trainerId}/clients/${clients[1].userId}/profile`)
             }
-            
             setClients(clientCopy);
         }
 
@@ -52,11 +53,13 @@ function ClientNav() {
             <div className="client__header-nav">
                 <NavLink to={`/trainer/${trainerId}/clients/${clientId}/profile`} 
                     id="profile"
-                    activeClassName="active-link" >Profile
+                    activeClassName="active-link"
+                    className="client__header-nav-link" >Profile
                 </NavLink>
                 <NavLink to={`/trainer/${trainerId}/clients/${clientId}/lessons`} 
                     id="lessons"
-                    activeClassName="active-link" >Lessons
+                    activeClassName="active-link"
+                    className="client__header-nav-link" >Lessons
                 </NavLink>
             </div>
 
