@@ -233,13 +233,32 @@ const ClientLessons  = () => {
             console.log(err);
         })
     }
-
+    if(!!currentClient && currentClient.lessons.length === 0){
+        return(   
+            <>
+                {clients && <PageLayout> 
+                    <ClientNav />                                  
+                        <div className="empty-container empty-lessons">
+                            <div className="empty-lessons__modal">
+                                <ModalContainer 
+                                    modalType = "update" 
+                                    modalName = "addLesson" 
+                                    buttonType="image"
+                                    url="/icons/add-icon.svg"
+                                    onSubmit={addNewLesson} 
+                                />
+                            </div>
+                            <p>Click to Add a Lesson</p>
+                        </div>
+                </PageLayout>}
+            </>
+        )
+    }
     return (
         <>
             {clients && <PageLayout> 
 
                 <ClientNav />
-
                 <div className="lessons">
                     {/* list of all client's lessons - click to render a specific lesson */}
                     <div className="lessons__list">

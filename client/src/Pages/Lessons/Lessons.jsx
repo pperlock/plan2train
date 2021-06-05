@@ -8,6 +8,7 @@ import "./Lessons.scss";
 import '../NextLesson/NextLesson.scss';
 
 import GridList from '../../components/GridList/GridList';
+import EmptyPage from '../../Pages/EmptyPage/EmptyPage';
 
 function Lessons() {
 
@@ -41,11 +42,12 @@ function Lessons() {
         setSelectedLesson(selectedLesson);
     }
 
-    console.log(pastLessons);
+    if(!!pastLessons && pastLessons.length===0){
+        return <EmptyPage/>
+    }
 
     return (
         <div className="next-lesson" style={{backgroundImage: "url('/images/main2.jfif')"}}>
-        {pastLessons && (pastLessons.length === 0 && <h1>No Lessons Yet</h1>)}
 
             <h1 className="next-lesson__title">PAST LESSONS</h1>
             

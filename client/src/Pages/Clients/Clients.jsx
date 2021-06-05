@@ -17,7 +17,7 @@ function Clients() {
         <>
             {!!clients &&
                 <PageLayout> 
-                    {clients.length === 0 ? <h1>No Clients</h1> : <Redirect to={`${url}/${clients[0].userId}/profile`}/>}
+                    {clients.length === 0 ? <EmptyPage/> : <Redirect to={`${url}/${clients[0].userId}/profile`}/>}
                 </PageLayout>
             }
         </>
