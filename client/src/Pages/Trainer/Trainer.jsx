@@ -1,420 +1,168 @@
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react'
+import {useParams} from 'react-router-dom';
+import firebase from '../../firebase';
 import axios from 'axios';
 
 import "./Trainer.scss"
 
-import SideBar from '../../components/SideBar/SideBar';
-import Programs from '../Programs/Programs';
-import Clients from '../Clients/Clients';
-import Schedule from '../Schedule/Schedule';
-import User from '../User/User';
-import EmptyPage from '../EmptyPage/EmptyPage';
-import {API_URL} from '../../App.js';
+import ModalContainer from '../../components/ModalContainer/ModalContainer';
+import TrainerContext from '../../store/trainer-context';
 
-/**
- * @param {Object} props - used to access the username and trainer id from the url
- * 
- * STATE
- * @param {String} username
- * @param {String} trainerId
- * @param {Object} userProfile - contains all the contact/compnay information for the trainer
- * @param {Array} clients - contains an array of client objects associated with the trainer
- * @param {String} updated - used to update the trainer app where necessary
- * @param {String} selectedFile - file selected to update trainer logo
- */
+import {API_URL} from '../../App';
 
 
-class Trainer extends React.Component{
+const Trainer = () => {
+
+    const {userProfile, setUserProfile, setTrainerId, updateUserProfile} = useContext(TrainerContext);
+
+    const {trainerId} = useParams();
+
+    //store the selected file in state
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    useEffect(()=>{
+        setTrainerId(trainerId);
+    },[]);
+
+   /** ================================================ ADD LOGO ================================================*/
+
+   //activate the click method on the invisible input box when the logo is clicked 
+   const activateFileSelector=()=>{
+        const inputBox = document.getElementById('inputFile');
+        inputBox.click();
+    }
     
-    state={files:null, 
-            username:this.props.match.params.username, 
-            trainerId: this.props.match.params.trainerId, 
-            userProfile:null, 
-            programs:[], 
-            clients:[], 
-            updated:false, 
-            empty:false, 
-            selectedFile:null}
-
-
-    componentDidMount(){
-       //get the trainer's information and their associated clients from the db when the component is mounted
-        axios.get(`${API_URL}/api/trainer/${this.state.trainerId}`)
-        .then(res =>{
-            this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
-                axios.get(`${API_URL}/trainer/${this.state.trainerId}/clients`)
-                .then(clientRes=>{
-                    clientRes.data.sort((a,b)=>{
-                        if(a.userProfile.lname < b.userProfile.lname) return -1;
-                        if(a.userProfile.lname > b.userProfile.lname) return 1;
-                        return 0;
-                    })
-                     this.setState({clients:clientRes.data})
-                })
-                .catch(clientErr =>{
-                    console.log(clientErr);
-                })
-            })
-        })
-        .catch(err =>{
-            console.log(err);
-        })
+    //get the file selected from the file picker and store it in state
+    const fileSelectedHandler = event =>{
+        setSelectedFile(event.target.files[0]); 
     }
 
-    componentDidUpdate(){
-        //get the trainer's information and their associated clients from the db when the component is updated
-        if(this.state.updated){
-            axios.get(`${API_URL}/api/trainer/${this.state.trainerId}`)
-            .then(res =>{
-                this.setState({userProfile:res.data.userProfile, programs:res.data.programs},()=>{
-                    axios.get(`${API_URL}/trainer/${this.props.match.params.trainerId}/clients`)
-                    .then(clientRes=>{
-                         clientRes.data.sort((a,b)=>{
-                             if(a.userProfile.lname < b.userProfile.lname) return -1;
-                             if(a.userProfile.lname > b.userProfile.lname) return 1;
-                             return 0;
-                            })
-                         this.setState({clients:clientRes.data})
+    //upload the logo file to firebase storage in the trainer's
+    const fileUpload=()=>{
+        if(!!selectedFile){
+            let bucketName = trainerId;
+            let storageRef = firebase.storage().ref(`/${bucketName}/${selectedFile.name}`);
+            let uploadTask = storageRef.put(selectedFile);
+            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                ()=>{
+                    console.log("Uploading ...")
+                },
+                ()=>{
+                    console.log("Upload Unsuccessful");
+                },
+                ()=>{
+                    //once the file is uploaded get the url and save it to the db and update the trainer component
+                    let storageLoc = firebase.storage().ref();
+                    storageLoc.child(`/${bucketName}/${selectedFile.name}`).getDownloadURL()
+                    .then((url)=>{
+                        const logo={logo:url}
+                        axios.put(`${API_URL}/trainer/${trainerId}/updateLogo`, logo)
+                        .then(res =>{
+                            const profileCopy = {...userProfile};
+                            profileCopy.company.logo = res.data;
+                            setUserProfile(profileCopy);
+                        })
+                        .catch(err=>{
+                            console.log(err);
+                        })
                     })
-                    .catch(clientErr =>{
-                        console.log(clientErr);
+                    .catch(err=>{
+                        console.log(err);
                     })
-                })
-                // if the update is fired by another component then set updated back to false
-                this.setState({updated:false})
-            })
-            .catch(err=>{
-                console.log(err)        
-            })
+                }   
+            )
         }
     }
 
-    /** ================================================ UPDATE TRAINER ================================================*/
-    updateUserProfile=(event)=>{
-        
-        event.preventDefault();
+    //fire the fileupload function any time the selectedFile is changed in state
+    useEffect(()=>{
+        fileUpload();
+    },[selectedFile, fileUpload])
 
-        //create a new user profile based on the information entered into the modal form
-        const updatedProfile = {
-            contact:{
-                username:event.target.username.value,
-                fname:event.target.fname.value,
-                lname:event.target.lname.value,
-                password:event.target.password.value,
-                email:event.target.email.value,
-                phone:event.target.phone.value,
-                address:event.target.address.value,
-                city: event.target.city.value,
-                province: event.target.province.value,
-                country: event.target.country.value,
-                postal:event.target.postal.value
-            },
-            social:{facebook:event.target.facebook.value, twitter:event.target.twitter.value, instagram: event.target.instagram.value, linkedIn:event.target.linkedIn.value},
-            company:{
-                name:event.target.companyName.value,
-                description: event.target.companyDescription.value,
-                //logo is not entered in this form - just use whatever has been stored in state
-                logo:this.state.userProfile.company.logo
+
+    const {lname,fname,username,password,email,phone,address,city,province,country,postal} = userProfile ? userProfile.contact : {};
+    const {facebook, twitter, instagram, linkedIn} = userProfile ? userProfile.social : {};
+    const {name, description, logo} = userProfile ? userProfile.company : {};
+
+     //show the password as *****
+     const hiddenPassword = password && password.split("").map(character => "*");
+   
+    return (
+        <>
+            {userProfile &&  
+                <div className="user-profile" style={{backgroundImage: "url('/images/main2.jfif')"}}>
+                    <p className="user-profile__type">Profile: Trainer</p>
+                    <div className="user-profile__bottom">
+                        <div className="user-profile__description">
+                        
+                            <div className="user-profile__description-logo-container">
+
+                                {/* render the logo from the db - if there isn't one use the image icon stored on the front end */}
+                                <img src={logo !=="" ? logo : "/icons/image.svg"} alt ="company logo" className="user-profile__description-logo" onClick={activateFileSelector}/>
+                                
+                                <input id="inputFile" type="file" className="user-profile__description-input" onChange={fileSelectedHandler}></input>
+
+                            </div>
+                            <div className="user-profile__description-content">
+                                <p className="user-profile__description-company">{name}</p>
+                                <p className="user-profile__description-description">{description}</p>
+                            </div>
+                        </div>
+                        <div className="component user-profile__container">
+                            <p className="component-title user-profile__title">{`${fname} ${lname}`}</p>
+                            
+                            {(username !=="google" && username !=="facebook") &&
+                            <div className="user-profile__sign-in">                       
+                                <p className="user-label" >UserName: </p>
+                                <p className="user-text"> {username}</p>
+
+                                <p className="user-label" >Password: </p>
+                                <p className="user-text"> {hiddenPassword}</p>
+                            </div>
+                            }
+
+                            <div className="user-profile__details">
+                                <div className="user-profile__contact">
+                                    <p className="user-label user-profile__contact-title"> CONTACT </p> 
+                                    <div className="user-profile-item">
+                                        <img className="contact-icon" src="/icons/email-icon.svg" alt="email"/><p>{email}</p>
+                                    </div>
+                                    <div className="user-profile-item">
+                                        <img className="contact-icon" src="/icons/phone-icon.svg" alt="phone number"/><p>{phone}</p>
+                                    </div>
+
+                                    <div className="user-profile__social">
+                                        <a href={facebook} target="_blank" rel="noopener noreferrer"><img className="contact-icon--social" src="/icons/facebook-icon.svg" alt="facebook"/></a>
+                                        <a href={twitter} target="_blank" rel="noopener noreferrer"><img className="contact-icon--social" src="/icons/twitter-icon.svg" alt="twitter"/></a>
+                                        <a href={instagram} target="_blank" rel="noopener noreferrer"><img className="contact-icon--social" src="/icons/instagram-icon.svg" alt="instagram"/></a>
+                                        <a href={linkedIn} target="_blank" rel="noopener noreferrer"><img className="contact-icon--social" src="/icons/linkedin-icon.svg" alt="linked-in"/></a>
+                                    </div>
+                                </div>
+                                <div className="user-profile__address">
+                                        <p className="user-label user-profile__address-title">ADDRESS</p>
+                                        <p className="user-profile__address-item">{address}</p>
+                                        <p className="user-profile__address-item">{`${city}, ${province}, ${country}`}</p>
+                                        <p className="user-profile__address-item">{postal}</p>
+                                </div>
+                            </div>
+
+                            {/* render the modalcontainer along with the button used to trigger it for updating the user profile */}
+                            <div className="user-profile__update">
+                                <ModalContainer 
+                                    modalName = "updateUser" 
+                                    modalType = "update" 
+                                    buttonText="Update" 
+                                    buttonType="image" 
+                                    url="/icons/user-edit.svg" 
+                                    information={userProfile} onSubmit={updateUserProfile}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-        }
-
-        //send a request to the db to save the new information and set it in state
-        axios.put(`${API_URL}/trainer/${this.props.match.params.trainerId}/updateDetails`, updatedProfile)
-        .then(res =>{
-            this.setState({userProfile:updatedProfile});
-        })
-        .catch(err=>{
-            console.log(err);
-        })
-    }
-
-    /** ================================================ ADD PROGRAM ================================================*/
-    addProgram=(event)=>{
-
-        event.preventDefault();
-
-        //create a new program based on the information entered into the modal form - id is created on backend
-        const newProgram = {
-            name:event.target.programName.value,
-            description:event.target.programDescription.value
-        }
-
-        //send a request to the db to save the new information and set it in state using the returned information
-        axios.post(`${API_URL}/trainer/${this.props.match.params.trainerId}/addProgram`, newProgram)
-        .then(res =>{
-            this.setState({programs:[...this.state.programs, res.data]},()=>{
-                // direct the user to the new program page
-                this.props.history.push(`/trainer/${this.props.match.params.trainerId}/programs/${res.data.id}`)
-            })
-        })
-        .catch(err=>{
-            console.log(err);
-        })
-        
-    }
-
-    /** ================================================ UPDATE PROGRAM ================================================*/
-    updateProgram=(event)=>{
-
-        event.preventDefault();
-        
-        //create a new program based on the information entered into the modal form
-        const newProgram = {
-            name:event.target.programName.value,
-            description:event.target.programDescription.value
-        }
-
-        //send a request to the db to save the new information - trigger an update of the component to fetch the new data       
-        axios.post(`${API_URL}/trainer/${this.props.match.params.trainerId}/${this.props.match.params.programId}/updateProgram`, newProgram)
-        .then(res =>{
-            this.setState({updated:true})
-        })
-        .catch(err=>{
-            console.log(err);
-        })
-        
-    }
-
-    /** ================================================ DELETE PROGRAM ================================================*/
-    deleteProgram = (programId) =>{
-
-        // send a request to the db to delete a program with the specified programId
-        axios.delete(`${API_URL}/program/${this.props.match.params.programId}`)
-        .then(res =>{
-            //trigger the state to update the component and the redirect the user to the first program on the list
-            this.setState({updated:true},()=>{
-                //if the program removed is the only program then send the user to the empty page
-                if((this.state.programs.length - 1) === 0){
-                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/programs`)
-                }else{
-                    //if the program on the list was the first on on the list send it to the program at index 1 otherwise index 0
-                    const programLoc = this.state.programs.findIndex(program => program.id === programId);
-                    programLoc !== 0 ? 
-                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/programs/${this.state.programs[0].id}`)
-                    :
-                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/programs/${this.state.programs[1].id}`)
-                }
-            });
-        })
-        .catch(err=>{
-            console.log(err);
-        }) 
-    }
-
-    /** ================================================ ADD RESOURCE ================================================*/
-    addResource=(newResource)=>{
-        //a new resources is made in the programs component and passed back to trainer to save in the db
-        axios.post(`${API_URL}/program/${this.props.match.params.programId}/addResource`, newResource)
-        .then(res =>{
-            this.setState({updated:true});//trigger the component did update to pull updated data from db
-        })
-        .catch(err=>{
-            console.log(err);
-        })
-    }
-
-    /** ================================================ DELETE RESOURCE ================================================*/
-    deleteResource = (resourceId) =>{
-        //a resourceId is sent back from the programs component and removed from the db
-        axios.delete(`${API_URL}/program/${this.props.match.params.programId}/${resourceId}`)
-        .then(res =>{
-            this.setState({updated:true});//trigger the component did update to pull updated data from db
-        })
-        .catch(err=>{
-            console.log(err);
-        }) 
-    }
-
-    /** ================================================ ADD CLIENT ================================================*/
-    addClient=(event)=>{
-
-        event.preventDefault();
-
-        // get the list of selected programs from the selection element
-        const options = event.target.programs.options;
-        // let opt="";
-        let programs = [];
-        for(var i=0; i<options.length; i++){
-            let opt = options[i];
-            const program = this.state.programs.find(program=> program.id===opt.value);
-            opt.selected && programs.push(program);
-        }
-
-        // create a new client to send to the db using form input values- trainerId is applied and userid is created on the backend
-        const newClient = {
-            trainerId:"",
-            username:event.target.username.value,
-            password:event.target.password.value,
-            profile:"client",
-            status:"active",
-            userProfile:{
-                fname:event.target.fname.value,
-                lname:event.target.lname.value,
-                email:event.target.email.value,
-                phone:event.target.phone.value,
-                address:event.target.address.value,
-                city: event.target.city.value,
-                province: event.target.province.value,
-                country: event.target.country.value
-            },
-            //use the selected programs from above
-            programs:programs
-        }
-
-        // save the new client in the db and return send the user to the new client's profile page
-        axios.post(`${API_URL}/trainer/${this.props.match.params.trainerId}/addClient`, newClient)
-        .then(res =>{
-                const newClientList = [...this.state.clients, res.data];
-                newClientList.sort((a,b)=>{
-                    if(a.userProfile.lname < b.userProfile.lname) return -1;
-                    if(a.userProfile.lname > b.userProfile.lname) return 1;
-                    return 0;
-                })
-                this.setState({clients:newClientList},()=>{
-                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${res.data.userId}/profile`)
-                })
-        })
-        .catch(err=>{
-            console.log(err);
-        })
-        }
-
-    /** ================================================ DELETE CLIENT ================================================*/
-    deleteClient=(clientId)=>{
-
-       // send a request to the db to delete a client with the specified programId
-        axios.delete(`${API_URL}/client/${clientId}`)
-        .then(res =>{
-            //trigger the state to update the component and the redirect the user to the appropriate client
-            this.setState({updated:true},()=>{
-                //if the client removed was the only one on the list send the user to the empty clients page
-                if((this.state.clients.length - 1) === 0){
-                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients`)
-                }else{
-                    const programLoc = this.state.clients.findIndex(client => client.userId === clientId);
-                    //send the user to the first client on the list unless the one removed was at 0 index, the route to client at index 1
-                    programLoc !== 0 ? 
-                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${this.state.clients[0].userId}/profile`)
-                    :
-                    this.props.history.push(`/trainer/${this.props.match.params.trainerId}/clients/${this.state.clients[1].userId}/profile`)
-                }
-            });
-        })
-        .catch(err=>{
-            console.log(err);
-        })     
-    }
-
-    /** ================================================ UPDATE CLIENT ================================================*/
-    updateClient=(event)=>{
-        event.preventDefault();
-        
-        //create a new client object using the input information from the form
-        const updatedClient = {
-            fname:event.target.fname.value,
-            lname:event.target.lname.value,
-            email:event.target.email.value,
-            phone:event.target.phone.value,
-            address:event.target.address.value,
-            city: event.target.city.value,
-            province: event.target.province.value,
-            country: event.target.country.value,
-            postal:event.target.postal.value
-        }
-
-        // send the new client information to the db and update the state to pull from the db
-        axios.put(`${API_URL}/client/${this.props.match.params.clientId}/updateDetails`, updatedClient)
-        .then(res =>{
-            //pulls new data from db on component did update
-            this.setState({updated:true})
-           })
-        .catch(err=>{
-            console.log(err);
-        })
-    }
-
-    //used to update the state and trigger a pull from the db when data is created,updated, or deleted
-    updateTrainer=()=>{
-        this.setState({updated:true})
-    }
-
-    render(){
-        const {match} = this.props;
-        return (
-            <>
-                {/* render the sidebar for all instances */}
-                {this.state.userProfile &&  
-                    <SideBar
-                        clients={this.state.clients} 
-                        programs={this.state.programs} 
-                        match={match}
-                        trainerId={this.state.trainerId}
-                        trainerName={this.state.username}
-                        history={this.props.history}
-                    />}
-                {/* render an empty page alerting the user to add programs based on the path */}
-                {(this.state.userProfile && match.path==="/trainer/:trainerId/programs") && 
-                    <EmptyPage 
-                        match={match}
-                        list={this.state.programs} 
-                        onSubmit={this.addProgram}
-                        programs={this.state.programs}
-                    />}
-
-                {/* render an empty page alerting the user to add clients based on the path */}
-                {(this.state.userProfile && match.path==="/trainer/:trainerId/clients") && 
-                    <EmptyPage 
-                        match={match}
-                        list={this.state.clients}
-                        onSubmit={this.addClient}
-                        programs={this.state.programs}
-                    />}
-                
-                {/* render the program, clients or user components based on the path */}
-
-                {(this.state.userProfile && match.path==="/trainer/:trainerId/programs/:programId") && 
-                    <Programs 
-                        programs={this.state.programs} 
-                        currentProgramId={match.params.programId} 
-                        match={match}
-                        addProgram={this.addProgram}
-                        deleteProgram={this.deleteProgram}
-                        addResource={this.addResource} 
-                        deleteResource={this.deleteResource}  
-                        updateProgram={this.updateProgram} 
-                    />}
-
-                {(this.state.clients && this.state.clients.length !== 0 && match.path==="/trainer/:trainerId/clients/:clientId/profile") && 
-                    <Clients {...this.props} 
-                        programs={this.state.programs} 
-                        clients={this.state.clients} 
-                        addNote={this.addNote}
-                        addClient={this.addClient}
-                        updateClient={this.updateClient}
-                        deleteClient={this.deleteClient}
-                        updateTrainer={this.updateTrainer}
-                    />}
-
-                {(this.state.clients  && this.state.clients.length !== 0 && match.path==="/trainer/:trainerId/clients/:clientId/lessons") && 
-                    <Clients {...this.props} 
-                        programs={this.state.programs} 
-                        clients={this.state.clients} 
-                        addClient={this.addClient}
-                        deleteClient={this.deleteClient}
-                    />}
-                
-                {(this.state.userProfile && match.path==="/trainer/:trainerId") && 
-                    <User 
-                        user={this.state.userProfile} 
-                        updateUserProfile={this.updateUserProfile} 
-                        match={match} 
-                        updateTrainer={this.updateTrainer} 
-                    />}
-                
-                {(this.state.userProfile && match.path==="/trainer/:trainerId/schedule") && <Schedule />}
-            </>
-        )
-    }
+        </>
+    )
 }
 
 export default Trainer

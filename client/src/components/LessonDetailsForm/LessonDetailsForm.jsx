@@ -5,18 +5,18 @@ function LessonDetailsForm({onSubmit, closeModal, lesson}) {
     
     if (!lesson){
         var location = {name:"", address:"", city:"", province:"", country:""}
-        var lesson = {date:"", time:"", location}
+        var lesson = {date:"", time:"", location, id:""}
     }
     var {date, time, location} = lesson;
     var {name,address, city, province, country} = location;   
 
-    const handleSubmit=(event)=>{
-        onSubmit(event);
+    const handleSubmit=(event, lessonId)=>{
+        onSubmit(event, lessonId);
         closeModal();
     }
 
     return (
-        <form id="modal-form" className="modal-form" onSubmit={handleSubmit} >
+        <form id="modal-form" className="modal-form" onSubmit={(event)=>handleSubmit(event, lesson.id)} >
 
             <div className="modal-form__when">
                 <div className="modal-form__section modal-form__lesson-name">

@@ -9,10 +9,8 @@ import "./LoginModal.scss";
 import LoginForm from '../LoginForm/LoginForm';
 import {API_URL} from '../../App.js';
 
+function LoginModal ({onClickOutside, onKeyDown, closeModal, modalType, toggleScrollLock}) {
 
-function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal, onSubmit, modalType, toggleScrollLock}) {
-
-    
     const [showSignIn, setShowSignIn] = useState(true);
     const [showSignUp, setShowSignUp] = useState(false);
   
@@ -84,15 +82,16 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                 <aside 
                 className='modal-cover'
                 // onClick={onClickOutside}
-                onKeyDown={onKeyDown}>
-                    <div className="modal-area modal-login__area" ref={modalRef} style={{backgroundImage: "url('/images/main5.jfif')"}}>
+                onKeyDown={onKeyDown}
+                >
+                    <div className="modal-area modal-login__area" style={{backgroundImage: "url('/images/main5.jfif')"}}>
                         <div className="modal-login__header">
                             {modalType === "loginclient" && <h1 className="modal-title modal-login__header-title">Client Login</h1>}
                             {modalType === "logintrainer" && <h1 className= "modal-login__header-title">Trainer Login</h1>}
                             {(profileType === "trainer" && showSignIn) && <button className="modal-login__body-signup" onClick={toggleLoginForm}>New to the Community? <span className="modal-login__body-signup-accent">Sign Up</span></button>}
                         </div>
                         <button
-                            ref={buttonRef}
+                            // ref={buttonRef}
                             className="modal-close modal-login__close"
                             onClick={closeModal}>
                             <svg className="modal-close-icon" viewBox="0 0 40 40">
@@ -111,15 +110,11 @@ function LoginModal ({onClickOutside, onKeyDown, modalRef, buttonRef, closeModal
                                 <div className="login-divider__line"></div>
                             </div>
                             <div className="modal-login__alternate">
-                                {/* <button onClick={googleSignIn} className="social-login" id="google" type="button" form="login-form"> */}
-                                    <img className="social-login__icon" onClick={googleSignIn} src="/icons/google.png" alt="google signin"></img>
-                                {/* </button> */}
+                                <img className="social-login__icon" onClick={googleSignIn} src="/icons/google.png" alt="google signin"></img>
                                 <p className="modal-login__alternate-text"> {showSignIn ? "Login With Google" : "Sign Up With Google"}</p>
                             </div>
                             <div className="modal-login__alternate">
-                                {/* <button onClick={googleSignIn} className="social-login social-login-facebook" id="google" type="button" form="login-form"> */}
-                                    <img className="social-login__icon" onClick={facebookSignIn} src="/icons/facebook-icon-square.png" alt="google signin"></img>
-                                {/* </button> */}
+                                <img className="social-login__icon" onClick={facebookSignIn} src="/icons/facebook-icon-square.png" alt="google signin"></img>
                                 <p className="modal-login__alternate-text">{showSignIn ? "Login With Facebook" : "Sign Up With Facebook"}</p>
                             </div>
                             </>}

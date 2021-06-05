@@ -1,5 +1,5 @@
 import React from 'react'
-// import "./Schedule.scss"
+import "./Schedule.scss"
 // import { INITIAL_EVENTS, createEventId } from './event-utils'
 
 

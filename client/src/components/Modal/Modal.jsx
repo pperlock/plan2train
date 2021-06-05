@@ -18,7 +18,7 @@ import NewClientForm from '../NewClientForm/NewClientForm';
  * @param {String} closeModal - closes the modal when cancel or "x" is clicked
  */
 
-function Modal({onKeyDown, modalRef, buttonRef, closeModal,onSubmit, information, modalName}) {
+function Modal({onKeyDown, modalRef, buttonRef, closeModal, onSubmit, information, modalName}) {
 
     let modalSize="";
     if(modalName ==="updateClient"){
@@ -35,8 +35,7 @@ function Modal({onKeyDown, modalRef, buttonRef, closeModal,onSubmit, information
 
     return ReactDOM.createPortal(
         <FocusTrap>
-            <aside 
-            className='modal-cover' onKeyDown={onKeyDown}>
+            <aside className='modal-cover' onKeyDown={onKeyDown}>
                 <div className={`modal-area ${modalSize}`} ref={modalRef} style={{backgroundImage: "url('/images/intro-background.png')"}}>
                     {modalName==="updateUser" && <h1 className="modal-title">Trainer Details</h1>}
                     {(modalName==="updateClient" || modalName==="addClient") && <h1 className="modal-title">Client Details</h1>}
@@ -58,7 +57,6 @@ function Modal({onKeyDown, modalRef, buttonRef, closeModal,onSubmit, information
                         {(modalName === "modifyLesson" || modalName==="addLesson") && <LessonDetailsForm onSubmit={onSubmit} closeModal={closeModal} lesson={information} />}
                     </div>
                 </div>
-
             </aside>
         </FocusTrap>, document.body
     );

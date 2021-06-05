@@ -1,7 +1,9 @@
 import React, {useState, useEffect}  from 'react';
+import {useParams} from 'react-router-dom';
 import {useDrop} from 'react-dnd';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import {API_URL} from '../../App';
 
 import './LessonResources.scss'
 
@@ -15,13 +17,13 @@ import AppliedResources from '../../components/AppliedResources/AppliedResources
  * @param {Object} currentClient - client currently rendered
  */
 
-function LessonResources({programs, currentLesson, currentClient, match}) {
+function LessonResources({programs, currentLesson, currentClient}) {
 
     const ItemTypes = {
         CARD:'card',
     };
 
-    const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
+    const {trainerId} = useParams();
 
     const [allResources, setAllResources] = useState(programs);
     
@@ -31,24 +33,17 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
     //current lesson being rendered - changed based on drag and drop from available resources 
     const[currentLessonResources, updateCurrentLesson] = useState(currentLesson);
 
+    const [activeResource, setActiveResource] = useState(programs[0].id);
+
        
      //update the resources of the current lesson when state changes
     useEffect(() => {
         updateCurrentLesson(currentLesson);
     },[currentLesson]);
 
-    
-
     // update the resources being displayed when a program is chosen
     const updateDisplayed = (program)=>{
-
-        if (document.querySelector(".active-program")){
-            const previouslyActiveLink = document.querySelector(".active-program");
-            previouslyActiveLink.classList.remove("active-program");
-            
-            const activeLinkElement = document.getElementById(program.id);
-            activeLinkElement.classList.add("active-program");
-        }
+        setActiveResource(program.id);
         setResourceList(program.resources);
     }
 
@@ -56,7 +51,6 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
     const markAsDone = id => {
 
         const sameBox = currentLessonResources.resources.find(resource=> resource.id===id);
-        // const sameDisplayBox = displayResources.find(resource=> resource.id===id);
 
         if (!sameBox){
             //find the resource to update and set the applied status to true        
@@ -74,10 +68,10 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
             updateCurrentLesson(lessonObject);
 
             //create an array of the ids associated with the updated resources to push to the db
-            const updatedResources = lessonObject.resources.map(resource => resource)
+            // const updatedResources = lessonObject.resources.map(resource => resource)
 
             //update the db with the new lesson resources
-            axios.put(`${API_URL}/client/${currentClient.userId}/${currentLessonResources.id}/updateResource`, updatedResources)
+            axios.put(`${API_URL}/client/${currentClient.userId}/${currentLessonResources.id}/updateResource`, [...lessonObject.resources])
             .catch(err=>{
                 console.log(err);
             })
@@ -110,7 +104,9 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
             updateCurrentLesson(lessonObject);
 
             //create an array of the ids associated with the updated resources to push to the db
-            const updatedResources = lessonObject.resources.map(resource => resource)
+            // const updatedResources = lessonObject.resources.map(resource => resource);
+            /********************************************************************************************************************* */
+            const updatedResources = [...lessonObject.resources];
 
             // update the db with the new lesson resources
             axios.put(`${API_URL}/client/${currentClient.userId}/${currentLessonResources.id}/updateResource`, updatedResources)
@@ -162,10 +158,9 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
 
     if(programs.length===0){
         return(                                     
-            // <div onClick={this.addNewLesson} className="empty-container">
-            <div className="empty-container empty-lesson__resources">
+             <div className="empty-container empty-lesson__resources">
                 <h2>You Don't have any Programs Yet!</h2>
-                <Link to={`/trainer/${match.params.trainerId}/programs`} className="empty-lesson__resources-link">Click Here to Add Some Programs and Resources</Link>
+                <Link to={`/trainer/${trainerId}/programs`} className="empty-lesson__resources-link">Click Here to Add Some Programs and Resources</Link>
             </div>
         )
     
@@ -180,9 +175,9 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
                             <img src="/icons/chevron-left.svg" className="chevron-left" alt="scroll left" onClick={()=>{scrollList("left")}}/>
                             <ul className="current-lesson__available-programs"> 
                                 {programs.map((program,i) => 
-                                    <Link key={program.id} to={`/trainer/${match.params.trainerId}/clients/${currentClient.userId}/lessons`}>
+                                    <Link key={program.id} to={`/trainer/${trainerId}/clients/${currentClient.userId}/lessons`}>
                                         <li id={program.id} onClick={()=>updateDisplayed(program)} 
-                                            className={i===0 ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
+                                            className={activeResource === program.id ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
                                         </li>
                                     </Link>)}
                             </ul>

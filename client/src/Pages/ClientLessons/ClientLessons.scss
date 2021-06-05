@@ -1,7 +1,11 @@
 @import '../../styles/globalImports.scss';
 
 .lessons{
-    width:80%;
+    width: 64%;
+    position: absolute;
+    top: 270px;
+    right: 67px;
+
     &__list{
         display:flex;
         flex-wrap:wrap;
@@ -40,6 +44,7 @@
     cursor:pointer;
     text-align:center;
     width:100px;
+
     &__name{
         white-space: nowrap;
         overflow: hidden;
@@ -202,6 +207,11 @@ input:checked + .slidinggroove{
 .empty-lessons{
     width:55%;
     font-size:22px;
+    width: 64%;
+    position: absolute;
+    top: 270px;
+    right: 67px;
+    
     &__modal{
         display:flex;
         align-items:center;

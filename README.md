@@ -3,6 +3,9 @@ Plan2Train is an organizational app focused on helping small businesses in the p
 
 **Ideation to Submission:** 10 days
 
+Visit the deployed app at 
+# https://plan2train.herokuapp.com/ 
+
 ## Tech Stack: 
 **FrontEnd:** *React, React Hooks, HTML5, SASS, Google Maps API, Firebase Storage*
 **BackEnd:** *Node, Express, MongoDB, Mongoose, Passport*

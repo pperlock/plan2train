@@ -512,7 +512,7 @@ app.put('/client/:clientId/updateDetails', (req,res)=>{
         response.save()
         .then((response)=>{
             //once the data is saved, the database sends us back a new object version of document that was saved
-            res.send(response.userProfile);
+            res.send(response);
         })
         .catch((err)=>{
             console.log(err);
@@ -536,8 +536,8 @@ app.post(`/client/:clientId/addNote`, (req, res)=>{
 
         response.save()
         .then((saveRes)=>{
-            //once the data is saved, the database sends us back a new object version of document that was saved
-            res.send(newNote);
+            //once the data is saved, the database sends back the updated client
+            res.send(response);
         })
         .catch((err)=>{
             console.log(err);

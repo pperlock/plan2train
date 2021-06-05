@@ -1,240 +1,28 @@
-import React from 'react';
-import firebase from '../../firebase';
+import React, {useContext} from 'react';
+import {useRouteMatch, Redirect} from 'react-router-dom';
 
 import "./Programs.scss";
 
-import ClientList from '../../components/ClientList/ClientList';
-import GridList from '../../components/GridList/GridList';
-import ModalContainer from '../../components/ModalContainer/ModalContainer';
+import PageLayout from '../../components/PageLayout/PageLayout';
+import EmptyPage from '../EmptyPage/EmptyPage';
 
+import TrainerContext from '../../store/trainer-context';
 
-/**
- * Props Passed in by Trainer
- * @param {Object} currentClient 
- * @param {string} currentProgramId 
- * @param {Object} programs 
- * @param {Object} match
- * @param {function} addProgram
- * @param {function} deleteProgram
- * @param {function} addResource
- * @param {function} deleteResource
- */
- 
-class Programs extends React.Component {
+const Programs  = () => {
 
-    state={selectedFile:null, showRadio:true, uploaded:false, uploadType:"", showloading:false, hideEmpty:null}
-
-    // triggered by clicking on a download type radio button
-    uploadType = (event) => {
-        
-        const type = event.target.value;
-        // if the type value of the radio button is of type file the activate the file input box
-        if (type ==="file"){
-                this.fileInput.click()
-        }else{
-            //otherwise update the state with an input type of url and hide the radio buttons
-            this.setState({uploadType:type, showRadio:false})
-        }
-    }
-
-    // fired through reference in uploadType - event to handle choosing a file type from file picker
-    fileSelectedHandler = event =>{
-        //files is an array - if they choose more than one - set the upload type in state to file and hide the radio buttons
-        this.setState({selectedFile:event.target.files[0], uploadType:"file", showRadio:false});
-    }
-
-    // fired by clicking the upload button
-    fileUpload=(event,uploadType)=>{
-        event.preventDefault();
-        
-       
-        // if the resource to be added is a file the save it to firebase and send the resulting url to db
-        if (uploadType === "file"){
-            const selectedIndex = event.target.uploadType.options.selectedIndex
-            const selectedType = event.target.uploadType.options[selectedIndex].value;
-            
-            let bucketName = this.props.programs[0].trainerId;
-            let file = this.state.selectedFile;
-            let storageRef = firebase.storage().ref(`/${bucketName}/${file.name}`);
-            let uploadTask = storageRef.put(file);
-            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-                //next
-                ()=>{
-                    console.log("Uploading ...")
-                    //show the loading icon while resource is uploading
-                    this.setState({showloading:true, hideEmpty:true})
-                },
-                //error
-                ()=>{
-                    console.log("Upload Unsuccessful");
-                },
-                //complete
-                ()=>{
-                    let storageLoc = firebase.storage().ref();
-                    storageLoc.child(`/${bucketName}/${file.name}`).getDownloadURL()
-                    .then((url)=>{
-                        //create a new resource based using the url retrieved from storage - id is created on backend
-                        const newResource={
-                            name:event.target.uploadName.value,
-                            url:url,
-                            type: selectedType
-                        }
-                        //save the new resource to the database using the function passed down by the trainer component
-                        this.props.addResource(newResource, this.props.match.params.programId);
-                        //stop showing the loading icon
-                        this.setState({showloading:false})
-                    })
-                    .catch(err=>{
-                        console.log(err);
-                    })
-                }   
-            )
-
-        //if the resource is a url then capture the url and send it to db
-        }else{
-            const newResource={
-                name:event.target.uploadName.value,
-                url:event.target.uploadURL.value,
-                type:"url"
+    const {programs} = useContext(TrainerContext);
+    const {url} = useRouteMatch();
+    
+    return (
+        <>
+            {!!programs &&
+                <PageLayout> 
+                    {programs.length === 0 ? <EmptyPage/> : <Redirect to={`${url}/${programs[0].id}`}/>}
+                </PageLayout>
             }
-            this.props.addResource(newResource, this.props.match.params.programId);
-        }
+        </>
+    )
 
-        // return the radio buttons to the screen and hide the resource input elements
-        this.setState({uploadType:"",  showRadio:true, showloading:false});
-    }
-
-
-    render(){
-        const {programs, match, addProgram}=this.props;
-        //find information for the program specified in the url
-        const program = programs.find(program=>program.id===match.params.programId)
-
-        return (
-            <div className="programs__container" style={{backgroundImage: "url('/images/main2.jfif')"}} >
-                {/* render a list of clients on the page */}
-                <ClientList list={programs} match={match} onSubmit={addProgram}/>
-                
-                <div className="programs__container-right">
-                    <div className="component program__resources">
-                        <div className="program__header">
-                            <p className="component-title">{program.name}</p>
-                            <p className="program__header-description">{program.description}</p>
-                        </div>
-
-                        {/* update program details */}
-                        <div className="program__header-actions">
-                            <div className="program__header-update">
-                                <ModalContainer 
-                                    modalType = "update" 
-                                    modalName = "updateProgram" 
-                                    buttonType="image"
-                                    url="/icons/edit-icon.svg"
-                                    onSubmit={this.props.updateProgram}
-                                    information={program}
-                                />
-                            </div>
-
-                            {/* delete program */}
-                            <div className="program__header-delete">
-                                <ModalContainer 
-                                    modalType = "delete" 
-                                    modalName = "deleteProgram" 
-                                    buttonType="image"
-                                    url="/icons/trash.svg"
-                                    onSubmit={this.props.deleteProgram}
-                                    deleteString= {program.name}
-                                    deleteId={program.id}
-                                />
-                            </div>
-                        </div>
-                    </div>   
-
-                    {/* if there are no programs added yet then show then empty container with instructions for the user */}
-                    {(program.resources.length === 0 && !this.state.hideEmpty) ? 
-                        <div onClick={()=>this.setState({showRadio:true})} className="empty-container empty-resources">
-                            <p>Choose a Resource Type Below to Add Resources</p>
-                            {this.state.showloading && 
-                                <div className="gridlist">
-                                    <div className="component grid__list-item loading"><img src="/icons/loading-icon.gif" alt="loading"/></div>
-                                </div>}    
-                        </div>
-                        :  
-                        <div className="gridlist">
-                            {/* otherwise render a list of resources available for the program */}
-                            {program.resources.map(resource=> 
-                                <GridList 
-                                    key={resource.id} 
-                                    content={resource.name}
-                                    resourceType={resource.type} 
-                                    id={resource.id} 
-                                    link={resource.url} 
-                                    description={resource.type} 
-                                    deleteString={resource.name}
-                                    deleteBtn={true}
-                                    deleteType="modal" 
-                                    deleteFunction={this.props.deleteResource}
-                                    modalName="deleteResource"
-                                />)}
-                                {/* if the resource is loading show the loading icon */}
-                                {this.state.showloading && <div className="component grid__list-item loading"><img src="/icons/loading-icon.gif" alt="loading"/></div>}
-                        </div>
-                        }
-  
-                    <div className="resource__add">
-       
-                        {/* input box used to access the file picker */}
-                        <input 
-                            style={{display:'none'}} 
-                            type="file"
-                            // when file is selected it sets the state to the file, hides the radio and sets type of file in state
-                            onChange={this.fileSelectedHandler} 
-                            //input box is invisible activated by radio button choice through reference in upload type function 
-                            ref={fileInput => this.fileInput=fileInput}>
-                        </input>
-
-                        {/* conditionally render the radio buttons based on the state value */}
-                        {this.state.showRadio && 
-                            <div className="resource__add-radios">
-                                {/* clicking an input box sets which resource type options to show */}
-                                <input className="resource__add-radios-button" type="radio" id="url" name="addResource" value="url" onClick={this.uploadType}/>
-                                <label className="resource__add-radios-label" htmlFor="url">Add Website</label>
-                                <input className="resource__add-radios-button" type="radio" id="file" name="addResource" value="file" onClick={this.uploadType}/>
-                                <label className="resource__add-radios-label" htmlFor="file">Upload File</label>
-                            </div>
-                        }
-                        
-                        {/* renders the appropriate text boxes and select element if the upload type is a file */}
-                        {(this.state.uploadType==="file" && !this.state.showRadio) &&
-                            <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
-                                <input className="text-input resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
-                                <input className="text-input resource__upload-file" name="uploadURL" type="text" value={this.state.selectedFile.name && this.state.selectedFile.name} readOnly></input>
-                                <select className="resource__upload-type" name="uploadType">
-                                    <option value="pdf">pdf</option>
-                                    <option value="doc">doc</option>
-                                    <option value="video">video</option>
-                                    <option value="image">image</option>
-                                </select>
-                                <button  className="resource__upload-back" onClick={()=>{ this.setState({showRadio:true})}}><img src="/icons/arrow_back-24px.svg" alt="back"/></button> 
-                                <button className="resource__upload-submit" type="submit">Add</button>  
-                            </form>
-                        }
-
-                        {/* renders the appropriate text boxes and select element if the upload type is a url */}
-                        {(this.state.uploadType==="url" && !this.state.showRadio) &&
-                            <form className="resource__upload" onSubmit={(event)=>this.fileUpload(event, this.state.uploadType)}>
-                                <input className="text-input resource__upload-name" name="uploadName" type="text" placeholder="Resource Name" required></input>
-                                <input className="text-input resource__upload-file" name="uploadURL" type="text" placeholder="Enter URL" required></input>
-                                <button  className="resource__upload-back" onClick={()=>{ this.setState({showRadio:true})}}><img src="/icons/arrow_back-24px.svg" alt="back"/></button> 
-                                <button className="resource__upload-submit" type="submit">Add</button>    
-                            </form>
-                        }
-                    </div>
-                </div>
-                
-            </div>
-        )
-    }
 };
 
 export default Programs
