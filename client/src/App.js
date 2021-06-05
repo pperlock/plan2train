@@ -8,12 +8,15 @@ import Intro from './Pages/Intro/Intro';
 import Trainer from './Pages/Trainer/Trainer';
 import Programs from './Pages/Programs/Programs';
 import ProgramDetails from './Pages/ProgramDetails/ProgramDetails';
-import Client from './Pages/Client/Client';
 import Clients from './Pages/Clients/Clients';
 import SideBar from './components/SideBar/SideBar';
 import ClientLessons from './Pages/ClientLessons/ClientLessons';
 import ClientProfile from './Pages/ClientProfile/ClientProfile';
 import Schedule from './Pages/Schedule/Schedule';
+
+import ClientWelcome from './Pages/ClientWelcome/ClientWelcome';
+import Lessons from './Pages/Lessons/Lessons';
+import NextLesson from './Pages/NextLesson/NextLesson';
 
 import TrainerProvider from './store/TrainerProvider';
 
@@ -52,12 +55,12 @@ function App() {
                         <Route path="/trainer/:trainerId/schedule" component={Schedule}/>
  
                          {/* Client  - welcome*/}
-                        <Route path="/client/:clientId" exact render={(props)=>(<Client {...props}/>)}/>
+                        <Route path="/client/:clientId" exact component={ClientWelcome}/>
                         {/* Client  - next lesson*/}
-                        <Route path="/client/:clientId/nextlesson/:lessonId" exact render={(props)=>(<Client {...props}/>)}/>
+                        <Route path="/client/:clientId/nextlesson" exact component={NextLesson}/>
                         {/* Client  - past lessons*/}
-                        <Route path="/client/:clientId/lessons/:lessonId" exact render={(props)=>(<Client {...props}/>)}/>
-                        <Route path="/client/:clientId/lessons" exact render={(props)=>(<Client {...props}/>)}/>
+                        <Route path="/client/:clientId/lessons/:lessonId" exact component={Lessons}/>
+                        <Route path="/client/:clientId/lessons" exact component={Lessons}/>
                     </>
                     
                 </Switch>

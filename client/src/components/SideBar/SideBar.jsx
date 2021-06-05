@@ -6,7 +6,7 @@ import "./SideBar.scss"
 
 import {API_URL} from '../../App.js';
 
-function SideBar ({client, nextLesson, pastLessons, location}){
+function SideBar ({client, nextLesson,location}){
     
     const profile = location.pathname.split("/")[1];
     const id = location.pathname.split("/")[2];
@@ -21,10 +21,8 @@ function SideBar ({client, nextLesson, pastLessons, location}){
         :
         [
          {id:'1', text: 'Welcome', link: `/client/${id}`, linkName:'client', icon: "/icons/welcome.svg", alt:"calendar icon"},
-         {id:'2', text: 'Next Lesson', linkName:'nextlesson',icon: "/icons/swoopy-arrow.svg", alt:"next-lesson", 
-            link: (!!client && !!nextLesson) ? `/client/${id}/nextlesson/${nextLesson.id}`:'/'},
-         {id:'3', text: 'Past Lessons', linkName:'lessons', icon: "/icons/programs-icon.svg", alt:"user profile",
-            link: (!!client && !!pastLessons) ? (pastLessons.length === 0 ? `/client/${id}/lessons` : `/client/${id}/lessons/${pastLessons[0].id}`):'/'},
+         {id:'2', text: 'Next Lesson', linkName:'nextlesson',icon: "/icons/swoopy-arrow.svg", alt:"next-lesson", link: `/client/${id}/nextlesson`},
+         {id:'3', text: 'Past Lessons', linkName:'lessons', icon: "/icons/programs-icon.svg", alt:"user profile", link: `/client/${id}/lessons`},
         ];
 
     const [activeLink, setActiveLink] = useState(sideBarList[0].linkName);

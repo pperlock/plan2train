@@ -1,23 +1,33 @@
 import React, {useState,useEffect}from 'react';
+import {useParams} from 'react-router-dom';
 import axios from 'axios';
+
+import {API_URL} from '../../App.js';
 
 import "./NextLesson.scss";
 
 import Map from '../../components/Map/Map';
 import GridList from '../../components/GridList/GridList';
 
-/**
- * @param {Object} nextLesson - contains all the information for the next lesson
- */
-
-function NextLesson({nextLesson}) {
-
-    const {address, city, province} = nextLesson.location
+function NextLesson() {
 
     // store the geocoded (lat,long) location of the map in state
-    const [mapLocation, setMapLocation]=useState(null);
+    const [mapLocation, setMapLocation] = useState(null);
 
+    const [nextLesson, setNextLesson] = useState(null);
+
+    const {clientId} = useParams();
+    
     useEffect(()=>{
+        
+        axios.get(`${API_URL}/api/client/${clientId}`)
+        .then(res =>{
+            setNextLesson(res.data.lessons.find(lesson=> lesson.current===true));
+        })
+        .catch(err => {
+            console.log(err)
+        })
+        
         //send the location of the next lesson to the api to geocode the location for google maps
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
         .then(res=>{
@@ -28,10 +38,13 @@ function NextLesson({nextLesson}) {
             console.log(err);
         })
     },[])
+    
+    const {address, city, province} = nextLesson ? nextLesson.location : {};
 
     return (
     <div className="next-lesson" style={{backgroundImage: "url('/images/main2.jfif')"}}>
         <h1 className="next-lesson__title">NEXT LESSON</h1>
+        {nextLesson &&
         <div className="component next-lesson__container">
             <h2 className="component-title">{nextLesson.name}</h2>
                 <div className = "current-lesson__top next-lesson__top">
@@ -90,10 +103,9 @@ function NextLesson({nextLesson}) {
                             </div>
                         </div>
                     </div>
-
                 </div>
-                
             </div>
+        }
      </div>
     )
 }

@@ -48,28 +48,7 @@ function Client () {
     return (
         <div>
 
-            {/* render the appropriate component based on the specified path */}
-            
-            {(trainer && path==="/client/:clientId") && 
-                <ClientWelcome
-                    client={client}
-                    trainer={trainer}    
-                />
-            }
 
-            {(client && nextLesson && path==="/client/:clientId/nextlesson/:lessonId") && 
-                <NextLesson
-                    nextLesson={nextLesson}
-                />
-            }
-
-            {(client && pastLessons && path==="/client/:clientId/lessons/:lessonId") && 
-                <Lessons
-                    pastLessons={pastLessons}
-                />
-            }
-
-            {(client && path==="/client/:clientId/lessons") && <EmptyPage />}
         </div>
     )
 }
