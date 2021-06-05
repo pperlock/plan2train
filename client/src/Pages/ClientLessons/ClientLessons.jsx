@@ -67,13 +67,6 @@ const ClientLessons  = () => {
         }
     }, [currentClient, currentLesson, clients])
 
-    //old component did update for maps
-    //         if(prevProps.currentLesson){
-    //             if(prevProps.currentLesson.location.address !==this.state.currentLesson.location.address || prevProps.currentLesson.location.city !==this.state.currentLesson.location.city ){
-    //                 this.geoCode();
-    //             }
-    //         }
-
     const geoCode = () =>{
         const {address, city, province} = currentLesson.location;
         axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
