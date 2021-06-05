@@ -17,13 +17,13 @@ import AppliedResources from '../../components/AppliedResources/AppliedResources
  * @param {Object} currentClient - client currently rendered
  */
 
-function LessonResources({programs, currentLesson, currentClient, match}) {
+function LessonResources({programs, currentLesson, currentClient}) {
 
     const ItemTypes = {
         CARD:'card',
     };
 
-    const {trainerId, clientId} = useParams();
+    const {trainerId} = useParams();
 
     const [allResources, setAllResources] = useState(programs);
     
@@ -33,24 +33,17 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
     //current lesson being rendered - changed based on drag and drop from available resources 
     const[currentLessonResources, updateCurrentLesson] = useState(currentLesson);
 
+    const [activeResource, setActiveResource] = useState(programs[0].id);
+
        
      //update the resources of the current lesson when state changes
     useEffect(() => {
         updateCurrentLesson(currentLesson);
     },[currentLesson]);
 
-    
-
     // update the resources being displayed when a program is chosen
     const updateDisplayed = (program)=>{
-
-        if (document.querySelector(".active-program")){
-            const previouslyActiveLink = document.querySelector(".active-program");
-            previouslyActiveLink.classList.remove("active-program");
-            
-            const activeLinkElement = document.getElementById(program.id);
-            activeLinkElement.classList.add("active-program");
-        }
+        setActiveResource(program.id);
         setResourceList(program.resources);
     }
 
@@ -165,8 +158,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
 
     if(programs.length===0){
         return(                                     
-            // <div onClick={this.addNewLesson} className="empty-container">
-            <div className="empty-container empty-lesson__resources">
+             <div className="empty-container empty-lesson__resources">
                 <h2>You Don't have any Programs Yet!</h2>
                 <Link to={`/trainer/${trainerId}/programs`} className="empty-lesson__resources-link">Click Here to Add Some Programs and Resources</Link>
             </div>
@@ -185,7 +177,7 @@ function LessonResources({programs, currentLesson, currentClient, match}) {
                                 {programs.map((program,i) => 
                                     <Link key={program.id} to={`/trainer/${trainerId}/clients/${currentClient.userId}/lessons`}>
                                         <li id={program.id} onClick={()=>updateDisplayed(program)} 
-                                            className={i===0 ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
+                                            className={activeResource === program.id ? "current-lesson__available-programs-item active-program" : "current-lesson__available-programs-item"}>{program.name}
                                         </li>
                                     </Link>)}
                             </ul>

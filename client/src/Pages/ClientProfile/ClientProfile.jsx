@@ -7,7 +7,7 @@ import './ClientProfile.scss';
 import Map from '../../components/Map/Map';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 import ClientNav from '../../components/ClientNav/ClientNav';
-import ClientsLayout from '../../components/ClientsLayout/ClientsLayout';
+import PageLayout from '../../components/PageLayout/PageLayout';
 
 import {API_URL} from '../../App.js';
 
@@ -140,7 +140,7 @@ const ClientProfile = () => {
 
     return (
         <>
-        {clients && <ClientsLayout> 
+        {clients && <PageLayout> 
             <ClientNav/>
             <div className="client__profile-container">
                     <div className="client__programs">
@@ -213,7 +213,7 @@ const ClientProfile = () => {
                     }
                 </div>
 
-        </ClientsLayout> 
+        </PageLayout> 
         }
         </>
     )

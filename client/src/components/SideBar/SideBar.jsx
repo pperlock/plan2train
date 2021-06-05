@@ -1,41 +1,33 @@
-import React, {useState, useContext} from 'react';
-import {Link, Redirect, useRouteMatch, useParams} from 'react-router-dom';
+import React, {useState} from 'react';
+import {Link, Redirect, withRouter} from 'react-router-dom';
 import axios from 'axios';
 
 import "./SideBar.scss"
 
 import {API_URL} from '../../App.js';
-import TrainerContext from '../../store/trainer-context';
 
-function SideBar ({client, nextLesson, pastLessons}){
+function SideBar ({client, nextLesson, pastLessons, location}){
     
-    const {programs} = useContext(TrainerContext);
-
-    const {path} = useRouteMatch();
-    const {clientId, trainerId} = useParams();
-
-    const splitPath =path.split("/");
-    const profile = splitPath[1];
+    const profile = location.pathname.split("/")[1];
+    const id = location.pathname.split("/")[2];
 
     //define a list of menu links objects with the necessary attributes based on the profile type 
     const sideBarList = profile ==="trainer" ?
-        [{id:'1', text: 'User Profile', link:`/trainer/${trainerId}`, linkName:'trainer', icon: "/icons/user-profile-icon.svg", alt:"user profile"},
-         {id:'2', text: 'Programs', linkName:'programs', icon: "/icons/programs-icon.svg", alt:"list icon",
-            link: !programs ? `/trainer/${trainerId}/programs` : `/trainer/${trainerId}/programs/${programs[0].id}`},
-         {id:'3', text: 'Clients', linkName:'clients', icon: "/icons/clients-icon.svg", alt:"clients icon",
-            link: `/trainer/${trainerId}/clients`},
-         {id:'4', text: 'Schedule', link: `/trainer/${trainerId}/schedule`, linkName:'schedule', icon: "/icons/calendar-icon.svg", alt:"calendar icon"},
+        [{id:'1', text: 'User Profile', link:`/trainer/${id}`, linkName:'trainer', icon: "/icons/user-profile-icon.svg", alt:"user profile"},
+         {id:'2', text: 'Programs', linkName:'programs', icon: "/icons/programs-icon.svg", alt:"list icon", link: `/trainer/${id}/programs`},
+         {id:'3', text: 'Clients', linkName:'clients', icon: "/icons/clients-icon.svg", alt:"clients icon", link: `/trainer/${id}/clients`},
+         {id:'4', text: 'Schedule', link: `/trainer/${id}/schedule`, linkName:'schedule', icon: "/icons/calendar-icon.svg", alt:"calendar icon"},
         ]
         :
         [
-         {id:'1', text: 'Welcome', link: `/client/${clientId}`, linkName:'client', icon: "/icons/welcome.svg", alt:"calendar icon"},
+         {id:'1', text: 'Welcome', link: `/client/${id}`, linkName:'client', icon: "/icons/welcome.svg", alt:"calendar icon"},
          {id:'2', text: 'Next Lesson', linkName:'nextlesson',icon: "/icons/swoopy-arrow.svg", alt:"next-lesson", 
-            link: (!!client && !!nextLesson) ? `/client/${clientId}/nextlesson/${nextLesson.id}`:'/'},
+            link: (!!client && !!nextLesson) ? `/client/${id}/nextlesson/${nextLesson.id}`:'/'},
          {id:'3', text: 'Past Lessons', linkName:'lessons', icon: "/icons/programs-icon.svg", alt:"user profile",
-            link: (!!client && !!pastLessons) ? (pastLessons.length === 0 ? `/client/${clientId}/lessons` : `/client/${clientId}/lessons/${pastLessons[0].id}`):'/'},
+            link: (!!client && !!pastLessons) ? (pastLessons.length === 0 ? `/client/${id}/lessons` : `/client/${id}/lessons/${pastLessons[0].id}`):'/'},
         ];
 
-    const [activeLink, setActiveLink] = useState(splitPath.length === 3 ? splitPath[1] : splitPath[3]);
+    const [activeLink, setActiveLink] = useState(sideBarList[0].linkName);
     const [loggedOut, setLoggedOut] = useState(false);
 
     const logout = ()=>{
@@ -80,4 +72,4 @@ function SideBar ({client, nextLesson, pastLessons}){
     )
 }
 
-export default SideBar
+export default withRouter(SideBar)

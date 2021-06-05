@@ -7,7 +7,7 @@ import './ClientLessons.scss'
 import GridList from '../../components/GridList/GridList';
 import ModalContainer from '../../components/ModalContainer/ModalContainer';
 import LessonResources from '../../components/LessonResources/LessonResources';
-import ClientsLayout from  '../../components/ClientsLayout/ClientsLayout';
+import PageLayout from  '../../components/PageLayout/PageLayout';
 import ClientNav from '../../components/ClientNav/ClientNav';
 
 import Map from '../../components/Map/Map';
@@ -236,7 +236,7 @@ const ClientLessons  = () => {
 
     return (
         <>
-            {clients && <ClientsLayout> 
+            {clients && <PageLayout> 
 
                 <ClientNav />
 
@@ -360,7 +360,7 @@ const ClientLessons  = () => {
                         </div>
                     }
                 </div>
-            </ClientsLayout> 
+            </PageLayout> 
             }
         </>
     )

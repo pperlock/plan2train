@@ -6,7 +6,7 @@ import "./Clients.scss";
 import TrainerContext from '../../store/trainer-context';
 
 import EmptyPage from '../EmptyPage/EmptyPage';
-import ClientsLayout from '../../components/ClientsLayout/ClientsLayout';
+import PageLayout from '../../components/PageLayout/PageLayout';
 
 function Clients() {
 
@@ -16,9 +16,9 @@ function Clients() {
     return (
         <>
             {!!clients &&
-                <ClientsLayout> 
+                <PageLayout> 
                     {clients.length === 0 ? <h1>No Clients</h1> : <Redirect to={`${url}/${clients[0].userId}/profile`}/>}
-                </ClientsLayout>
+                </PageLayout>
             }
         </>
     )

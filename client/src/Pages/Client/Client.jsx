@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import "./Client.scss";
 
-import SideBar from '../../components/SideBar/SideBar';
 import ClientWelcome from '../ClientWelcome/ClientWelcome';
 import Lessons from '../Lessons/Lessons';
 import NextLesson from '../NextLesson/NextLesson';
@@ -48,12 +47,6 @@ function Client () {
 
     return (
         <div>
-            {/* render the sidebar unconditionally */}
-            <SideBar
-                nextLesson={nextLesson}
-                pastLessons={pastLessons}
-                client={client} 
-            />
 
             {/* render the appropriate component based on the specified path */}
             

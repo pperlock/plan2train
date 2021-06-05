@@ -1,8 +1,8 @@
 import React from 'react'
 
-import ClientList from "../../components/ClientList/ClientList";
+import ClientList from "../ClientList/ClientList";
 
-function ClientsLayout({children}) {
+function PageLayout({children}) {
     return (
         <div className="clients__container">
             <ClientList/>
@@ -11,4 +11,4 @@ function ClientsLayout({children}) {
     )
 }
 
-export default ClientsLayout
+export default PageLayout
