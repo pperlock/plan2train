@@ -20,7 +20,7 @@ import NextLesson from './Pages/NextLesson/NextLesson';
 
 import TrainerProvider from './store/TrainerProvider';
 
-const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
+const API_URL = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com/api': 'http://localhost:5000/api';
 
 function App() {
   

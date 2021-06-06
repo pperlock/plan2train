@@ -9,6 +9,8 @@ import "./LoginModal.scss";
 import LoginForm from '../LoginForm/LoginForm';
 import {API_URL} from '../../App.js';
 
+const API_URL_AUTH = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
+
 function LoginModal ({onClickOutside, onKeyDown, closeModal, modalType, toggleScrollLock}) {
 
     const [showSignIn, setShowSignIn] = useState(true);
@@ -37,11 +39,11 @@ function LoginModal ({onClickOutside, onKeyDown, closeModal, modalType, toggleSc
     }
 
     const googleSignIn=()=>{
-        window.location.href = `${API_URL}/auth/google`;
+        window.location.href = `${API_URL_AUTH}/auth/google`;
      }
 
     const facebookSignIn=()=>{
-        window.location.href = `${API_URL}/auth/facebook`;
+        window.location.href = `${API_URL_AUTH}/auth/facebook`;
     }
 
 

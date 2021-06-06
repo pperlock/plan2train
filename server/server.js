@@ -72,7 +72,7 @@ require('./passportConfig')(passport); //using the instance of passport we creat
 
 /* =========================================== SIGN UP/ CREATE TRAINER  ================================================ */
 
-app.post('/addTrainer', (req,res)=>{
+app.post('/api/addTrainer', (req,res)=>{
 
     const {username,password} = req.body;
 
@@ -147,7 +147,7 @@ app.post('/addTrainer', (req,res)=>{
     
 /* =========================================== LOG IN - GET USER DETAILS ================================================ */
 
-app.post("/login", (req,res, next)=>{
+app.post("/api/login", (req,res, next)=>{
 
     const loginResponse = {
         loggedIn:false, 
@@ -182,11 +182,10 @@ app.post("/login", (req,res, next)=>{
     })(req, res, next);
 })
 
-app.get("/logout", (req,res)=>{
+app.get("/api/logout", (req,res)=>{
     req.logout();
     res.send("Logged Out");
 });
-
 
 
 //login using google
@@ -348,7 +347,7 @@ app.get('/api/client/:userId', (req, res) => {
 });
 
 /* =========================================== UPDATE TRAINER DETAILS ================================================ */
-app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
+app.put('/api/trainer/:trainerId/updateDetails', (req,res)=>{
 
     const hashPassword = async ()=>{
         const hashedPassword = await bcrypt.hash(req.body.contact.password, 10);
@@ -394,7 +393,7 @@ app.put('/trainer/:trainerId/updateDetails', (req,res)=>{
 })
 
 /* =========================================== UPDATE LOGO ================================================ */
-app.put('/trainer/:trainerId/updateLogo', (req,res)=>{
+app.put('/api/trainer/:trainerId/updateLogo', (req,res)=>{
 
     Trainer.findOne({userId:req.params.trainerId}) 
     .then((response)=>{
@@ -437,7 +436,7 @@ app.get('/api/checkUsername/:username', (req,res)=>{
 });
 
 /* =========================================== ADD CLIENT ================================================ */
-app.post('/trainer/:trainerId/addClient', (req,res)=>{
+app.post('/api/trainer/:trainerId/addClient', (req,res)=>{
     
     const {username,password,profile,status,userProfile, programs} = req.body;
     const date = new Date().getFullYear();
@@ -486,7 +485,7 @@ app.post('/trainer/:trainerId/addClient', (req,res)=>{
 
 /* =========================================== DELETE CLIENT ================================================ */
 
-app.delete('/client/:clientId', (req,res)=>{
+app.delete('/api/client/:clientId', (req,res)=>{
     Client.deleteOne({userId:req.params.clientId})
     .catch(err=>{
         console.log(err);
@@ -502,7 +501,7 @@ app.delete('/client/:clientId', (req,res)=>{
 })
 
 /* =========================================== UPDATE CLIENT DETAILS ================================================ */
-app.put('/client/:clientId/updateDetails', (req,res)=>{
+app.put('/api/client/:clientId/updateDetails', (req,res)=>{
 
     Client.findOne({userId:req.params.clientId}) 
     .then((response)=>{
@@ -525,7 +524,7 @@ app.put('/client/:clientId/updateDetails', (req,res)=>{
 
 /* =========================================== ADD CLIENT NOTE ================================================ */
 
-app.post(`/client/:clientId/addNote`, (req, res)=>{
+app.post(`/api/client/:clientId/addNote`, (req, res)=>{
 
     const newNote = req.body.note;
 
@@ -551,7 +550,7 @@ app.post(`/client/:clientId/addNote`, (req, res)=>{
 
 /* =========================================== DELETE CLIENT NOTE ================================================ */
 
-app.delete(`/client/:clientId/:noteId/deleteNote`, (req, res)=>{
+app.delete(`/api/client/:clientId/:noteId/deleteNote`, (req, res)=>{
 
     Client.findOne({userId:req.params.clientId}) //asynchronous
     .then((response)=>{
@@ -578,7 +577,7 @@ app.delete(`/client/:clientId/:noteId/deleteNote`, (req, res)=>{
 });
 
 /* =========================================== ADD PROGRAM ================================================ */
-app.post('/trainer/:trainerId/addProgram', (req,res)=>{
+app.post('/api/trainer/:trainerId/addProgram', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
 
     const {name, description} = req.body;
@@ -603,7 +602,7 @@ app.post('/trainer/:trainerId/addProgram', (req,res)=>{
 })
 
 /* =========================================== UPDATE CLIENT PROGRAMS ================================================ */
-app.put('/client/:clientId/updatePrograms', (req,res)=>{
+app.put('/api/client/:clientId/updatePrograms', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
 
     Client.findOne({userId:req.params.clientId}) 
@@ -626,7 +625,7 @@ app.put('/client/:clientId/updatePrograms', (req,res)=>{
 })
 
 /* =========================================== UPDATE PROGRAM ================================================ */
-app.post('/trainer/:trainerId/:programId/updateProgram', (req,res)=>{
+app.post('/api/trainer/:trainerId/:programId/updateProgram', (req,res)=>{
     //create a new instance of a document (variable name can be anything) and save that it in the database - .POST?
 
     const {name, description} = req.body;
@@ -654,7 +653,7 @@ app.post('/trainer/:trainerId/:programId/updateProgram', (req,res)=>{
 
 /* =========================================== DELETE PROGRAM ================================================ */
 
-app.delete('/program/:programId', (req,res)=>{
+app.delete('/api/program/:programId', (req,res)=>{
     Program.deleteOne({id:req.params.programId})
     .then(response=>{
         res.send("Program successfully deleted");
@@ -662,7 +661,7 @@ app.delete('/program/:programId', (req,res)=>{
 })
 
 /* =========================================== ADD RESOURCE ================================================ */
-app.post('/program/:programId/addResource', (req,res)=>{
+app.post('/api/program/:programId/addResource', (req,res)=>{
 
     const {name, url, type} = req.body;
 
@@ -693,7 +692,7 @@ app.post('/program/:programId/addResource', (req,res)=>{
 
 /* =========================================== DELETE RESOURCE ================================================ */
 
-app.delete('/program/:programId/:resourceId', (req,res)=>{
+app.delete('/api/program/:programId/:resourceId', (req,res)=>{
     Program.findOne({id:req.params.programId}) //asynchronous
     .then((response)=>{
 
@@ -720,7 +719,7 @@ app.delete('/program/:programId/:resourceId', (req,res)=>{
 
 /* =========================================== GET CLIENTS ================================================ */
 
-app.get('/trainer/:trainerId/clients', (req, res) => {
+app.get('/api/trainer/:trainerId/clients', (req, res) => {
 
     Client.find({trainerId:req.params.trainerId}) //asynchronous
     .then((response)=>{
@@ -756,7 +755,7 @@ app.get('/api/trainer/:trainerId', (req, res) => {
 
 /* =========================================== ADD NEW LESSON ================================================ */
 
-app.post('/client/:clientId/addLesson', (req,res)=>{
+app.post('/api/client/:clientId/addLesson', (req,res)=>{
 
     const {name, date, time, location} = req.body
 
@@ -797,7 +796,7 @@ app.post('/client/:clientId/addLesson', (req,res)=>{
 
 /* =========================================== DELETE LESSON ================================================ */
 
-app.delete('/client/:clientId/:lessonId/deleteLesson', (req,res)=>{
+app.delete('/api/client/:clientId/:lessonId/deleteLesson', (req,res)=>{
 
     Client.findOne({userId:req.params.clientId}) //asynchronous
     .then((response)=>{
@@ -826,7 +825,7 @@ app.delete('/client/:clientId/:lessonId/deleteLesson', (req,res)=>{
 
 /* =========================================== ADD LESSON NOTE ================================================ */
 
-app.post(`/client/:clientId/:lessonId/addNote`, (req, res)=>{
+app.post(`/api/client/:clientId/:lessonId/addNote`, (req, res)=>{
 
    
     Client.findOne({userId:req.params.clientId}) //asynchronous
@@ -857,7 +856,7 @@ app.post(`/client/:clientId/:lessonId/addNote`, (req, res)=>{
 
 /* =========================================== ADD LESSON HOMEWORK ================================================ */
 
-app.post(`/client/:clientId/:lessonId/addHomework`, (req, res)=>{
+app.post(`/api/client/:clientId/:lessonId/addHomework`, (req, res)=>{
 
     const newHomework = req.body.note;
 
@@ -888,7 +887,7 @@ app.post(`/client/:clientId/:lessonId/addHomework`, (req, res)=>{
 //Blog.find().sort();
 
 /* =========================================== ADD LESSON RESOURCE ================================================ */
-app.put('/client/:clientId/:lessonId/updateResource', (req,res)=>{
+app.put('/api/client/:clientId/:lessonId/updateResource', (req,res)=>{
 
     Client.findOne({userId:req.params.clientId}) //asynchronous
     .then((response)=>{
@@ -911,7 +910,7 @@ app.put('/client/:clientId/:lessonId/updateResource', (req,res)=>{
 })
 
 /* =========================================== UPDATE LESSON DETAILS ================================================ */
-app.put('/client/:clientId/:lessonId/updateLessonDetails', (req,res)=>{
+app.put('/api/client/:clientId/:lessonId/updateLessonDetails', (req,res)=>{
 
     const {current, name, date, time, location} = req.body;
 
@@ -941,7 +940,7 @@ app.put('/client/:clientId/:lessonId/updateLessonDetails', (req,res)=>{
 })
 
 /* =========================================== UPDATE LESSON STATUS ================================================ */
-app.put('/client/:clientId/:lessonId/updateStatus', (req,res)=>{
+app.put('/api/client/:clientId/:lessonId/updateStatus', (req,res)=>{
 
     Client.findOne({userId:req.params.clientId}) //asynchronous
     .then((response)=>{

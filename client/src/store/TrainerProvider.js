@@ -15,7 +15,7 @@ const TrainerProvider = props =>{
         console.log('trainer-context');
         //get the trainer's information and their associated clients from the db when the component is mounted
         if(!!trainerId){
-            axios.get(`${API_URL}/api/trainer/${trainerId}`)
+            axios.get(`${API_URL}/trainer/${trainerId}`)
             .then(res =>{
                 console.log('reached');
                 setUserProfile(res.data.userProfile);
