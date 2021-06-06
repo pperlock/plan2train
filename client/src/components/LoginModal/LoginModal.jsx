@@ -9,6 +9,7 @@ import "./LoginModal.scss";
 import LoginForm from '../LoginForm/LoginForm';
 import {API_URL} from '../../App.js';
 
+//removes the "/api" from the 
 const API_URL_AUTH = process.env.NODE_ENV === "production" ? 'https://plan2train.herokuapp.com': 'http://localhost:5000';
 
 function LoginModal ({onClickOutside, onKeyDown, closeModal, modalType, toggleScrollLock}) {

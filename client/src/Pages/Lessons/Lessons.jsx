@@ -21,7 +21,7 @@ function Lessons() {
     const {clientId} = useParams();
 
     useEffect(()=>{
-        axios.get(`${API_URL}/api/client/${clientId}`)
+        axios.get(`${API_URL}/client/${clientId}`)
         .then(res =>{
             const filteredPast = res.data.lessons.filter(lesson=> lesson.current!==true);
             setPastLessons(filteredPast);

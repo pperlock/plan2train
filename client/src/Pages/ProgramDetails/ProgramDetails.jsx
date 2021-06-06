@@ -157,7 +157,7 @@ function ProgramDetails() {
        }
 
        //send a request to the db to save the new information - trigger an update of the component to fetch the new data       
-       axios.post(`${API_URL}/trainer/${trainerId}/${programId}/updateProgram`, newProgram)
+       axios.post(`${API_URL}/program/${programId}/updateProgram`, newProgram)
        .then(res =>{
             console.log(res);
             const programsCopy = [...programs];

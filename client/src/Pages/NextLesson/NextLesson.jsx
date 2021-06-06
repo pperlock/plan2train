@@ -21,7 +21,7 @@ function NextLesson() {
     
     useEffect(()=>{
         
-        axios.get(`${API_URL}/api/client/${clientId}`)
+        axios.get(`${API_URL}/client/${clientId}`)
         .then(res =>{
             setNextLesson(res.data.lessons.find(lesson=> lesson.current===true));
         })

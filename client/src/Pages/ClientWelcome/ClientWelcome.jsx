@@ -22,13 +22,13 @@ function ClientWelcome() {
     const [mapLocation, setMapLocation]=useState(null);
 
     useEffect(()=>{
-        axios.get(`${API_URL}/api/client/${clientId}`)
+        axios.get(`${API_URL}/client/${clientId}`)
         .then(res =>{
             setClient(res.data)
             return res.data
         })
         .then(clientData=>{
-            axios.get(`${API_URL}/api/trainer/${clientData.trainerId}`)
+            axios.get(`${API_URL}/trainer/${clientData.trainerId}`)
             .then(trainerRes=>{
                 setTrainer(trainerRes.data.userProfile)
             })

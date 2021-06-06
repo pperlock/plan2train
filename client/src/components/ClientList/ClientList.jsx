@@ -78,7 +78,7 @@ function ClientList() {
             //use the selected programs from above
             programs:clientPrograms
         }
-
+        
         // save the new client in the db and return send the user to the new client's profile page
         axios.post(`${API_URL}/trainer/${trainerId}/addClient`, newClient)
         .then(res =>{

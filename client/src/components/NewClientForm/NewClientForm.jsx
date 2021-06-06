@@ -12,7 +12,7 @@ function NewClientForm({onSubmit, closeModal, programs}) {
     const handleSubmit=(event)=>{
         event.preventDefault();
         
-        axios.get(`${API_URL}/api/checkUserName/${event.target.username.value}`)
+        axios.get(`${API_URL}/client/checkUserName/${event.target.username.value}`)
         .then(res =>{
             if (!res.data){
                 setClientError(null);

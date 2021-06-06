@@ -24,7 +24,6 @@ const ClientProfile = () => {
     const [currentClient, setCurrentClient] = useState(null);
 
     useEffect(()=>{
-        console.log('client profile loaded');
         !!clients && setCurrentClient(clients.find(client => client.userId === clientId));
         setTrainerId(trainerId);
         
@@ -120,7 +119,6 @@ const ClientProfile = () => {
         // send the new client information to the db and update the state to pull from the db
         axios.put(`${API_URL}/client/${clientId}/updateDetails`, updatedClient)
         .then(res =>{
-            console.log(res);
             const clientLoc = clients.findIndex(client => client.userId === clientId);
             const clientCopy=[...clients];
             clientCopy.splice(clientLoc,1,res.data);
