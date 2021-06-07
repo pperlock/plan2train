@@ -13,35 +13,41 @@ const TrainerProvider = props =>{
 
     useEffect(()=>{
         console.log('trainer-context');
-        //get the trainer's information and their associated clients from the db when the component is mounted
-        if(!!trainerId){
-            axios.get(`${API_URL}/trainer/${trainerId}`)
-            .then(res =>{
-                console.log('reached');
-                setUserProfile(res.data.userProfile);
-                setPrograms(res.data.programs);
-            })
-            .catch(err =>{
+        
+        const fetchTrainer = async () =>{
+            try{
+                const trainerResponse = await axios.get(`${API_URL}/trainer/${trainerId}`);
+            setUserProfile(trainerResponse.data.userProfile);
+            setPrograms(trainerResponse.data.programs);
+            }catch (err){
                 console.log(err);
-            })
+            }
 
-            axios.get(`${API_URL}/trainer/${trainerId}/clients`)
-            .then(res=>{
-                res.data.sort((a,b)=>{
+        }
+
+        const fetchClients = async () => {
+            try{
+                const clientsResponse = await axios.get(`${API_URL}/trainer/${trainerId}/clients`);
+                clientsResponse.data.sort((a,b)=>{
                     if(a.userProfile.lname < b.userProfile.lname) return -1;
                     if(a.userProfile.lname > b.userProfile.lname) return 1;
                     return 0;
                 })
-                setClients(res.data)
-            })
-            .catch(err =>{
+                setClients(clientsResponse.data);
+            }catch (err){
                 console.log(err);
-            }) 
+            }
         }
+
+        if(!!trainerId){
+            fetchTrainer();
+            fetchClients();
+        }
+
     },[trainerId]);
 
     /** ================================================ UPDATE TRAINER ================================================*/
-    const updateUserProfile=(event)=>{
+    const updateUserProfile = async (event)=>{
     
         event.preventDefault();
 
@@ -71,14 +77,8 @@ const TrainerProvider = props =>{
             }
         }
 
-        //send a request to the db to save the new information and set it in state
-        axios.put(`${API_URL}/trainer/${trainerId}/updateDetails`, updatedProfile)
-        .then(res =>{
-            setUserProfile(updatedProfile);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+        await axios.put(`${API_URL}/trainer/${trainerId}/updateDetails`, updatedProfile);
+        setUserProfile(updatedProfile);
     }
 
     

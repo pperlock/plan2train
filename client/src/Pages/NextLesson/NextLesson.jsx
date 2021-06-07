@@ -20,24 +20,25 @@ function NextLesson() {
     const {clientId} = useParams();
     
     useEffect(()=>{
-        
-        axios.get(`${API_URL}/client/${clientId}`)
-        .then(res =>{
-            setNextLesson(res.data.lessons.find(lesson=> lesson.current===true));
-        })
-        .catch(err => {
-            console.log(err)
-        })
-        
+
+        const fetchLesson = async ()=>{
+            const clientRes = await axios.get(`${API_URL}/client/${clientId}`);
+            setNextLesson(clientRes.data.lessons.find(lesson=> lesson.current===true));
+        }
+
+        fetchLesson();
+       
         //send the location of the next lesson to the api to geocode the location for google maps
-        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
-        .then(res=>{
-            //once the location is geocoded set it in state
-            setMapLocation(res.data.results[0].locations[0].displayLatLng);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+        const getMapLocation = async () =>{
+            try{
+            const mapRes = await axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`);
+            setMapLocation(mapRes.data.results[0].locations[0].displayLatLng);
+            }catch (err){
+                console.log(err);
+            }
+        }
+
+        // getMapLocation();
     },[])
     
     const {address, city, province} = nextLesson ? nextLesson.location : {};

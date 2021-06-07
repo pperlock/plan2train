@@ -49,35 +49,35 @@ const ClientProfile = () => {
         }
     }, [programs, clients, clientId, currentClient, setCurrentClient])
 
-    const geoCode = () =>{
+    const geoCode = async() =>{
         const {address, city, province} = currentClient.userProfile;
-        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
-        .then(res=>{
-            setMapLocation(res.data.results[0].locations[0].displayLatLng);     
-        })
-        .catch(err=>{
+        try{
+            const res = await axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
+            // console.log(res.data.results[0].locations[0].displayLatLng);
+            // this.setState({mapLocation:res.data.results[0].locations[0].displayLatLng}); 
+            setMapLocation(res.data.results[0].locations[0].displayLatLng)    
+        }catch(err){
             console.log(err);
-        })
+        }
     }
 
-    const addNote=(note)=>{
+    const addNote = async note =>{
         const newNote={
             note:note
         }
 
-        axios.post(`${API_URL}/client/${currentClient.userId}/addNote`, newNote)
-        .then(res =>{
+        try{
+            const res = await axios.post(`${API_URL}/client/${currentClient.userId}/addNote`, newNote)
             const clientLoc = clients.findIndex(client => client.userId === clientId);
             const clientCopy=[...clients];
             clientCopy.splice(clientLoc, 1 ,res.data);
             setClients(clientCopy);
-        })
-        .catch(err=>{
+        }catch(err){
             console.log(err);
-        })
+        }
     }
 
-    const toggleProgram=(programId)=>{
+    const toggleProgram = async programId =>{
 
         const currentPrograms = currentClient.programs;
         const program = currentPrograms.find((program)=>program.id === programId);
@@ -91,14 +91,15 @@ const ClientProfile = () => {
             currentPrograms.push(programs.find(program=> programId===program.id))
         }
         
-        axios.put(`${API_URL}/client/${currentClient.userId}/updatePrograms`, currentPrograms)
-        .catch(err=>{
+        try{
+            await axios.put(`${API_URL}/client/${currentClient.userId}/updatePrograms`, currentPrograms)
+        }catch(err){
             console.log(err);
-        }) 
+        } 
     }
 
     /** ================================================ UPDATE CLIENT ================================================*/
-    const updateClient=(event)=>{
+    const updateClient = async event =>{
         event.preventDefault();
 
         const {fname, lname, email, phone, address, city, province, country, postal} = event.target;
@@ -117,8 +118,8 @@ const ClientProfile = () => {
         }
 
         // send the new client information to the db and update the state to pull from the db
-        axios.put(`${API_URL}/client/${clientId}/updateDetails`, updatedClient)
-        .then(res =>{
+        try{
+            const res = await axios.put(`${API_URL}/client/${clientId}/updateDetails`, updatedClient);
             const clientLoc = clients.findIndex(client => client.userId === clientId);
             const clientCopy=[...clients];
             clientCopy.splice(clientLoc,1,res.data);
@@ -128,10 +129,9 @@ const ClientProfile = () => {
                 return 0;
             })
             setClients(clientCopy);
-           })
-        .catch(err=>{
+        }catch(err){
             console.log(err);
-        })
+        }
     }
     
     const {address, city, province, country, postal, email, phone} = currentClient ? currentClient.userProfile : {};

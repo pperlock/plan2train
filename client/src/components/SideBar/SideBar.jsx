@@ -28,10 +28,13 @@ function SideBar ({client, nextLesson,location}){
     const [activeLink, setActiveLink] = useState(sideBarList[0].linkName);
     const [loggedOut, setLoggedOut] = useState(false);
 
-    const logout = ()=>{
-        axios.get(`${API_URL}/logout`)
-        .then(res =>{setLoggedOut(true);})
-        .catch(err =>{console.log(err)})
+    const logout = async ()=>{
+        try{
+            await axios.get(`${API_URL}/logout`);
+            setLoggedOut(true);
+        }catch(err){
+            console.log(err)
+        }
     }
 
     return (

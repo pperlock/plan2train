@@ -50,25 +50,23 @@ const Trainer = () => {
                 ()=>{
                     console.log("Upload Unsuccessful");
                 },
-                ()=>{
+                async ()=>{
                     //once the file is uploaded get the url and save it to the db and update the trainer component
                     let storageLoc = firebase.storage().ref();
-                    storageLoc.child(`/${bucketName}/${selectedFile.name}`).getDownloadURL()
-                    .then((url)=>{
-                        const logo={logo:url}
-                        axios.put(`${API_URL}/trainer/${trainerId}/updateLogo`, logo)
-                        .then(res =>{
-                            const profileCopy = {...userProfile};
-                            profileCopy.company.logo = res.data;
-                            setUserProfile(profileCopy);
-                        })
-                        .catch(err=>{
-                            console.log(err);
-                        })
-                    })
-                    .catch(err=>{
+                    
+                    try {
+                    
+                        const url = await storageLoc.child(`/${bucketName}/${selectedFile.name}`).getDownloadURL();
+                        const logo={logo:url};
+
+                        const res = await axios.put(`${API_URL}/trainer/${trainerId}/updateLogo`, logo);
+                        const profileCopy = {...userProfile};
+                        profileCopy.company.logo = res.data;
+                        setUserProfile(profileCopy);
+                    
+                    }catch(err){
                         console.log(err);
-                    })
+                    }
                 }   
             )
         }

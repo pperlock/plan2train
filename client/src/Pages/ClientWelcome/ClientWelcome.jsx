@@ -22,29 +22,32 @@ function ClientWelcome() {
     const [mapLocation, setMapLocation]=useState(null);
 
     useEffect(()=>{
-        axios.get(`${API_URL}/client/${clientId}`)
-        .then(res =>{
-            setClient(res.data)
-            return res.data
-        })
-        .then(clientData=>{
-            axios.get(`${API_URL}/trainer/${clientData.trainerId}`)
-            .then(trainerRes=>{
+
+        const fetchClient = async () =>{
+            try{
+                const clientRes = await axios.get(`${API_URL}/client/${clientId}`)
+                const trainerRes = await axios.get(`${API_URL}/trainer/${clientRes.data.trainerId}`);
+                setClient(clientRes.data);
                 setTrainer(trainerRes.data.userProfile)
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
-        
-        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
-        .then(res=>{
-            setMapLocation(res.data.results[0].locations[0].displayLatLng);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
-    },[clientId]);
+            }catch (err){
+                console.log(err);
+            }
+        }
+
+        fetchClient();
+
+        const getMapLocation = async () =>{
+            try{
+            const mapRes = await axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`);
+            setMapLocation(mapRes.data.results[0].locations[0].displayLatLng);
+            }catch (err){
+                console.log(err);
+            }
+        }
+
+        // getMapLocation();
+       
+    },[]);
 
     const {lname,fname,email,phone,address,city,province,country,postal} = !!trainer ? trainer.contact : {};
     const {facebook, twitter, instagram, linkedIn} = !!trainer ? trainer.social : {};

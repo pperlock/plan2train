@@ -67,21 +67,20 @@ const ClientLessons  = () => {
         }
     }, [currentClient, currentLesson, clients])
 
-    const geoCode = () =>{
+    const geoCode = async() =>{
         const {address, city, province} = currentLesson.location;
-        axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
-        .then(res=>{
+        try{
+            const res = await axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=${process.env.REACT_APP_MAPQUEST_API}&street=${address}&city=${city}&state=${province}`)
             // console.log(res.data.results[0].locations[0].displayLatLng);
             // this.setState({mapLocation:res.data.results[0].locations[0].displayLatLng}); 
             setMapLocation(res.data.results[0].locations[0].displayLatLng)    
-        })
-        .catch(err=>{
+        }catch(err){
             console.log(err);
-        })
+        }
     }
 
      //adds an item to either the homework or the notes lists when the form is submitted
-    const addListItem = (note, list) =>{
+    const addListItem = async (note, list) =>{
 
         const newItem={
             note:note
@@ -90,8 +89,8 @@ const ClientLessons  = () => {
         if (list==="addNote"){
             //if the target is the notes section then save it to the appropriate spot in the db
 
-            axios.post(`${API_URL}/client/${clientId}/${currentLesson.id}/addNote`, newItem)
-            .then(res =>{
+            try{
+                const res = await axios.post(`${API_URL}/client/${clientId}/${currentLesson.id}/addNote`, newItem);
                 const lessonCopy = {...currentLesson};
                 lessonCopy.notes = res.data;
 
@@ -101,14 +100,14 @@ const ClientLessons  = () => {
 
                 setCurrentClient(clientCopy);
                 setCurrentLesson(lessonCopy);
-            })
-            .catch(err=>{
+            }catch (err){
                 console.log(err);
-            })
+            }
         }else{
             //if the target is the homework section then save it to the appropriate spot in the db
-            axios.post(`${API_URL}/client/${clientId}/${currentLesson.id}/addHomework`, newItem)
-            .then(res =>{
+            
+            try {
+                const res = await axios.post(`${API_URL}/client/${clientId}/${currentLesson.id}/addHomework`, newItem);
                 const lessonCopy = {...currentLesson};
                 lessonCopy.homework = res.data;
 
@@ -117,10 +116,10 @@ const ClientLessons  = () => {
                 clientCopy.lessons.splice(lessonloc,1,lessonCopy);
 
                 setCurrentLesson(lessonCopy);
-            })
-            .catch(err=>{
+            }catch (err){
                 console.log(err);
-            })
+            }
+
         }
     }
   
@@ -131,7 +130,7 @@ const ClientLessons  = () => {
     }
 
     //adds a new empty lesson when +New is clicked and saves it to the db
-    const addNewLesson = event =>{
+    const addNewLesson = async event =>{
         event.preventDefault();
         const {lessonName,date,time, locationName,address,city, province, country} = event.target
 
@@ -148,34 +147,32 @@ const ClientLessons  = () => {
             }
         }
 
-        axios.post(`${API_URL}/client/${clientId}/addLesson`,newLesson)
-        .then(res =>{
+        try{
+            const res = await axios.post(`${API_URL}/client/${clientId}/addLesson`,newLesson);  
             const clientCopy = {...currentClient};
             clientCopy.lessons.push(res.data)
             setCurrentClient(clientCopy);
             setCurrentLesson(res.data);
-        })
-        .catch(err=>{
+        }catch(err){
             console.log(err);
-        })
+        }
     }
 
-    const deleteLesson = lessonId =>{
+    const deleteLesson = async lessonId =>{
        
-        axios.delete(`${API_URL}/client/${clientId}/${lessonId}/deleteLesson`)
-            .then(res =>{
-                const clientCopy = {...currentClient};
-                const lessonLoc = clientCopy.lessons.findIndex(lesson => lesson.id === lessonId);
-                clientCopy.lessons.splice(lessonLoc, 1);
-                setCurrentClient(clientCopy);
-                setCurrentLesson(currentClient.lessons[0]);
-            })
-            .catch(err=>{
-                console.log(err);
-            })
+        try{
+            await axios.delete(`${API_URL}/client/${clientId}/${lessonId}/deleteLesson`);
+            const clientCopy = {...currentClient};
+            const lessonLoc = clientCopy.lessons.findIndex(lesson => lesson.id === lessonId);
+            clientCopy.lessons.splice(lessonLoc, 1);
+            setCurrentClient(clientCopy);
+            setCurrentLesson(currentClient.lessons[0]);
+        }catch(err){
+            console.log(err);
+        }
     }
 
-    const updateDetails = event =>{
+    const updateDetails = async (event) =>{
 
         event.preventDefault();
 
@@ -195,37 +192,36 @@ const ClientLessons  = () => {
             }
         }
 
-        axios.put(`${API_URL}/client/${currentClient.userId}/${currentLesson.id}/updateLessonDetails`, updatedLesson)
-        .then(res =>{
+        try{
+            const res = await axios.put(`${API_URL}/client/${currentClient.userId}/${currentLesson.id}/updateLessonDetails`, updatedLesson)
             const clientCopy = {...currentClient};
             const index = clientCopy.lessons.findIndex(lesson=>lesson.id === currentLesson.id);
             clientCopy.lessons.splice(index,1);
             clientCopy.lessons.splice(index, 0, res.data);
             setCurrentClient(clientCopy);
             setCurrentLesson(res.data);
-        })
-        .catch(err=>{
+        }catch (err){
             console.log(err);
-        })
+        }
     }
 
-    const updateStatus = event =>{
+    const updateStatus = async (event) =>{
 
         const {id} = event.target;
-        axios.put(`${API_URL}/client/${clientId}/${id}/updateStatus`)
-        .then(res =>{
+        
+        try{
+            await axios.put(`${API_URL}/client/${clientId}/${id}/updateStatus`);
             const clientCopy = {...currentClient};
             const lessonCopy = {...currentLesson};
             clientCopy.lessons.forEach(lesson => lesson.current = (lesson.id === id) ? true : false);
             lessonCopy.current = true;
             setCurrentClient(clientCopy);
             setCurrentLesson(lessonCopy);
-
-        })
-        .catch(err=>{
+        }catch(err){
             console.log(err);
-        })
+        }
     }
+
     if(!!currentClient && currentClient.lessons.length === 0){
         return(   
             <>
@@ -247,6 +243,7 @@ const ClientLessons  = () => {
             </>
         )
     }
+
     return (
         <>
             {clients && <PageLayout> 

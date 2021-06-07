@@ -17,8 +17,6 @@ function ClientList() {
 
     const {clients, setClients, programs, setPrograms} = useContext(TrainerContext);
 
-    console.log(clients);
-
     const searchList = (event) => {
         setFilter(event.target.value);
     }
@@ -41,7 +39,7 @@ function ClientList() {
     }
 
     /** ================================================ ADD CLIENT ================================================*/
-    const addClient=(event)=>{
+    const addClient = async event =>{
 
         event.preventDefault();
 
@@ -80,27 +78,23 @@ function ClientList() {
         }
         
         // save the new client in the db and return send the user to the new client's profile page
-        axios.post(`${API_URL}/trainer/${trainerId}/addClient`, newClient)
-        .then(res =>{
-                const newClientList = [...clients, res.data];
-                newClientList.sort((a,b)=>{
-                    if(a.userProfile.lname < b.userProfile.lname) return -1;
-                    if(a.userProfile.lname > b.userProfile.lname) return 1;
-                    return 0;
-                })
-                setClients(newClientList);
-                return res.data.userId;   
-        })
-        .then(res2=>{
-            history.push(`/trainer/${trainerId}/clients/${res2}/profile`)
-        })
-        .catch(err=>{
+        try{
+            const res = await axios.post(`${API_URL}/trainer/${trainerId}/addClient`, newClient);
+            const newClientList = [...clients, res.data];
+            newClientList.sort((a,b)=>{
+                if(a.userProfile.lname < b.userProfile.lname) return -1;
+                if(a.userProfile.lname > b.userProfile.lname) return 1;
+                return 0;
+            })
+            setClients(newClientList);
+            history.push(`/trainer/${trainerId}/clients/${res.data.userId}/profile`)
+        }catch(err){
             console.log(err);
-        })
+        }
     }
 
     /** ================================================ ADD PROGRAM ================================================*/
-    const addProgram=(event)=>{
+    const addProgram = async event =>{
 
         event.preventDefault();
 
@@ -110,17 +104,13 @@ function ClientList() {
            description:event.target.programDescription.value
        }
 
-       axios.post(`${API_URL}/trainer/${match.params.trainerId}/addProgram`, newProgram)
-       .then(res =>{
+       try{
+           const res = await axios.post(`${API_URL}/trainer/${trainerId}/addProgram`, newProgram);
            setPrograms([...programs, res.data]);
-           return res;
-       })
-       .then(res2=>{
-           history.push(`/trainer/${match.params.trainerId}/programs/${res2.data.id}`)
-       })
-       .catch(err=>{
+           history.push(`/trainer/${trainerId}/programs/${res.data.id}`)
+       }catch(err){
            console.log(err);
-       })   
+       }   
    }
 
     return (

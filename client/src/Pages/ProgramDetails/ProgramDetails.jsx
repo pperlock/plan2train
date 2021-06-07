@@ -84,10 +84,11 @@ function ProgramDetails() {
                     console.log("Upload Unsuccessful");
                 },
                 //complete
-                ()=>{
+                async ()=>{
                     let storageLoc = firebase.storage().ref();
-                    storageLoc.child(`/${bucketName}/${file.name}`).getDownloadURL()
-                    .then((url)=>{
+                    try{
+                        const url = await storageLoc.child(`/${bucketName}/${file.name}`).getDownloadURL()
+
                         //create a new resource based using the url retrieved from storage - id is created on backend
                         const newResource={
                             name:event.target.uploadName.value,
@@ -96,12 +97,13 @@ function ProgramDetails() {
                         }
                         //save the new resource to the database using the function passed down by the trainer component
                         addResource(newResource, programId);
+                        
                         //stop showing the loading icon
                         setShowLoading(false);
-                    })
-                    .catch(err=>{
+
+                    }catch(err){
                         console.log(err);
-                    })
+                    }
                 }   
             )
 
@@ -121,32 +123,9 @@ function ProgramDetails() {
         setShowLoading(false);
     }
 
-    /** ================================================ ADD PROGRAM ================================================*/
-    const addProgram=(event)=>{
-
-        event.preventDefault();
-
-       //create a new program based on the information entered into the modal form - id is created on backend
-       const newProgram = {
-           name:event.target.programName.value,
-           description:event.target.programDescription.value
-       }
-
-       axios.post(`${API_URL}/trainer/${trainerId}/addProgram`, newProgram)
-       .then(res =>{
-           setPrograms([...programs, res.data]);
-           return res;
-       })
-       .then(res2=>{
-           history.push(`/trainer/${trainerId}/programs/${res2.data.id}`)
-       })
-       .catch(err=>{
-           console.log(err);
-       })   
-   }
 
    /** ================================================ UPDATE PROGRAM ================================================*/
-   const updateProgram=(event)=>{
+   const updateProgram = async event =>{
 
        event.preventDefault();
        
@@ -156,78 +135,70 @@ function ProgramDetails() {
            description:event.target.programDescription.value
        }
 
-       //send a request to the db to save the new information - trigger an update of the component to fetch the new data       
-       axios.post(`${API_URL}/program/${programId}/updateProgram`, newProgram)
-       .then(res =>{
-            console.log(res);
+       try{
+            const res = await axios.post(`${API_URL}/program/${programId}/updateProgram`, newProgram);
             const programsCopy = [...programs];
             const programLoc = programsCopy.findIndex(program => program.id === res.data.id);
             programsCopy.splice(programLoc,1, res.data);
             setPrograms(programsCopy);
-       })
-       .catch(err=>{
+       }catch(err){
            console.log(err);
-       })
+       }
        
    }
 
    /** ================================================ DELETE PROGRAM ================================================*/
-   const deleteProgram = (programId) =>{
-
-       axios.delete(`${API_URL}/program/${programId}`)
-       .then((res) =>{
-           //trigger the state to update the component and the redirect the user to the first program on the list
-           const programsCopy = [...programs];
-           const programLoc = programsCopy.findIndex(program => program.id === programId);
-           programsCopy.splice(programLoc,1);
-           setPrograms(programsCopy);
-       })
-       .then(() =>{
-           //if the program removed is the only program then send the user to the empty page
-           if((programs.length - 1) === 0){
-               history.push(`/trainer/${trainerId}/programs`)
-           }else{
-               //if the program on the list was the first on on the list send it to the program at index 1 otherwise index 0
-               const programLoc = programs.findIndex(program => program.id === programId);
-               programLoc !== 0 ? 
-               history.push(`/trainer/${trainerId}/programs/${programs[0].id}`)
-               :
-               history.push(`/trainer/${trainerId}/programs/${programs[1].id}`)
-           }
-       })
-       .catch(err=>{
+   const deleteProgram = async programId =>{
+        
+       try{
+            await axios.delete(`${API_URL}/program/${programId}`)
+            //trigger the state to update the component and the redirect the user to the first program on the list
+            const programsCopy = [...programs];
+            const programLoc = programsCopy.findIndex(program => program.id === programId);
+            programsCopy.splice(programLoc,1);
+            setPrograms(programsCopy);
+                
+            //if the program removed is the only program then send the user to the empty page
+            if((programs.length - 1) === 0){
+                history.push(`/trainer/${trainerId}/programs`)
+            }else{
+                    //if the program on the list was the first on on the list send it to the program at index 1 otherwise index 0
+                    const programLoc = programs.findIndex(program => program.id === programId);
+                    programLoc !== 0 ? 
+                    history.push(`/trainer/${trainerId}/programs/${programs[0].id}`)
+                    :
+                    history.push(`/trainer/${trainerId}/programs/${programs[1].id}`)
+            }
+       }catch(err){
            console.log(err);
-       }); 
+       }; 
    }
 
    /** ================================================ ADD RESOURCE ================================================*/
-   const addResource=(newResource)=>{
-       //a new resources is made in the programs component and passed back to trainer to save in the db
-       axios.post(`${API_URL}/program/${programId}/addResource`, newResource)
-       .then(res =>{
+   const addResource = async newResource =>{
+        try{   
+            //a new resources is made in the programs component and passed back to trainer to save in the db
+            const res = await axios.post(`${API_URL}/program/${programId}/addResource`, newResource);
             const programCopy = {...currentProgram};
             programCopy.resources = [...programCopy.resources, res.data.resources.pop()];
             setCurrentProgram(programCopy);
-       })
-       .catch(err=>{
-           console.log(err);
-       })
+        }catch(err){
+            console.log(err);
+        }
    }
 
    /** ================================================ DELETE RESOURCE ================================================*/
-   const deleteResource = (resourceId) =>{
+   const deleteResource = async resourceId =>{
        //a resourceId is sent back from the programs component and removed from the db
-       axios.delete(`${API_URL}/program/${programId}/${resourceId}`)
-       .then(res =>{
-        //    setUpdated(true);//trigger the component did update to pull updated data from db
+       try{
+            await axios.delete(`${API_URL}/program/${programId}/${resourceId}`);
             const programCopy = {...currentProgram};
             const resourceLoc = programCopy.resources.findIndex(resource=>resource.id === resourceId);
             programCopy.resources.splice(resourceLoc, 1);
             setCurrentProgram(programCopy);
-       })
-       .catch(err=>{
+       }catch(err){
            console.log(err);
-       }) 
+       } 
     }
 
     return (

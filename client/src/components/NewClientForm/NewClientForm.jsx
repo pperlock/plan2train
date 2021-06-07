@@ -9,11 +9,11 @@ function NewClientForm({onSubmit, closeModal, programs}) {
 
     const[clientError, setClientError] = useState(null);
 
-    const handleSubmit=(event)=>{
+    const handleSubmit = async event =>{
         event.preventDefault();
         
-        axios.get(`${API_URL}/client/checkUserName/${event.target.username.value}`)
-        .then(res =>{
+        try{
+            const res = await axios.get(`${API_URL}/client/checkUserName/${event.target.username.value}`);
             if (!res.data){
                 setClientError(null);
                 onSubmit(event);
@@ -21,10 +21,9 @@ function NewClientForm({onSubmit, closeModal, programs}) {
             }else{
                 setClientError("Username Already Exists");
             }
-        })
-        .catch(err=>{
+        }catch(err){
             console.log(err);
-        })
+        }
     }
 
     return (

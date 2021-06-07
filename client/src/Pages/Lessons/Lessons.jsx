@@ -12,7 +12,6 @@ import EmptyPage from '../../Pages/EmptyPage/EmptyPage';
 
 function Lessons() {
 
-    console.log('lessons reached')
     //set the selected lesson in state and default it to the first lesson in the array
     const [selectedLesson, setSelectedLesson]= useState(null);
 
@@ -21,20 +20,21 @@ function Lessons() {
     const {clientId} = useParams();
 
     useEffect(()=>{
-        axios.get(`${API_URL}/client/${clientId}`)
-        .then(res =>{
-            const filteredPast = res.data.lessons.filter(lesson=> lesson.current!==true);
-            setPastLessons(filteredPast);
-            return filteredPast
-        })
-        .then(res2 =>{
-            setSelectedLesson(res2[0])
-        })
-        .catch(err => {
-            console.log(err)
-        })
         
-    },[clientId]);
+        const fetchLessons = async () =>{
+            try{
+                const clientRes = await axios.get(`${API_URL}/client/${clientId}`);
+                const filteredPast = clientRes.data.lessons.filter(lesson=> lesson.current!==true);
+                setPastLessons(filteredPast);
+                setSelectedLesson(filteredPast[0]);
+            }catch (err){
+                console.log(err);
+            }
+        }
+
+        fetchLessons();
+        
+    },[]);
 
     //changes the lesson being rendered when a lesson is clicked from top list
     const showLesson = (lessonId) =>{
